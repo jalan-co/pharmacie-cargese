@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pharmacie-de-cargese.vercel.app/sitemap-index.xml

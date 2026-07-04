@@ -1,0 +1,171 @@
+---
+/**
+ * Section d'accroche de la page d'accueil.
+ * Fond bleu profond, titre, baseline et deux appels à l'action
+ * (Appeler / Itinéraire). Aucune photo : un motif de croix en aplat structure
+ * l'espace visuel.
+ */
+import { pharmacie, lienItineraire, logo } from '../data/site';
+import BoutonAppeler from './BoutonAppeler.astro';
+import Icone from './Icone.astro';
+---
+
+<section class="hero">
+  <div class="conteneur hero__inner">
+    <div class="hero__contenu">
+      <p class="hero__surtitre">
+        <Icone nom="pin" taille={16} />
+        <span>{pharmacie.adresse.ville} · Corse-du-Sud</span>
+      </p>
+
+      <h1 class="hero__titre">
+        <span>Pharmacie</span>
+        <span class="hero__titre-accent">de Cargèse</span>
+      </h1>
+
+      <p class="hero__baseline">
+        {pharmacie.baseline}. Conseil, écoute et suivi personnalisé, du bilan de
+        médication à la micronutrition.
+      </p>
+
+      <div class="hero__actions">
+        <BoutonAppeler variante="primaire" afficherNumero={true} />
+        <a
+          href={lienItineraire}
+          class="btn btn--secondaire btn--sur-sombre"
+          target="_blank"
+          rel="noopener"
+        >
+          <Icone nom="route" class="btn__icone" />
+          <span>Itinéraire</span>
+        </a>
+      </div>
+
+      <p class="hero__garde">
+        <Icone nom="shield" taille={18} />
+        <span>Pharmacie de garde : <strong>{pharmacie.garde}</strong> (24h/24)</span>
+      </p>
+    </div>
+
+    <!-- Logo officiel mis en valeur sur une carte claire. -->
+    <div class="hero__visuel">
+      <div class="hero__carte-logo">
+        <img
+          src={logo.src}
+          alt=""
+          width={logo.largeur}
+          height={logo.hauteur}
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        120% 120% at 85% 10%,
+        color-mix(in srgb, var(--bleu-medium) 55%, transparent),
+        transparent 55%
+      ),
+      linear-gradient(160deg, var(--bleu-profond), color-mix(in srgb, var(--bleu-profond) 82%, #000) 100%);
+    background-color: var(--bleu-profond);
+    color: var(--blanc);
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    align-items: center;
+    gap: var(--esp-2xl);
+    padding-block: clamp(3rem, 6vw, 6rem);
+  }
+
+  .hero__surtitre {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-xs);
+    font-size: var(--taille-sm);
+    font-weight: var(--graisse-medium);
+    letter-spacing: 0.02em;
+    color: var(--bleu-clair-3);
+    margin-bottom: var(--esp-md);
+  }
+
+  .hero__titre {
+    color: var(--blanc);
+    font-size: var(--taille-2xl);
+    display: flex;
+    flex-direction: column;
+  }
+  .hero__titre-accent {
+    font-family: var(--police-serif);
+    font-style: italic;
+    font-weight: var(--graisse-normale);
+    color: var(--accent-or);
+  }
+
+  .hero__baseline {
+    margin-top: var(--esp-lg);
+    max-width: 34rem;
+    color: var(--bleu-clair-2);
+    font-size: var(--taille-md);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-sm);
+    margin-top: var(--esp-xl);
+  }
+
+  .hero__garde {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-xs);
+    margin-top: var(--esp-lg);
+    font-size: var(--taille-sm);
+    color: var(--bleu-clair-3);
+  }
+  .hero__garde strong {
+    color: var(--blanc);
+    font-weight: var(--graisse-forte);
+    letter-spacing: 0.04em;
+  }
+
+  /* Visuel : logo officiel sur carte blanche. */
+  .hero__visuel {
+    display: grid;
+    place-items: center;
+  }
+  .hero__carte-logo {
+    width: min(100%, 24rem);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border-radius: var(--rayon-lg);
+    background: var(--blanc);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--ombre-lg);
+  }
+  .hero__carte-logo img {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--esp-xl);
+    }
+    .hero__visuel {
+      justify-content: center;
+    }
+    .hero__carte-logo {
+      width: min(100%, 20rem);
+    }
+  }
+</style>

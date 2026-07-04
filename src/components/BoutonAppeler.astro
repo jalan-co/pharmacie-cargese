@@ -1,0 +1,36 @@
+---
+/**
+ * Bouton « Appeler » réutilisable.
+ * - Variante par défaut : bouton primaire (utilisé dans le header, le hero…).
+ * - Le numéro provient toujours de la source unique `site.ts`.
+ */
+import { pharmacie } from '../data/site';
+import Icone from './Icone.astro';
+
+interface Props {
+  /** Style visuel du bouton. */
+  variante?: 'primaire' | 'secondaire';
+  /** Classe supplémentaire (ex. adaptation sur fond sombre). */
+  class?: string;
+  /** Texte affiché ; par défaut « Appeler ». */
+  libelle?: string;
+  /** Affiche le numéro en toutes lettres après le libellé. */
+  afficherNumero?: boolean;
+}
+
+const {
+  variante = 'primaire',
+  class: classe = '',
+  libelle = 'Appeler',
+  afficherNumero = false,
+} = Astro.props;
+---
+
+<a
+  href={`tel:${pharmacie.telephone.lien}`}
+  class={`btn btn--${variante} ${classe}`}
+  aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
+>
+  <Icone nom="phone" class="btn__icone" />
+  <span>{libelle}{afficherNumero ? ` · ${pharmacie.telephone.affichage}` : ''}</span>
+</a>

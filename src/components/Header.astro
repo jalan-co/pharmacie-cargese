@@ -1,0 +1,113 @@
+---
+/**
+ * En-tête du site : logo, navigation principale et bouton Appeler.
+ * Sticky en haut de page. La navigation (3 liens courts) reste visible sur
+ * mobile ; le bouton Appeler du header est relayé par une barre fixe en bas
+ * d'écran sur mobile (voir BarreAppelMobile).
+ */
+import { navigation } from '../data/site';
+import Logo from './Logo.astro';
+import BoutonAppeler from './BoutonAppeler.astro';
+
+// Chemin courant pour marquer le lien actif (aria-current).
+const chemin = Astro.url.pathname;
+const estActif = (href: string) =>
+  href === '/' ? chemin === '/' : chemin.startsWith(href);
+---
+
+<header class="entete">
+  <div class="conteneur entete__inner">
+    <a href="/" class="entete__logo" aria-label="Pharmacie de Cargèse — accueil">
+      <Logo />
+    </a>
+
+    <nav class="entete__nav" aria-label="Navigation principale">
+      <ul>
+        {
+          navigation.map((lien) => (
+            <li>
+              <a
+                href={lien.href}
+                aria-current={estActif(lien.href) ? 'page' : undefined}
+              >
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="entete__action">
+      <BoutonAppeler variante="primaire" />
+    </div>
+  </div>
+</header>
+
+<style>
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--blanc) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--bordure);
+  }
+  .entete__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-lg);
+    min-height: 4.5rem;
+  }
+  .entete__logo {
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .entete__nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-xs);
+  }
+  .entete__nav a {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--rayon-pilule);
+    font-family: var(--police-titre);
+    font-size: var(--taille-sm);
+    font-weight: var(--graisse-medium);
+    color: var(--couleur-texte);
+    text-decoration: none;
+    transition: background-color var(--transition-douce), color var(--transition-douce);
+  }
+  .entete__nav a:hover {
+    background: var(--bleu-clair-1);
+    color: var(--bleu-medium);
+  }
+  .entete__nav a[aria-current='page'] {
+    color: var(--bleu-medium);
+    background: var(--bleu-clair-1);
+  }
+
+  /* Tablette et mobile : la nav se resserre, le bouton Appeler du header
+     laisse place à la barre fixe du bas. */
+  @media (max-width: 720px) {
+    .entete__inner {
+      gap: var(--esp-md);
+      min-height: 3.75rem;
+    }
+    .entete__action {
+      display: none;
+    }
+    .entete__nav a {
+      padding: 0.45rem 0.6rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .entete__nav a {
+      font-size: var(--taille-xs);
+      padding: 0.4rem 0.45rem;
+    }
+  }
+</style>

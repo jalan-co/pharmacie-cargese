@@ -1,0 +1,62 @@
+---
+/**
+ * Carte présentant un service. Réutilisée sur l'accueil (aperçu) et la page
+ * Services (version détaillée). Reçoit un objet Service en props.
+ */
+import type { Service } from '../data/site';
+import Icone from './Icone.astro';
+
+interface Props {
+  service: Service;
+  /** Niveau de titre pour respecter la hiérarchie Hn de la page. */
+  niveauTitre?: 2 | 3;
+}
+
+const { service, niveauTitre = 3 } = Astro.props;
+const Titre = `h${niveauTitre}` as const;
+---
+
+<article class="carte">
+  <span class="carte__icone" aria-hidden="true">
+    <Icone nom={service.icone} taille={26} />
+  </span>
+  <Titre class="carte__titre">{service.titre}</Titre>
+  <p class="carte__description">{service.description}</p>
+</article>
+
+<style>
+  .carte {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-sm);
+    height: 100%;
+    padding: var(--esp-lg);
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    box-shadow: var(--ombre-sm);
+    transition: transform var(--transition-douce), box-shadow var(--transition-douce),
+      border-color var(--transition-douce);
+  }
+  .carte:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ombre-md);
+    border-color: var(--bleu-clair-3);
+  }
+  .carte__icone {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--rayon-sm);
+    background: var(--bleu-clair-1);
+    color: var(--bleu-medium);
+  }
+  .carte__titre {
+    font-size: var(--taille-md);
+  }
+  .carte__description {
+    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
+  }
+</style>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Pharmacie de Cargèse">
+  <defs>
+    <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a2e5c"/>
+      <stop offset="1" stop-color="#08234a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#fond)"/>
+  <g fill="#ffffff">
+    <rect x="150" y="250" width="42" height="130" rx="10"/>
+    <rect x="106" y="294" width="130" height="42" rx="10"/>
+  </g>
+  <text x="290" y="300" font-family="Helvetica, Arial, sans-serif" font-size="76" font-weight="700" fill="#ffffff">Pharmacie</text>
+  <text x="290" y="388" font-family="Georgia, serif" font-style="italic" font-size="64" fill="#c9a24b">de Cargèse</text>
+  <text x="292" y="452" font-family="Helvetica, Arial, sans-serif" font-size="30" fill="#cddff2">Votre pharmacie de proximité — 20130 Cargèse</text>
+</svg>

@@ -1,0 +1,77 @@
+/**
+ * Design tokens — variables CSS globales.
+ * Aucune couleur ni valeur d'espacement ne doit être codée en dur dans les
+ * composants : tout passe par ces variables.
+ */
+
+:root {
+  /* --- Couleurs : palette bleu / blanc épurée --- */
+  --bleu-profond: #0a2e5c;
+  --bleu-medium: #1a5aa0;
+  --bleu-clair-1: #e8f1fb;
+  --bleu-clair-2: #e6eef7;
+  --bleu-clair-3: #cddff2;
+  --bordure: #c7d8ec;
+  --slate: #5b7891;
+  --slate-2: #64809c;
+  --blanc: #ffffff;
+
+  /* Accent doré discret, en écho au traitement « de Cargèse » de la maquette. */
+  --accent-or: #c9a24b;
+
+  /* --- Couleurs sémantiques (dérivées des tokens ci-dessus) --- */
+  --couleur-texte: var(--bleu-profond);
+  --couleur-texte-doux: var(--slate);
+  --couleur-fond: var(--blanc);
+  --couleur-fond-alt: var(--bleu-clair-1);
+  --couleur-lien: var(--bleu-medium);
+
+  /* --- Typographie --- */
+  --police-titre: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --police-corps: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --police-serif: Georgia, 'Times New Roman', serif;
+
+  /* Échelle typographique (fluide, clamp mobile → desktop) */
+  --taille-xs: 0.8125rem;   /* 13px */
+  --taille-sm: 0.9375rem;   /* 15px */
+  --taille-base: 1.0625rem; /* 17px */
+  --taille-md: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --taille-lg: clamp(1.375rem, 1.2rem + 0.9vw, 1.875rem);
+  --taille-xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --taille-2xl: clamp(2.25rem, 1.7rem + 2.6vw, 3.75rem);
+
+  --graisse-normale: 400;
+  --graisse-medium: 500;
+  --graisse-forte: 700;
+
+  --interligne-serre: 1.15;
+  --interligne-base: 1.65;
+
+  /* --- Espacements (échelle cohérente) --- */
+  --esp-2xs: 0.25rem;
+  --esp-xs: 0.5rem;
+  --esp-sm: 0.75rem;
+  --esp-md: 1rem;
+  --esp-lg: 1.5rem;
+  --esp-xl: 2.5rem;
+  --esp-2xl: 4rem;
+  --esp-3xl: 6rem;
+
+  /* --- Rayons --- */
+  --rayon-sm: 8px;
+  --rayon-md: 14px;
+  --rayon-lg: 22px;
+  --rayon-pilule: 999px;
+
+  /* --- Ombres --- */
+  --ombre-sm: 0 1px 3px rgba(10, 46, 92, 0.08);
+  --ombre-md: 0 8px 24px rgba(10, 46, 92, 0.1);
+  --ombre-lg: 0 18px 48px rgba(10, 46, 92, 0.16);
+
+  /* --- Mise en page --- */
+  --largeur-max: 1120px;
+  --largeur-texte: 60ch;
+
+  /* --- Transitions --- */
+  --transition-douce: 200ms ease;
+}

@@ -1,0 +1,81 @@
+---
+/**
+ * Page « Nos services » : présentation détaillée des 4 services.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EntetePage from '../components/EntetePage.astro';
+import CarteService from '../components/CarteService.astro';
+import BoutonAppeler from '../components/BoutonAppeler.astro';
+import { services, seo, pharmacie } from '../data/site';
+
+const meta = seo['/services'];
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <EntetePage
+    surtitre="Nos services"
+    titre="Des expertises au service de votre santé"
+    intro="À la Pharmacie de Cargèse, chaque service est assuré par notre équipe de pharmaciens, dans un espace confidentiel et à votre écoute."
+  />
+
+  <section class="section">
+    <div class="conteneur">
+      <ul class="grille-detail" role="list">
+        {
+          services.map((service) => (
+            <li>
+              <CarteService service={service} niveauTitre={2} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Rappel d'action : prendre contact -->
+  <section class="section rappel">
+    <div class="conteneur rappel__inner">
+      <div>
+        <h2>Une question sur nos services&nbsp;?</h2>
+        <p>
+          Notre équipe vous répond et vous oriente vers l'accompagnement le plus
+          adapté. Appelez-nous directement à l'officine.
+        </p>
+      </div>
+      <BoutonAppeler variante="secondaire" afficherNumero={true} class="btn--sur-sombre" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grille-detail {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--esp-lg);
+  }
+  @media (max-width: 640px) {
+    .grille-detail {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .rappel {
+    background: var(--bleu-profond);
+    color: var(--blanc);
+  }
+  .rappel :global(h2) {
+    color: var(--blanc);
+  }
+  .rappel__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--esp-lg);
+  }
+  .rappel p {
+    margin-top: var(--esp-sm);
+    max-width: 40rem;
+    color: var(--bleu-clair-2);
+  }
+</style>

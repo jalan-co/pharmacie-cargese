@@ -1,0 +1,146 @@
+---
+/**
+ * Pied de page : coordonnées complètes, navigation, rappel garde.
+ * Remplace une page Contact (le bouton Appeler est omniprésent par ailleurs).
+ */
+import { pharmacie, navigation } from '../data/site';
+import Logo from './Logo.astro';
+import Icone from './Icone.astro';
+
+const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
+---
+
+<footer class="pied">
+  <div class="conteneur pied__inner">
+    <div class="pied__marque">
+      <Logo sombre={true} />
+      <p class="pied__baseline">{pharmacie.baseline}.</p>
+    </div>
+
+    <nav class="pied__nav" aria-label="Navigation de pied de page">
+      <h2 class="pied__titre">Le site</h2>
+      <ul>
+        {navigation.map((lien) => <li><a href={lien.href}>{lien.libelle}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="pied__contact">
+      <h2 class="pied__titre">Nous contacter</h2>
+      <ul>
+        <li>
+          <Icone nom="pin" taille={18} />
+          <span>{pharmacie.adresse.complete}</span>
+        </li>
+        <li>
+          <Icone nom="phone" taille={18} />
+          <a href={`tel:${pharmacie.telephone.lien}`}>{pharmacie.telephone.affichage}</a>
+        </li>
+        <li>
+          <Icone nom="mail" taille={18} />
+          <a href={`mailto:${pharmacie.email}`}>{pharmacie.email}</a>
+        </li>
+        <li class="pied__garde">
+          <Icone nom="shield" taille={18} />
+          <span>Garde : <strong>{pharmacie.garde}</strong> (24h/24)</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pied__bas">
+    <div class="conteneur pied__bas-inner">
+      <p>© {annee} {pharmacie.nom}. Tous droits réservés.</p>
+      <p>Site vitrine — informations non contractuelles.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    background: var(--bleu-profond);
+    color: var(--bleu-clair-2);
+    margin-top: var(--esp-2xl);
+  }
+  .pied__inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.4fr;
+    gap: var(--esp-xl);
+    padding-block: var(--esp-2xl);
+  }
+  .pied__baseline {
+    margin-top: var(--esp-md);
+    max-width: 26rem;
+    font-size: var(--taille-sm);
+    color: var(--bleu-clair-3);
+  }
+  .pied__titre {
+    font-size: var(--taille-sm);
+    font-weight: var(--graisse-forte);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blanc);
+    margin-bottom: var(--esp-md);
+  }
+  .pied__nav ul,
+  .pied__contact ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-sm);
+  }
+  .pied a {
+    color: var(--bleu-clair-2);
+    text-decoration: none;
+  }
+  .pied a:hover {
+    color: var(--blanc);
+    text-decoration: underline;
+  }
+  .pied__contact li {
+    display: flex;
+    align-items: start;
+    gap: var(--esp-sm);
+    font-size: var(--taille-sm);
+  }
+  .pied__contact :global(svg) {
+    color: var(--bleu-clair-3);
+    flex: none;
+    margin-top: 2px;
+  }
+  .pied__garde strong {
+    color: var(--blanc);
+    letter-spacing: 0.04em;
+  }
+
+  .pied__bas {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .pied__bas-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--esp-xs);
+    padding-block: var(--esp-lg);
+    font-size: var(--taille-xs);
+    color: var(--slate-2);
+  }
+
+  @media (max-width: 860px) {
+    .pied__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pied__marque {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .pied__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+  /* Marge basse pour ne pas passer sous la barre d'appel mobile fixe. */
+  @media (max-width: 720px) {
+    .pied__bas {
+      padding-bottom: 4.5rem;
+    }
+  }
+</style>

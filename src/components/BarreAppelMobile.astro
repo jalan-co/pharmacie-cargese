@@ -1,0 +1,52 @@
+---
+/**
+ * Barre fixe en bas d'écran (mobile uniquement) : garde le bouton « Appeler »
+ * accessible en permanence, conformément aux exigences mobile-first.
+ */
+import { pharmacie } from '../data/site';
+import BoutonAppeler from './BoutonAppeler.astro';
+import Icone from './Icone.astro';
+import { lienItineraire } from '../data/site';
+---
+
+<div class="barre-appel" aria-label="Contact rapide">
+  <BoutonAppeler variante="primaire" afficherNumero={true} class="barre-appel__btn" />
+  <a
+    href={lienItineraire}
+    class="btn btn--secondaire barre-appel__itineraire"
+    target="_blank"
+    rel="noopener"
+    aria-label={`Itinéraire vers la ${pharmacie.nom}`}
+  >
+    <Icone nom="route" class="btn__icone" />
+    <span>Itinéraire</span>
+  </a>
+</div>
+
+<style>
+  .barre-appel {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    .barre-appel {
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: 200;
+      display: flex;
+      gap: var(--esp-xs);
+      padding: var(--esp-xs) var(--esp-md);
+      padding-bottom: max(var(--esp-xs), env(safe-area-inset-bottom));
+      background: color-mix(in srgb, var(--blanc) 92%, transparent);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-top: 1px solid var(--bordure);
+    }
+    .barre-appel__btn {
+      flex: 1 1 auto;
+    }
+    .barre-appel__itineraire {
+      flex: 0 0 auto;
+    }
+  }
+</style>

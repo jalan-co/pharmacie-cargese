@@ -1,0 +1,41 @@
+---
+/**
+ * Logo officiel de la pharmacie (image).
+ * Sur fond sombre (footer), l'image opaque est présentée dans un badge blanc
+ * arrondi pour rester lisible et soignée.
+ */
+import { pharmacie, logo } from '../data/site';
+
+interface Props {
+  /** Sur fond sombre : encadré blanc autour du logo. */
+  sombre?: boolean;
+  /** Hauteur d'affichage en pixels (le ratio est préservé). */
+  hauteur?: number;
+}
+const { sombre = false, hauteur = 48 } = Astro.props;
+const largeur = Math.round((hauteur * logo.largeur) / logo.hauteur);
+---
+
+<img
+  src={logo.src}
+  alt={`Logo ${pharmacie.nom}`}
+  width={largeur}
+  height={hauteur}
+  style={`height:${hauteur}px`}
+  class:list={['logo', { 'logo--sombre': sombre }]}
+  decoding="async"
+/>
+
+<style>
+  .logo {
+    display: block;
+    width: auto;
+    object-fit: contain;
+  }
+  .logo--sombre {
+    background: var(--blanc);
+    padding: var(--esp-xs) var(--esp-sm);
+    border-radius: var(--rayon-sm);
+    box-sizing: content-box;
+  }
+</style>

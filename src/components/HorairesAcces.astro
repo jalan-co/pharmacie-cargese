@@ -1,0 +1,212 @@
+---
+/**
+ * Bloc « Horaires & accès » : horaires, adresse, contact et rappel de la
+ * pharmacie de garde. Réutilisé sur l'accueil (sans carte) et sur la page
+ * Horaires (avec la carte Google Maps).
+ */
+import {
+  pharmacie,
+  horaires,
+  lienItineraire,
+  lienCarteEmbed,
+} from '../data/site';
+import Icone from './Icone.astro';
+import BoutonAppeler from './BoutonAppeler.astro';
+
+interface Props {
+  /** Affiche l'iframe Google Maps (page Horaires). */
+  avecCarte?: boolean;
+  niveauTitre?: 2 | 3;
+}
+const { avecCarte = false, niveauTitre = 2 } = Astro.props;
+const Titre = `h${niveauTitre}` as const;
+---
+
+<section class="ha section" aria-label="Horaires et accès">
+  <div class="conteneur">
+    <div class:list={['ha__grille', { 'ha__grille--carte': avecCarte }]}>
+      <!-- Colonne infos -->
+      <div class="ha__infos">
+        <Titre class="ha__titre">Horaires &amp; accès</Titre>
+
+        <dl class="ha__horaires">
+          {
+            horaires.map((creneau) => (
+              <div class="ha__ligne">
+                <dt>{creneau.jours}</dt>
+                <dd>{creneau.heures}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <ul class="ha__coordonnees">
+          <li>
+            <Icone nom="pin" taille={20} />
+            <span>
+              {pharmacie.adresse.rue}<br />
+              {pharmacie.adresse.codePostal} {pharmacie.adresse.ville}
+            </span>
+          </li>
+          <li>
+            <Icone nom="phone" taille={20} />
+            <a href={`tel:${pharmacie.telephone.lien}`}>{pharmacie.telephone.affichage}</a>
+          </li>
+          <li>
+            <Icone nom="mail" taille={20} />
+            <a href={`mailto:${pharmacie.email}`}>{pharmacie.email}</a>
+          </li>
+        </ul>
+
+        <p class="ha__garde" role="note">
+          <Icone nom="shield" taille={20} />
+          <span>
+            <strong>Pharmacie de garde</strong> — en dehors des horaires, composez le
+            <a href={`tel:${pharmacie.garde}`} class="ha__garde-num">{pharmacie.garde}</a>
+            (24h/24, 7j/7).
+          </span>
+        </p>
+
+        <div class="ha__actions">
+          <BoutonAppeler variante="primaire" />
+          <a href={lienItineraire} class="btn btn--secondaire" target="_blank" rel="noopener">
+            <Icone nom="route" class="btn__icone" />
+            <span>Itinéraire</span>
+          </a>
+        </div>
+      </div>
+
+      {
+        avecCarte && (
+          <div class="ha__carte">
+            <iframe
+              title={`Carte de localisation de la ${pharmacie.nom}`}
+              src={lienCarteEmbed}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .ha__grille {
+    display: grid;
+    gap: var(--esp-xl);
+  }
+  .ha__grille--carte {
+    grid-template-columns: 1fr 1.1fr;
+    align-items: stretch;
+  }
+
+  .ha__infos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-lg);
+  }
+
+  .ha__horaires {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    overflow: hidden;
+  }
+  .ha__ligne {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--esp-xs) var(--esp-md);
+    padding: var(--esp-md) var(--esp-lg);
+  }
+  .ha__ligne + .ha__ligne {
+    border-top: 1px solid var(--bordure);
+  }
+  .ha__ligne dt {
+    font-weight: var(--graisse-medium);
+    color: var(--couleur-texte);
+  }
+  .ha__ligne dd {
+    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
+  }
+
+  .ha__coordonnees {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-sm);
+  }
+  .ha__coordonnees li {
+    display: flex;
+    align-items: start;
+    gap: var(--esp-sm);
+    color: var(--couleur-texte);
+  }
+  .ha__coordonnees :global(svg) {
+    color: var(--bleu-medium);
+    flex: none;
+    margin-top: 2px;
+  }
+  .ha__coordonnees a {
+    color: var(--couleur-texte);
+    text-decoration: none;
+  }
+  .ha__coordonnees a:hover {
+    color: var(--bleu-medium);
+    text-decoration: underline;
+  }
+
+  .ha__garde {
+    display: flex;
+    align-items: start;
+    gap: var(--esp-sm);
+    padding: var(--esp-md) var(--esp-lg);
+    background: var(--bleu-clair-1);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    font-size: var(--taille-sm);
+    color: var(--couleur-texte-doux);
+  }
+  .ha__garde :global(svg) {
+    color: var(--bleu-medium);
+    flex: none;
+    margin-top: 2px;
+  }
+  .ha__garde-num {
+    font-weight: var(--graisse-forte);
+    color: var(--bleu-medium);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    margin-inline: 0.15em;
+  }
+
+  .ha__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-sm);
+  }
+
+  .ha__carte {
+    border-radius: var(--rayon-md);
+    overflow: hidden;
+    border: 1px solid var(--bordure);
+    box-shadow: var(--ombre-sm);
+    min-height: 22rem;
+  }
+  .ha__carte iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 22rem;
+    border: 0;
+  }
+
+  @media (max-width: 860px) {
+    .ha__grille--carte {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

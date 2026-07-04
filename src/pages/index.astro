@@ -1,0 +1,75 @@
+---
+/**
+ * Page d'accueil.
+ * Compose les sections dans l'ordre : hero, chiffres clés, services phares,
+ * ruban de marques, horaires & accès.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import BlocStats from '../components/BlocStats.astro';
+import CarteService from '../components/CarteService.astro';
+import RubanMarques from '../components/RubanMarques.astro';
+import HorairesAcces from '../components/HorairesAcces.astro';
+import { services, seo } from '../data/site';
+
+const meta = seo['/'];
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <Hero />
+  <BlocStats />
+
+  <section class="section" aria-labelledby="titre-services">
+    <div class="conteneur">
+      <div class="section-entete">
+        <span class="surtitre">Nos services</span>
+        <h2 id="titre-services">Un accompagnement de santé complet</h2>
+        <p>
+          De la prévention au conseil personnalisé, notre équipe vous suit à chaque
+          étape. Découvrez nos quatre expertises phares.
+        </p>
+      </div>
+
+      <ul class="grille-services" role="list">
+        {
+          services.map((service) => (
+            <li>
+              <CarteService service={service} niveauTitre={3} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="lien-services">
+        <a href="/services" class="btn btn--secondaire">
+          Voir le détail de nos services
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <RubanMarques />
+  <HorairesAcces />
+</BaseLayout>
+
+<style>
+  .grille-services {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--esp-lg);
+  }
+  .lien-services {
+    margin-top: var(--esp-xl);
+  }
+
+  @media (max-width: 900px) {
+    .grille-services {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .grille-services {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

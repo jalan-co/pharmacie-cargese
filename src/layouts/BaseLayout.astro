@@ -1,0 +1,85 @@
+---
+/**
+ * Gabarit de base : structure HTML, <head> (SEO, Open Graph, favicon, polices),
+ * header, contenu (slot) et footer. Utilisé par toutes les pages.
+ */
+import '@fontsource-variable/inter'; // Webfont Inter auto-hébergée (perf, RGPD).
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+import { pharmacie } from '../data/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarreAppelMobile from '../components/BarreAppelMobile.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+// URL canonique absolue (basée sur `site` dans astro.config.mjs).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-image.svg', Astro.site).href;
+
+// Données structurées Schema.org (Pharmacy) pour le référencement local.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Pharmacy',
+  name: pharmacie.nom,
+  telephone: pharmacie.telephone.affichage,
+  email: pharmacie.email,
+  url: Astro.site?.href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: pharmacie.adresse.rue,
+    postalCode: pharmacie.adresse.codePostal,
+    addressLocality: pharmacie.adresse.ville,
+    addressCountry: 'FR',
+  },
+};
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a2e5c" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Open Graph / réseaux sociaux -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={pharmacie.nom} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a href="#contenu" class="skip-link">Aller au contenu</a>
+    <Header />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Footer />
+    <BarreAppelMobile />
+  </body>
+</html>
