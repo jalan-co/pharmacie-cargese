@@ -1,0 +1,218 @@
+# Configuration du back-office Sveltia CMS.
+# Le CMS édite le fichier src/data/content.json et enregistre les modifications
+# directement dans le dépôt GitHub. Chaque enregistrement déclenche un nouveau
+# déploiement Vercel : le site est mis à jour ~1 minute plus tard.
+
+backend:
+  name: github
+  repo: jalan-co/pharmacie-cargese
+  branch: main
+  # IMPORTANT : remplacer par l'URL de PRODUCTION réelle du site après le
+  # premier déploiement Vercel (ou par le domaine définitif). L'authentification
+  # (/api/auth et /api/callback) est servie par cette même adresse.
+  base_url: https://pharmacie-cargese.vercel.app
+  auth_endpoint: api/auth
+
+# Langue de l'interface d'administration.
+locale: fr
+
+# Dossier où seront déposées les images ajoutées depuis le CMS (photos à venir).
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: contenu
+    label: Contenu du site
+    delete: false
+    files:
+      - name: infos
+        label: Informations & textes du site
+        file: src/data/content.json
+        description: >-
+          Coordonnées, textes d'accueil, services, marques, horaires et
+          référencement. Modifiez, puis cliquez sur « Enregistrer » : le site se
+          met à jour automatiquement en une minute environ.
+        fields:
+          - label: La pharmacie
+            name: pharmacie
+            widget: object
+            fields:
+              - { label: Nom, name: nom, widget: string }
+              - { label: Accroche (baseline), name: baseline, widget: string }
+              - {
+                  label: Téléphone,
+                  name: telephone,
+                  widget: string,
+                  hint: "Format : 04 95 26 40 30",
+                }
+              - { label: E-mail, name: email, widget: string }
+              - {
+                  label: N° pharmacie de garde,
+                  name: garde,
+                  widget: string,
+                  default: "3237",
+                }
+              - label: Adresse
+                name: adresse
+                widget: object
+                fields:
+                  - { label: Rue, name: rue, widget: string }
+                  - { label: Complément, name: complementRue, widget: string }
+                  - { label: Code postal, name: codePostal, widget: string }
+                  - { label: Ville, name: ville, widget: string }
+
+          - label: Section d'accueil
+            name: hero
+            widget: object
+            fields:
+              - { label: Petit badge, name: badge, widget: string }
+              - { label: Titre principal, name: titre, widget: string }
+              - { label: Texte d'introduction, name: texte, widget: text }
+              - {
+                  label: Ligne d'ouverture,
+                  name: ouverture,
+                  widget: string,
+                  hint: "Ex. : Ouvert aujourd'hui · ferme à 19h00",
+                }
+              - {
+                  label: Légende de l'emplacement photo,
+                  name: photoLegende,
+                  widget: string,
+                }
+              - {
+                  label: "Carte flottante — titre",
+                  name: carteFlottanteTitre,
+                  widget: string,
+                }
+              - {
+                  label: "Carte flottante — texte",
+                  name: carteFlottanteTexte,
+                  widget: string,
+                }
+              - {
+                  label: "Badge — valeur (ex. 45)",
+                  name: badgeValeur,
+                  widget: string,
+                }
+              - {
+                  label: "Badge — unité (ex. ans)",
+                  name: badgeUnite,
+                  widget: string,
+                }
+              - {
+                  label: "Badge — texte",
+                  name: badgeTexte,
+                  widget: string,
+                }
+
+          - label: Chiffres clés
+            name: stats
+            widget: list
+            label_singular: Chiffre
+            summary: "{{fields.valeur}} — {{fields.libelle}}"
+            fields:
+              - { label: Valeur, name: valeur, widget: string }
+              - { label: Libellé, name: libelle, widget: string }
+
+          - label: Services
+            name: services
+            widget: list
+            label_singular: Service
+            summary: "{{fields.titre}}"
+            fields:
+              - { label: Titre, name: titre, widget: string }
+              - { label: Description, name: description, widget: text }
+              - label: Icône
+                name: icone
+                widget: select
+                options:
+                  - clipboard
+                  - test
+                  - leaf
+                  - plant
+                  - heart
+                  - clock
+                  - shield
+                  - cross
+                  - phone
+                  - pin
+                  - mail
+                  - image
+
+          - label: Pourquoi nous
+            name: pourquoiNous
+            widget: object
+            fields:
+              - { label: Surtitre, name: surtitre, widget: string }
+              - { label: Titre, name: titre, widget: string }
+              - {
+                  label: Légende de l'emplacement photo,
+                  name: photoLegende,
+                  widget: string,
+                }
+              - label: Atouts
+                name: atouts
+                widget: list
+                label_singular: Atout
+                summary: "{{fields.titre}}"
+                fields:
+                  - { label: Titre, name: titre, widget: string }
+                  - { label: Description, name: description, widget: text }
+                  - label: Icône
+                    name: icone
+                    widget: select
+                    options:
+                      - heart
+                      - clock
+                      - shield
+                      - leaf
+                      - plant
+                      - clipboard
+                      - test
+
+          - label: Marques
+            name: marques
+            widget: list
+            label_singular: Marque
+            field: { label: Marque, name: marque, widget: string }
+
+          - label: Horaires
+            name: horaires
+            widget: list
+            label_singular: Jour
+            summary: "{{fields.jour}} — {{fields.heures}}"
+            fields:
+              - { label: Jour, name: jour, widget: string }
+              - {
+                  label: Heures,
+                  name: heures,
+                  widget: string,
+                  hint: "Ex. : 08:30 – 19:30 (ou « Fermé »)",
+                }
+              - {
+                  label: Fermé ce jour ?,
+                  name: ferme,
+                  widget: boolean,
+                  default: false,
+                }
+
+          - {
+              label: Note sous les horaires,
+              name: horairesNote,
+              widget: string,
+            }
+
+          - label: Référencement (SEO)
+            name: seo
+            widget: object
+            fields:
+              - {
+                  label: Titre de l'onglet du navigateur,
+                  name: title,
+                  widget: string,
+                }
+              - {
+                  label: Description (résultats Google),
+                  name: description,
+                  widget: text,
+                }

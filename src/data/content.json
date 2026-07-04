@@ -1,0 +1,102 @@
+{
+  "pharmacie": {
+    "nom": "Pharmacie de Cargèse",
+    "baseline": "Votre santé, accompagnée avec soin",
+    "telephone": "04 95 26 40 30",
+    "email": "pharmaciedecargese@gmail.com",
+    "garde": "3237",
+    "adresse": {
+      "rue": "Quartier Saint-Jean",
+      "complementRue": "Route de Piana",
+      "codePostal": "20130",
+      "ville": "Cargèse"
+    }
+  },
+  "hero": {
+    "badge": "Pharmacie de proximité à Cargèse",
+    "titre": "Votre santé, accompagnée avec soin",
+    "texte": "Conseil, prévention et suivi personnalisé au cœur du village. Une équipe de pharmaciens à votre écoute, six jours sur sept, à deux pas du port.",
+    "ouverture": "Ouvert aujourd'hui · ferme à 19h00",
+    "photoLegende": "Façade de l'officine ou pharmacien en conseil — image libre de droit",
+    "carteFlottanteTitre": "Conseil personnalisé",
+    "carteFlottanteTexte": "6 jours sur 7, sans rendez-vous",
+    "badgeValeur": "45",
+    "badgeUnite": "ans",
+    "badgeTexte": "au service du village"
+  },
+  "stats": [
+    { "valeur": "45+", "libelle": "Années au service du village" },
+    { "valeur": "8 000+", "libelle": "Patients accompagnés chaque année" },
+    { "valeur": "40+", "libelle": "Marques sélectionnées" },
+    { "valeur": "6j/7", "libelle": "Ouvert et à votre écoute" }
+  ],
+  "services": [
+    {
+      "titre": "Bilan de médication",
+      "description": "Un entretien dédié pour revoir vos traitements, éviter les interactions et sécuriser votre suivi.",
+      "icone": "clipboard"
+    },
+    {
+      "titre": "Tests de dépistage",
+      "description": "Angine, grippe et Covid : résultat rapide en officine pour une prise en charge sans attendre.",
+      "icone": "test"
+    },
+    {
+      "titre": "Conseil en micronutrition",
+      "description": "Fatigue, sommeil, immunité : des recommandations adaptées à votre terrain et à vos besoins.",
+      "icone": "leaf"
+    },
+    {
+      "titre": "Phytothérapie",
+      "description": "Le bienfait des plantes, conseillé par des pharmaciens formés, en complément de votre parcours de soin.",
+      "icone": "plant"
+    }
+  ],
+  "pourquoiNous": {
+    "surtitre": "Pourquoi nous",
+    "titre": "Une pharmacie humaine, au plus près des habitants",
+    "photoLegende": "Équipe de la pharmacie ou intérieur de l'officine — image libre de droit",
+    "atouts": [
+      {
+        "titre": "Un suivi qui vous connaît",
+        "description": "Vos traitements, vos habitudes, votre historique : un conseil qui tient compte de qui vous êtes.",
+        "icone": "heart"
+      },
+      {
+        "titre": "Disponible 6 jours sur 7",
+        "description": "Sans rendez-vous, du lundi au samedi, avec une pharmacie de garde joignable au 3237.",
+        "icone": "clock"
+      },
+      {
+        "titre": "Des marques de confiance",
+        "description": "Une sélection dermo-cosmétique et de santé naturelle rigoureuse, testée et recommandée.",
+        "icone": "shield"
+      }
+    ]
+  },
+  "marques": [
+    "Avène",
+    "La Rosée",
+    "Nuxe",
+    "Caudalie",
+    "Klorane",
+    "CeraVe",
+    "Respire",
+    "Rogé Cavaillès",
+    "Isdin"
+  ],
+  "horaires": [
+    { "jour": "Lundi", "heures": "08:30 – 19:30", "ferme": false },
+    { "jour": "Mardi", "heures": "08:30 – 19:30", "ferme": false },
+    { "jour": "Mercredi", "heures": "08:30 – 19:30", "ferme": false },
+    { "jour": "Jeudi", "heures": "08:30 – 19:30", "ferme": false },
+    { "jour": "Vendredi", "heures": "08:30 – 19:30", "ferme": false },
+    { "jour": "Samedi", "heures": "09:00 – 19:00", "ferme": false },
+    { "jour": "Dimanche", "heures": "Fermé", "ferme": true }
+  ],
+  "horairesNote": "Fermé les jours fériés",
+  "seo": {
+    "title": "Pharmacie de Cargèse — Votre santé, accompagnée avec soin",
+    "description": "Pharmacie de Cargèse : conseil, prévention et suivi personnalisé. Bilan de médication, tests de dépistage, micronutrition, phytothérapie. Quartier Saint-Jean, Route de Piana, 20130 Cargèse."
+  }
+}
