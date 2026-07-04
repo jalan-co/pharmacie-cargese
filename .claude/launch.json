@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
+    },
+    {
+      "name": "ref-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/static-server.mjs"],
+      "port": 8123
     }
   ]
 }

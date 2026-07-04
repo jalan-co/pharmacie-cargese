@@ -1,88 +1,81 @@
 ---
 /**
- * Bloc de statistiques rassurantes (chiffres clés).
- * Contenu issu de `stats` dans la source unique.
+ * Bandeau de statistiques : carte bleu profond, 4 chiffres clés.
  */
 import { stats } from '../data/site';
 ---
 
 <section class="stats" aria-label="Chiffres clés">
   <div class="conteneur">
-    <ul class="stats__grille">
-      {
-        stats.map((stat) => (
-          <li class="stats__item">
-            <span class="stats__valeur">{stat.valeur}</span>
-            <span class="stats__libelle">{stat.libelle}</span>
-          </li>
-        ))
-      }
+    <ul class="stats__carte">
+      {stats.map((stat) => (
+        <li class="stats__item">
+          <span class="stats__valeur">{stat.valeur}</span>
+          <span class="stats__libelle">{stat.libelle}</span>
+        </li>
+      ))}
     </ul>
   </div>
 </section>
 
 <style>
   .stats {
-    padding-block: var(--esp-xl);
+    /* Chevauche légèrement le hero au-dessus. */
+    margin-top: calc(-1 * var(--esp-xl));
+    position: relative;
+    z-index: 2;
   }
-  .stats__grille {
+  .stats__carte {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--esp-md);
-    padding: var(--esp-lg);
-    background: var(--bleu-clair-1);
-    border: 1px solid var(--bordure);
+    padding: var(--esp-xl) var(--esp-lg);
+    background: var(--bleu-profond);
     border-radius: var(--rayon-lg);
+    box-shadow: var(--ombre-lg);
   }
   .stats__item {
     display: flex;
     flex-direction: column;
     gap: var(--esp-2xs);
-    padding: var(--esp-sm) var(--esp-md);
+    padding-inline: var(--esp-md);
     text-align: center;
   }
   .stats__item + .stats__item {
-    border-left: 1px solid var(--bordure);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
   }
   .stats__valeur {
     font-family: var(--police-titre);
     font-weight: var(--graisse-forte);
     font-size: var(--taille-xl);
-    color: var(--bleu-medium);
+    color: var(--blanc);
     line-height: 1;
     letter-spacing: -0.02em;
   }
   .stats__libelle {
     font-size: var(--taille-sm);
-    color: var(--couleur-texte-doux);
+    color: var(--bleu-clair-3);
   }
 
   @media (max-width: 720px) {
-    .stats__grille {
+    .stats__carte {
       grid-template-columns: repeat(2, 1fr);
+      gap: var(--esp-lg) var(--esp-md);
     }
-    /* Bordures adaptées à la grille 2×2. */
-    .stats__item + .stats__item {
+    .stats__item:nth-child(odd) {
       border-left: none;
     }
-    .stats__item:nth-child(odd) {
-      border-right: 1px solid var(--bordure);
-    }
-    .stats__item:nth-child(n + 3) {
-      border-top: 1px solid var(--bordure);
-      padding-top: var(--esp-md);
+    .stats__item:nth-child(even) {
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
     }
   }
-
   @media (max-width: 400px) {
-    .stats__grille {
+    .stats__carte {
       grid-template-columns: 1fr;
     }
-    .stats__item:nth-child(odd) {
-      border-right: none;
-    }
     .stats__item + .stats__item {
-      border-top: 1px solid var(--bordure);
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
       padding-top: var(--esp-md);
     }
   }

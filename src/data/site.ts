@@ -2,10 +2,13 @@
  * Source UNIQUE de vérité du site.
  * Tout le contenu éditorial (coordonnées, services, marques, horaires, SEO)
  * est défini ici et consommé par les composants — jamais codé en dur ailleurs.
+ *
+ * Les textes reprennent la maquette validée. Les chiffres marketing
+ * (« 45 ans », « 8 000+ patients », « 40+ marques ») sont à confirmer par la
+ * pharmacie : ils se modifient uniquement ici.
  */
 
 export interface Service {
-  /** Identifiant court (slug), utile pour les ancres et les clés de liste. */
   id: string;
   titre: string;
   description: string;
@@ -13,9 +16,17 @@ export interface Service {
   icone: string;
 }
 
+export interface Atout {
+  titre: string;
+  description: string;
+  icone: string;
+}
+
 export interface CreneauHoraire {
-  jours: string;
+  jour: string;
   heures: string;
+  /** Vrai si la pharmacie est fermée ce jour (mise en forme atténuée). */
+  ferme?: boolean;
 }
 
 export interface LienNav {
@@ -26,20 +37,16 @@ export interface LienNav {
 /** Coordonnées et identité de la pharmacie. */
 export const pharmacie = {
   nom: 'Pharmacie de Cargèse',
-  /** Le nom scindé pour le traitement typographique du logo. */
-  nomLigne1: 'Pharmacie',
-  nomLigne2: 'de Cargèse',
-  baseline: 'Votre pharmacie de proximité au cœur de Cargèse',
+  baseline: 'Votre santé, accompagnée avec soin',
   adresse: {
-    rue: 'Quartier Saint-Jean, route de Piana',
+    rue: 'Quartier Saint-Jean',
+    complementRue: 'Route de Piana',
     codePostal: '20130',
     ville: 'Cargèse',
-    /** Adresse complète sur une ligne, pour les liens et le SEO. */
-    complete: 'Quartier Saint-Jean, route de Piana, 20130 Cargèse',
+    complete: 'Quartier Saint-Jean, Route de Piana, 20130 Cargèse',
   },
   telephone: {
     affichage: '04 95 26 40 30',
-    /** Format international pour l'attribut href="tel:". */
     lien: '+33495264030',
   },
   email: 'pharmaciedecargese@gmail.com',
@@ -54,45 +61,96 @@ export const logo = {
   hauteur: 453,
 } as const;
 
-/** Statistiques rassurantes affichées sur l'accueil. */
+/** Contenu du hero (accueil). */
+export const hero = {
+  badge: 'Pharmacie de proximité à Cargèse',
+  titre: 'Votre santé, accompagnée avec soin',
+  texte:
+    "Conseil, prévention et suivi personnalisé au cœur du village. Une équipe de pharmaciens à votre écoute, six jours sur sept, à deux pas du port.",
+  ouverture: "Ouvert aujourd'hui · ferme à 19h00",
+  /** Légende de l'emplacement photo (façade / conseil). */
+  photoLegende:
+    "Façade de l'officine ou pharmacien en conseil — image libre de droit",
+  /** Carte flottante « conseil ». */
+  carteFlottante: {
+    titre: 'Conseil personnalisé',
+    texte: '6 jours sur 7, sans rendez-vous',
+  },
+  /** Badge flottant « ancienneté ». */
+  badgeFlottant: {
+    valeur: '45',
+    unite: 'ans',
+    texte: 'au service du village',
+  },
+} as const;
+
+/** Statistiques rassurantes (bandeau bleu). */
 export const stats: { valeur: string; libelle: string }[] = [
-  { valeur: '3237', libelle: 'Pharmacie de garde, 24h/24' },
-  { valeur: '9', libelle: 'Grandes marques de soin' },
-  { valeur: '6j/7', libelle: 'Ouvert du lundi au samedi' },
-  { valeur: '100 %', libelle: 'Conseil pharmaceutique personnalisé' },
+  { valeur: '45+', libelle: 'Années au service du village' },
+  { valeur: '8 000+', libelle: 'Patients accompagnés chaque année' },
+  { valeur: '40+', libelle: 'Marques sélectionnées' },
+  { valeur: '6j/7', libelle: 'Ouvert et à votre écoute' },
 ];
 
-/** Les 4 services détaillés du site. */
+/** Les 4 services détaillés. */
 export const services: Service[] = [
   {
     id: 'bilan-medication',
     titre: 'Bilan de médication',
     description:
-      "Un entretien confidentiel avec votre pharmacien pour faire le point sur l'ensemble de vos traitements, vérifier leur bonne association et sécuriser votre prise au quotidien.",
+      'Un entretien dédié pour revoir vos traitements, éviter les interactions et sécuriser votre suivi.',
     icone: 'clipboard',
   },
   {
     id: 'tests-depistage',
     titre: 'Tests de dépistage',
     description:
-      'Tests rapides et fiables réalisés à l’officine pour l’angine, la grippe et la Covid-19, avec un résultat en quelques minutes et une orientation adaptée.',
+      'Angine, grippe et Covid : résultat rapide en officine pour une prise en charge sans attendre.',
     icone: 'test',
   },
   {
     id: 'micronutrition',
     titre: 'Conseil en micronutrition',
     description:
-      'Un accompagnement personnalisé pour équilibrer vos apports en vitamines, minéraux et oligo-éléments, au service de votre énergie et de votre bien-être durable.',
+      'Fatigue, sommeil, immunité : des recommandations adaptées à votre terrain et à vos besoins.',
     icone: 'leaf',
   },
   {
     id: 'phytotherapie',
     titre: 'Phytothérapie',
     description:
-      'Des solutions naturelles à base de plantes, sélectionnées et conseillées par nos pharmaciens pour accompagner en douceur les petits maux du quotidien.',
+      'Le bienfait des plantes, conseillé par des pharmaciens formés, en complément de votre parcours de soin.',
     icone: 'plant',
   },
 ];
+
+/** Section « Pourquoi nous » : atouts de la pharmacie. */
+export const pourquoiNous = {
+  surtitre: 'Pourquoi nous',
+  titre: 'Une pharmacie humaine, au plus près des habitants',
+  photoLegende:
+    "Équipe de la pharmacie ou intérieur de l'officine — image libre de droit",
+  atouts: [
+    {
+      titre: 'Un suivi qui vous connaît',
+      description:
+        'Vos traitements, vos habitudes, votre historique : un conseil qui tient compte de qui vous êtes.',
+      icone: 'heart',
+    },
+    {
+      titre: 'Disponible 6 jours sur 7',
+      description:
+        'Sans rendez-vous, du lundi au samedi, avec une pharmacie de garde joignable au 3237.',
+      icone: 'clock',
+    },
+    {
+      titre: 'Des marques de confiance',
+      description:
+        'Une sélection dermo-cosmétique et de santé naturelle rigoureuse, testée et recommandée.',
+      icone: 'shield',
+    },
+  ] as Atout[],
+};
 
 /** Marques présentées dans le ruban défilant (texte uniquement). */
 export const marques: string[] = [
@@ -107,40 +165,32 @@ export const marques: string[] = [
   'Isdin',
 ];
 
-/** Horaires d'ouverture. */
+/** Horaires d'ouverture, jour par jour. */
 export const horaires: CreneauHoraire[] = [
-  { jours: 'Lundi – Vendredi', heures: '9h00 – 12h30 · 14h30 – 19h30' },
-  { jours: 'Samedi', heures: '9h00 – 12h30 · 15h00 – 19h00' },
-  { jours: 'Dimanche', heures: 'Fermé — voir pharmacie de garde' },
+  { jour: 'Lundi', heures: '08:30 – 19:30' },
+  { jour: 'Mardi', heures: '08:30 – 19:30' },
+  { jour: 'Mercredi', heures: '08:30 – 19:30' },
+  { jour: 'Jeudi', heures: '08:30 – 19:30' },
+  { jour: 'Vendredi', heures: '08:30 – 19:30' },
+  { jour: 'Samedi', heures: '09:00 – 19:00' },
+  { jour: 'Dimanche', heures: 'Fermé', ferme: true },
 ];
 
-/** Navigation principale (réutilisée dans le header et le footer). */
+/** Note complémentaire sous les horaires. */
+export const horairesNote = 'Fermé les jours fériés';
+
+/** Navigation principale : ancres vers les sections de la page unique. */
 export const navigation: LienNav[] = [
-  { libelle: 'Accueil', href: '/' },
-  { libelle: 'Nos services', href: '/services' },
-  { libelle: 'Horaires & accès', href: '/horaires' },
+  { libelle: 'Accueil', href: '#accueil' },
+  { libelle: 'Nos services', href: '#services' },
+  { libelle: 'Horaires & accès', href: '#horaires' },
 ];
 
-/**
- * Métadonnées SEO par page.
- * La clé correspond au chemin de la page.
- */
-export const seo: Record<string, { title: string; description: string }> = {
-  '/': {
-    title: 'Pharmacie de Cargèse — Votre pharmacie de proximité',
-    description:
-      'Pharmacie de Cargèse : conseil pharmaceutique, bilan de médication, tests de dépistage, micronutrition et phytothérapie. Quartier Saint-Jean, route de Piana, 20130 Cargèse.',
-  },
-  '/services': {
-    title: 'Nos services — Pharmacie de Cargèse',
-    description:
-      'Découvrez les services de la Pharmacie de Cargèse : bilan de médication, tests de dépistage (angine, grippe, Covid), conseil en micronutrition et phytothérapie.',
-  },
-  '/horaires': {
-    title: 'Horaires & accès — Pharmacie de Cargèse',
-    description:
-      'Horaires d’ouverture, adresse et accès à la Pharmacie de Cargèse, Quartier Saint-Jean, route de Piana, 20130 Cargèse. Pharmacie de garde : 3237.',
-  },
+/** Métadonnées SEO de la page d'accueil. */
+export const seo = {
+  title: 'Pharmacie de Cargèse — Votre santé, accompagnée avec soin',
+  description:
+    'Pharmacie de Cargèse : conseil, prévention et suivi personnalisé. Bilan de médication, tests de dépistage, micronutrition, phytothérapie. Quartier Saint-Jean, Route de Piana, 20130 Cargèse.',
 };
 
 /** Lien Google Maps (itinéraire) construit à partir de l'adresse. */
@@ -148,7 +198,7 @@ export const lienItineraire = `https://www.google.com/maps/dir/?api=1&destinatio
   `${pharmacie.nom}, ${pharmacie.adresse.complete}`
 )}`;
 
-/** URL de l'iframe Google Maps centrée sur l'adresse (mode embed sans clé API). */
+/** URL de l'iframe Google Maps centrée sur l'adresse (embed sans clé API). */
 export const lienCarteEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(
   `${pharmacie.nom}, ${pharmacie.adresse.complete}`
 )}&z=14&output=embed`;

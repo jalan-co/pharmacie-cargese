@@ -1,0 +1,87 @@
+---
+/**
+ * Section « Pourquoi nous » : trois atouts (colonne gauche) + emplacement photo
+ * (colonne droite).
+ */
+import { pourquoiNous } from '../data/site';
+import Icone from './Icone.astro';
+import PlaceholderPhoto from './PlaceholderPhoto.astro';
+---
+
+<section class="pq section" id="pourquoi" aria-labelledby="pq-titre">
+  <div class="conteneur pq__inner">
+    <div class="pq__texte">
+      <span class="surtitre">{pourquoiNous.surtitre}</span>
+      <h2 id="pq-titre">{pourquoiNous.titre}</h2>
+
+      <ul class="pq__liste">
+        {pourquoiNous.atouts.map((atout) => (
+          <li class="pq__atout">
+            <span class="pq__ico" aria-hidden="true"><Icone nom={atout.icone} taille={22} /></span>
+            <div>
+              <h3>{atout.titre}</h3>
+              <p>{atout.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="pq__visuel">
+      <PlaceholderPhoto legende={pourquoiNous.photoLegende} ratio="3 / 4" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .pq__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--esp-2xl);
+  }
+  .pq__texte h2 {
+    margin-top: var(--esp-2xs);
+  }
+  .pq__liste {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-lg);
+    margin-top: var(--esp-xl);
+  }
+  .pq__atout {
+    display: flex;
+    gap: var(--esp-md);
+    align-items: start;
+  }
+  .pq__ico {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    border-radius: var(--rayon-md);
+    background: var(--bleu-clair-1);
+    color: var(--bleu-medium);
+    border: 1px solid var(--bordure);
+  }
+  .pq__atout h3 {
+    font-size: var(--taille-md);
+  }
+  .pq__atout p {
+    margin-top: var(--esp-2xs);
+    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
+  }
+
+  @media (max-width: 860px) {
+    .pq__inner {
+      grid-template-columns: 1fr;
+      gap: var(--esp-xl);
+    }
+    .pq__visuel {
+      order: -1;
+      max-width: 22rem;
+    }
+  }
+</style>

@@ -11,7 +11,12 @@ import { marques } from '../data/site';
 const boucle = [...marques, ...marques];
 ---
 
-<section class="ruban" aria-label="Marques disponibles à l'officine">
+<section class="ruban section" id="marques" aria-labelledby="ruban-titre">
+  <div class="conteneur ruban__entete">
+    <span class="surtitre">Nos marques</span>
+    <h2 id="ruban-titre">Les marques que nous sélectionnons pour vous</h2>
+  </div>
+
   <div class="ruban__masque">
     <ul class="ruban__piste" role="list">
       {
@@ -27,9 +32,19 @@ const boucle = [...marques, ...marques];
 
 <style>
   .ruban {
-    padding-block: var(--esp-xl);
     background: var(--bleu-clair-1);
     border-block: 1px solid var(--bordure);
+  }
+  .ruban__entete {
+    text-align: center;
+    margin-bottom: var(--esp-xl);
+  }
+  .ruban__entete .surtitre {
+    color: var(--bleu-medium);
+  }
+  .ruban__entete h2 {
+    max-width: 40rem;
+    margin-inline: auto;
   }
   /* Le masque fait apparaître/disparaître le contenu en fondu sur les bords. */
   .ruban__masque {

@@ -1,63 +1,53 @@
 ---
 /**
- * Section d'accroche de la page d'accueil.
- * Fond bleu profond, titre, baseline et deux appels à l'action
- * (Appeler / Itinéraire). Aucune photo : un motif de croix en aplat structure
- * l'espace visuel.
+ * Hero de la page d'accueil (thème clair).
+ * Colonne gauche : accroche + actions. Colonne droite : emplacement photo
+ * avec un badge « ancienneté » et une carte « conseil » flottants.
  */
-import { pharmacie, lienItineraire, logo } from '../data/site';
+import { hero, lienItineraire } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
+import PlaceholderPhoto from './PlaceholderPhoto.astro';
 import Icone from './Icone.astro';
 ---
 
-<section class="hero">
+<section class="hero" id="accueil">
   <div class="conteneur hero__inner">
     <div class="hero__contenu">
-      <p class="hero__surtitre">
-        <Icone nom="pin" taille={16} />
-        <span>{pharmacie.adresse.ville} · Corse-du-Sud</span>
-      </p>
+      <span class="badge-pilule">{hero.badge}</span>
 
-      <h1 class="hero__titre">
-        <span>Pharmacie</span>
-        <span class="hero__titre-accent">de Cargèse</span>
-      </h1>
-
-      <p class="hero__baseline">
-        {pharmacie.baseline}. Conseil, écoute et suivi personnalisé, du bilan de
-        médication à la micronutrition.
-      </p>
+      <h1 class="hero__titre">{hero.titre}</h1>
+      <p class="hero__texte">{hero.texte}</p>
 
       <div class="hero__actions">
-        <BoutonAppeler variante="primaire" afficherNumero={true} />
-        <a
-          href={lienItineraire}
-          class="btn btn--secondaire btn--sur-sombre"
-          target="_blank"
-          rel="noopener"
-        >
+        <BoutonAppeler variante="primaire" libelle="Appeler la pharmacie" />
+        <a href={lienItineraire} class="btn btn--secondaire" target="_blank" rel="noopener">
           <Icone nom="route" class="btn__icone" />
           <span>Itinéraire</span>
         </a>
       </div>
 
-      <p class="hero__garde">
-        <Icone nom="shield" taille={18} />
-        <span>Pharmacie de garde : <strong>{pharmacie.garde}</strong> (24h/24)</span>
+      <p class="hero__ouverture">
+        <Icone nom="clock" taille={17} />
+        <span>{hero.ouverture}</span>
       </p>
     </div>
 
-    <!-- Logo officiel mis en valeur sur une carte claire. -->
     <div class="hero__visuel">
-      <div class="hero__carte-logo">
-        <img
-          src={logo.src}
-          alt=""
-          width={logo.largeur}
-          height={logo.hauteur}
-          decoding="async"
-          fetchpriority="high"
-        />
+      <PlaceholderPhoto legende={hero.photoLegende} ratio="4 / 3" class="hero__photo" />
+
+      <!-- Badge ancienneté, flottant en haut à droite. -->
+      <div class="hero__badge" aria-hidden="true">
+        <span class="hero__badge-val">{hero.badgeFlottant.valeur}<em>{hero.badgeFlottant.unite}</em></span>
+        <span class="hero__badge-txt">{hero.badgeFlottant.texte}</span>
+      </div>
+
+      <!-- Carte conseil, flottante en bas à gauche. -->
+      <div class="hero__carte" aria-hidden="true">
+        <span class="hero__carte-ico"><Icone nom="shield" taille={20} /></span>
+        <span>
+          <strong>{hero.carteFlottante.titre}</strong>
+          <span class="hero__carte-sub">{hero.carteFlottante.texte}</span>
+        </span>
       </div>
     </div>
   </div>
@@ -65,107 +55,136 @@ import Icone from './Icone.astro';
 
 <style>
   .hero {
-    position: relative;
-    overflow: hidden;
     background:
-      radial-gradient(
-        120% 120% at 85% 10%,
-        color-mix(in srgb, var(--bleu-medium) 55%, transparent),
-        transparent 55%
-      ),
-      linear-gradient(160deg, var(--bleu-profond), color-mix(in srgb, var(--bleu-profond) 82%, #000) 100%);
-    background-color: var(--bleu-profond);
-    color: var(--blanc);
+      radial-gradient(90% 70% at 80% 0%, var(--bleu-clair-1), transparent 60%),
+      linear-gradient(180deg, var(--bleu-clair-2), var(--blanc) 65%);
+    border-bottom: 1px solid var(--bordure);
   }
-
   .hero__inner {
     display: grid;
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: 1.05fr 0.95fr;
     align-items: center;
     gap: var(--esp-2xl);
-    padding-block: clamp(3rem, 6vw, 6rem);
-  }
-
-  .hero__surtitre {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--esp-xs);
-    font-size: var(--taille-sm);
-    font-weight: var(--graisse-medium);
-    letter-spacing: 0.02em;
-    color: var(--bleu-clair-3);
-    margin-bottom: var(--esp-md);
+    padding-block: clamp(2.5rem, 5vw, 5rem);
   }
 
   .hero__titre {
-    color: var(--blanc);
-    font-size: var(--taille-2xl);
-    display: flex;
-    flex-direction: column;
+    margin-top: var(--esp-md);
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.4rem);
+    letter-spacing: -0.03em;
   }
-  .hero__titre-accent {
-    font-family: var(--police-serif);
-    font-style: italic;
-    font-weight: var(--graisse-normale);
-    color: var(--accent-or);
-  }
-
-  .hero__baseline {
+  .hero__texte {
     margin-top: var(--esp-lg);
     max-width: 34rem;
-    color: var(--bleu-clair-2);
     font-size: var(--taille-md);
+    color: var(--couleur-texte-doux);
   }
-
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--esp-sm);
     margin-top: var(--esp-xl);
   }
-
-  .hero__garde {
+  .hero__ouverture {
     display: inline-flex;
     align-items: center;
     gap: var(--esp-xs);
     margin-top: var(--esp-lg);
     font-size: var(--taille-sm);
-    color: var(--bleu-clair-3);
+    color: var(--couleur-texte-doux);
   }
-  .hero__garde strong {
-    color: var(--blanc);
-    font-weight: var(--graisse-forte);
-    letter-spacing: 0.04em;
+  .hero__ouverture :global(svg) {
+    color: var(--bleu-medium);
   }
 
-  /* Visuel : logo officiel sur carte blanche. */
+  /* Visuel + éléments flottants */
   .hero__visuel {
+    position: relative;
+  }
+  .hero__photo {
+    box-shadow: var(--ombre-md);
+  }
+
+  .hero__badge {
+    position: absolute;
+    top: -0.9rem;
+    right: -0.6rem;
+    display: flex;
+    flex-direction: column;
+    padding: var(--esp-sm) var(--esp-md);
+    background: var(--bleu-profond);
+    color: var(--blanc);
+    border-radius: var(--rayon-md);
+    box-shadow: var(--ombre-md);
+  }
+  .hero__badge-val {
+    font-family: var(--police-titre);
+    font-weight: var(--graisse-forte);
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .hero__badge-val em {
+    font-style: normal;
+    font-size: 0.9rem;
+    font-weight: var(--graisse-medium);
+    margin-left: 0.15em;
+  }
+  .hero__badge-txt {
+    margin-top: 0.15rem;
+    font-size: var(--taille-xs);
+    color: var(--bleu-clair-3);
+  }
+
+  .hero__carte {
+    position: absolute;
+    left: -0.8rem;
+    bottom: -1.2rem;
+    display: flex;
+    align-items: center;
+    gap: var(--esp-sm);
+    padding: var(--esp-sm) var(--esp-md);
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    box-shadow: var(--ombre-md);
+    max-width: 15rem;
+  }
+  .hero__carte-ico {
     display: grid;
     place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: none;
+    border-radius: var(--rayon-sm);
+    background: var(--bleu-clair-1);
+    color: var(--bleu-medium);
   }
-  .hero__carte-logo {
-    width: min(100%, 24rem);
-    padding: clamp(1.25rem, 3vw, 2.25rem);
-    border-radius: var(--rayon-lg);
-    background: var(--blanc);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: var(--ombre-lg);
+  .hero__carte strong {
+    display: block;
+    font-size: var(--taille-sm);
+    color: var(--couleur-texte);
   }
-  .hero__carte-logo img {
-    width: 100%;
-    height: auto;
+  .hero__carte-sub {
+    font-size: var(--taille-xs);
+    color: var(--couleur-texte-doux);
   }
 
   @media (max-width: 900px) {
     .hero__inner {
       grid-template-columns: 1fr;
-      gap: var(--esp-xl);
+      gap: var(--esp-2xl);
     }
     .hero__visuel {
-      justify-content: center;
+      max-width: 34rem;
     }
-    .hero__carte-logo {
-      width: min(100%, 20rem);
+  }
+  @media (max-width: 460px) {
+    .hero__carte {
+      left: 0;
+      bottom: -1rem;
+    }
+    .hero__badge {
+      right: 0;
     }
   }
 </style>

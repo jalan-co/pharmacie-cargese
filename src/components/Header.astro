@@ -1,40 +1,30 @@
 ---
 /**
- * En-tête du site : logo, navigation principale et bouton Appeler.
- * Sticky en haut de page. La navigation (3 liens courts) reste visible sur
- * mobile ; le bouton Appeler du header est relayé par une barre fixe en bas
- * d'écran sur mobile (voir BarreAppelMobile).
+ * En-tête : logo (dans une carte bordée), navigation par ancres et bouton
+ * Appeler. Sticky en haut. Sur mobile, le bouton Appeler du header est relayé
+ * par la barre fixe en bas d'écran (BarreAppelMobile).
  */
-import { navigation } from '../data/site';
-import Logo from './Logo.astro';
+import { navigation, pharmacie, logo } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
-
-// Chemin courant pour marquer le lien actif (aria-current).
-const chemin = Astro.url.pathname;
-const estActif = (href: string) =>
-  href === '/' ? chemin === '/' : chemin.startsWith(href);
 ---
 
 <header class="entete">
   <div class="conteneur entete__inner">
-    <a href="/" class="entete__logo" aria-label="Pharmacie de Cargèse — accueil">
-      <Logo />
+    <a href="#accueil" class="entete__logo" aria-label={`${pharmacie.nom} — accueil`}>
+      <img
+        src={logo.src}
+        alt={`Logo ${pharmacie.nom}`}
+        width={Math.round((44 * logo.largeur) / logo.hauteur)}
+        height={44}
+        decoding="async"
+      />
     </a>
 
     <nav class="entete__nav" aria-label="Navigation principale">
       <ul>
-        {
-          navigation.map((lien) => (
-            <li>
-              <a
-                href={lien.href}
-                aria-current={estActif(lien.href) ? 'page' : undefined}
-              >
-                {lien.libelle}
-              </a>
-            </li>
-          ))
-        }
+        {navigation.map((lien) => (
+          <li><a href={lien.href}>{lien.libelle}</a></li>
+        ))}
       </ul>
     </nav>
 
@@ -49,30 +39,41 @@ const estActif = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 100;
-    background: color-mix(in srgb, var(--blanc) 88%, transparent);
-    backdrop-filter: saturate(180%) blur(10px);
+    background: color-mix(in srgb, var(--blanc) 85%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--bordure);
   }
   .entete__inner {
     display: flex;
     align-items: center;
     gap: var(--esp-lg);
-    min-height: 4.5rem;
+    min-height: 4.75rem;
   }
+  /* Logo présenté dans une petite carte bordée, comme sur la maquette. */
   .entete__logo {
-    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
     margin-right: auto;
+    padding: 0.35rem 0.6rem;
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    box-shadow: var(--ombre-sm);
+  }
+  .entete__logo img {
+    height: 44px;
+    width: auto;
   }
 
   .entete__nav ul {
     display: flex;
     align-items: center;
-    gap: var(--esp-xs);
+    gap: var(--esp-2xs);
   }
   .entete__nav a {
     display: inline-block;
     padding: 0.5rem 0.9rem;
-    border-radius: var(--rayon-pilule);
+    border-radius: var(--rayon-sm);
     font-family: var(--police-titre);
     font-size: var(--taille-sm);
     font-weight: var(--graisse-medium);
@@ -84,30 +85,26 @@ const estActif = (href: string) =>
     background: var(--bleu-clair-1);
     color: var(--bleu-medium);
   }
-  .entete__nav a[aria-current='page'] {
-    color: var(--bleu-medium);
-    background: var(--bleu-clair-1);
-  }
 
-  /* Tablette et mobile : la nav se resserre, le bouton Appeler du header
-     laisse place à la barre fixe du bas. */
-  @media (max-width: 720px) {
+  @media (max-width: 780px) {
     .entete__inner {
       gap: var(--esp-md);
-      min-height: 3.75rem;
+      min-height: 4rem;
     }
     .entete__action {
       display: none;
     }
+    .entete__logo img {
+      height: 38px;
+    }
     .entete__nav a {
-      padding: 0.45rem 0.6rem;
+      padding: 0.45rem 0.55rem;
     }
   }
-
-  @media (max-width: 380px) {
+  @media (max-width: 420px) {
     .entete__nav a {
       font-size: var(--taille-xs);
-      padding: 0.4rem 0.45rem;
+      padding: 0.4rem 0.4rem;
     }
   }
 </style>

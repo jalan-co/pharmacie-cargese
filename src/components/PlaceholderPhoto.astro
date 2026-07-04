@@ -1,0 +1,24 @@
+---
+/**
+ * Emplacement photo stylisé (aplat bleu clair rayé), reproduisant la maquette :
+ * aucune photo réelle n'étant disponible, on réserve proprement l'espace.
+ * Remplacer par une vraie <img> (façade, équipe…) le moment venu.
+ */
+import Icone from './Icone.astro';
+
+interface Props {
+  legende: string;
+  /** Ratio d'aspect CSS (ex. "4 / 3"). */
+  ratio?: string;
+  class?: string;
+}
+const { legende, ratio = '4 / 3', class: classe = '' } = Astro.props;
+---
+
+<div class={`placeholder ${classe}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={legende}>
+  <span class="placeholder__icone" aria-hidden="true">
+    <Icone nom="image" taille={26} />
+  </span>
+  <span class="placeholder__label">Emplacement photo</span>
+  <span class="placeholder__legende">{legende}</span>
+</div>

@@ -1,36 +1,44 @@
 ---
 /**
- * Pied de page : coordonnées complètes, navigation, rappel garde.
- * Remplace une page Contact (le bouton Appeler est omniprésent par ailleurs).
+ * Pied de page : présentation, adresse, contact, appel à l'action.
  */
-import { pharmacie, navigation } from '../data/site';
-import Logo from './Logo.astro';
+import { pharmacie, logo } from '../data/site';
 import Icone from './Icone.astro';
+import BoutonAppeler from './BoutonAppeler.astro';
 
-const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
+const annee = 2026; // Site statique : année figée à la mise en ligne.
 ---
 
 <footer class="pied">
   <div class="conteneur pied__inner">
     <div class="pied__marque">
-      <Logo sombre={true} />
-      <p class="pied__baseline">{pharmacie.baseline}.</p>
+      <span class="pied__logo">
+        <img
+          src={logo.src}
+          alt={`Logo ${pharmacie.nom}`}
+          width={Math.round((44 * logo.largeur) / logo.hauteur)}
+          height={44}
+          decoding="async"
+        />
+      </span>
+      <p class="pied__desc">
+        Votre pharmacie de proximité en Corse, au cœur du village de Cargèse.
+        Conseil, prévention et accompagnement, six jours sur sept.
+      </p>
     </div>
 
-    <nav class="pied__nav" aria-label="Navigation de pied de page">
-      <h2 class="pied__titre">Le site</h2>
-      <ul>
-        {navigation.map((lien) => <li><a href={lien.href}>{lien.libelle}</a></li>)}
-      </ul>
-    </nav>
+    <div class="pied__col">
+      <h2 class="pied__titre">Adresse</h2>
+      <address class="pied__adresse">
+        {pharmacie.adresse.rue}<br />
+        {pharmacie.adresse.complementRue}<br />
+        {pharmacie.adresse.codePostal} {pharmacie.adresse.ville}
+      </address>
+    </div>
 
-    <div class="pied__contact">
-      <h2 class="pied__titre">Nous contacter</h2>
-      <ul>
-        <li>
-          <Icone nom="pin" taille={18} />
-          <span>{pharmacie.adresse.complete}</span>
-        </li>
+    <div class="pied__col">
+      <h2 class="pied__titre">Contact</h2>
+      <ul class="pied__contact">
         <li>
           <Icone nom="phone" taille={18} />
           <a href={`tel:${pharmacie.telephone.lien}`}>{pharmacie.telephone.affichage}</a>
@@ -41,16 +49,21 @@ const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
         </li>
         <li class="pied__garde">
           <Icone nom="shield" taille={18} />
-          <span>Garde : <strong>{pharmacie.garde}</strong> (24h/24)</span>
+          <span>Garde : <strong>{pharmacie.garde}</strong></span>
         </li>
       </ul>
+    </div>
+
+    <div class="pied__col">
+      <h2 class="pied__titre">Un besoin&nbsp;?</h2>
+      <BoutonAppeler variante="primaire" afficherNumero={true} class="pied__cta" />
     </div>
   </div>
 
   <div class="pied__bas">
     <div class="conteneur pied__bas-inner">
-      <p>© {annee} {pharmacie.nom}. Tous droits réservés.</p>
-      <p>Site vitrine — informations non contractuelles.</p>
+      <p>© {annee} {pharmacie.nom}</p>
+      <p>Site vitrine — informations non contractuelles</p>
     </div>
   </div>
 </footer>
@@ -59,33 +72,58 @@ const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
   .pied {
     background: var(--bleu-profond);
     color: var(--bleu-clair-2);
-    margin-top: var(--esp-2xl);
+    margin-top: 0;
   }
   .pied__inner {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1.4fr;
+    grid-template-columns: 1.6fr 1fr 1.2fr 1fr;
     gap: var(--esp-xl);
     padding-block: var(--esp-2xl);
   }
-  .pied__baseline {
+  .pied__logo {
+    display: inline-flex;
+    padding: 0.35rem 0.6rem;
+    background: var(--blanc);
+    border-radius: var(--rayon-md);
+  }
+  .pied__logo img {
+    height: 44px;
+    width: auto;
+  }
+  .pied__desc {
     margin-top: var(--esp-md);
-    max-width: 26rem;
+    max-width: 24rem;
     font-size: var(--taille-sm);
     color: var(--bleu-clair-3);
   }
   .pied__titre {
-    font-size: var(--taille-sm);
+    font-size: var(--taille-xs);
     font-weight: var(--graisse-forte);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     color: var(--blanc);
     margin-bottom: var(--esp-md);
   }
-  .pied__nav ul,
-  .pied__contact ul {
+  .pied__adresse {
+    font-style: normal;
+    font-size: var(--taille-sm);
+    color: var(--bleu-clair-2);
+    line-height: 1.9;
+  }
+  .pied__contact {
     display: flex;
     flex-direction: column;
     gap: var(--esp-sm);
+    font-size: var(--taille-sm);
+  }
+  .pied__contact li {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-sm);
+  }
+  .pied__contact :global(svg) {
+    color: var(--bleu-clair-3);
+    flex: none;
   }
   .pied a {
     color: var(--bleu-clair-2);
@@ -94,17 +132,6 @@ const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
   .pied a:hover {
     color: var(--blanc);
     text-decoration: underline;
-  }
-  .pied__contact li {
-    display: flex;
-    align-items: start;
-    gap: var(--esp-sm);
-    font-size: var(--taille-sm);
-  }
-  .pied__contact :global(svg) {
-    color: var(--bleu-clair-3);
-    flex: none;
-    margin-top: 2px;
   }
   .pied__garde strong {
     color: var(--blanc);
@@ -132,15 +159,14 @@ const annee = 2026; // Année de mise en ligne (site statique, valeur figée).
       grid-column: 1 / -1;
     }
   }
-  @media (max-width: 520px) {
+  @media (max-width: 480px) {
     .pied__inner {
       grid-template-columns: 1fr;
     }
   }
-  /* Marge basse pour ne pas passer sous la barre d'appel mobile fixe. */
-  @media (max-width: 720px) {
+  @media (max-width: 780px) {
     .pied__bas {
-      padding-bottom: 4.5rem;
+      padding-bottom: 4.75rem; /* place pour la barre d'appel mobile */
     }
   }
 </style>
