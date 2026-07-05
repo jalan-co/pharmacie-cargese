@@ -71,10 +71,12 @@ import Icone from './Icone.astro';
       <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
       <button class="hero__statut" data-hero-statut type="button">
         <span class="hero__statut-dot" aria-hidden="true"></span>
+        <span class="hero__statut-date" data-statut-date></span>
         <span class="hero__statut-txt">
           <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
           <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
         </span>
+        <Icone nom="chevron" taille={16} class="hero__statut-chevron" />
       </button>
     </div>
   </div>
@@ -135,6 +137,18 @@ import Icone from './Icone.astro';
       detail.textContent = today && !today.ferme
         ? `Aujourd'hui : ${today.heures}`
         : "Fermé aujourd'hui";
+    }
+
+    // Date du jour (ex. « Dimanche 5 juillet 2026 »), affichée sur mobile.
+    const dateEl = el.querySelector('[data-statut-date]');
+    if (dateEl) {
+      const texte = new Intl.DateTimeFormat('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(now);
+      dateEl.textContent = texte.charAt(0).toUpperCase() + texte.slice(1);
     }
 
     // Ouverture / fermeture de la popup des horaires.
@@ -279,6 +293,11 @@ import Icone from './Icone.astro';
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+  /* Date du jour + chevron : réservés au badge compact du mobile. */
+  .hero__statut-date,
+  .hero__statut-chevron {
+    display: none;
+  }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
     outline-color: color-mix(in srgb, var(--statut-ouvert) 45%, transparent);
@@ -351,7 +370,7 @@ import Icone from './Icone.astro';
       object-position: 60% center;
       /* Zoom + recadrage vertical : fait descendre l'enseigne/la façade
          dans la zone libre sous les boutons, loin du texte. */
-      transform: scale(1.7);
+      transform: scale(1.5);
       transform-origin: top center;
     }
     .hero__scrim {
@@ -388,15 +407,17 @@ import Icone from './Icone.astro';
       justify-content: center;
     }
 
-    /* Statut déplacé en haut à droite, aligné avec le burger menu. */
+    /* Statut déplacé en haut à droite, aligné avec le burger menu :
+       date du jour + état + chevron pour ouvrir la popup des horaires. */
     .hero__statut {
       position: fixed;
       top: 1rem;
       right: 1rem;
       z-index: 200;
       margin: 0;
+      gap: 0.5rem;
       height: 3rem;
-      padding: 0 1.1rem;
+      padding: 0 0.9rem 0 1rem;
       background: color-mix(in srgb, var(--blanc) 82%, transparent);
       backdrop-filter: saturate(160%) blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.7);
@@ -404,12 +425,28 @@ import Icone from './Icone.astro';
       box-shadow: var(--ombre-md);
       animation: none;
     }
+    .hero__statut-date {
+      display: inline;
+      font-size: var(--taille-xs);
+      font-weight: var(--graisse-medium);
+      color: var(--couleur-texte-doux);
+      white-space: nowrap;
+    }
     .hero__statut-txt {
       flex-direction: row;
       gap: 0.4rem;
     }
+    .hero__statut-etat {
+      font-size: var(--taille-sm);
+      white-space: nowrap;
+    }
     .hero__statut-detail {
       display: none;
+    }
+    .hero__statut-chevron {
+      display: inline-block;
+      color: var(--slate-2);
+      flex: none;
     }
 
     /* Voile plus léger = moins de contraste garanti par endroits (ex. sur le
