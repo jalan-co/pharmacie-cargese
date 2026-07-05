@@ -24,33 +24,35 @@ import Icone from './Icone.astro';
       <!-- Colonne gauche : horaires + garde -->
       <div class="ha__col">
         <div class="ha__bloc">
-          <h3 class="ha__bloc-titre">
-            <Icone nom="clock" taille={20} /> Horaires d'ouverture
-          </h3>
-          <dl class="ha__jours">
-            {horaires.map((c) => (
-              <div class:list={['ha__jour', { 'ha__jour--ferme': c.ferme }]}>
-                <dt>{c.jour}</dt>
-                <dd>{c.heures}</dd>
-              </div>
-            ))}
-          </dl>
-          <p class="ha__note">{horairesNote}</p>
-
-          <details class="ha__garde">
-            <summary class="ha__garde-sum">
-              <Icone nom="shield" taille={18} />
-              <span>Pharmacie de garde</span>
-              <Icone nom="chevron" taille={16} class="ha__garde-chevron" />
+          <details class="ha__horaires">
+            <summary class="ha__horaires-sum">
+              <Icone nom="clock" taille={20} />
+              <span>Horaires d'ouverture</span>
+              <Icone nom="chevron" taille={16} class="ha__horaires-chevron" />
             </summary>
-            <div class="ha__garde-contenu">
-              <p>En dehors des horaires, composez le <strong>{pharmacie.garde}</strong> (24h/24).</p>
-              <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
-                <Icone nom="phone" class="btn__icone" />
-                <span>Appeler le {pharmacie.garde}</span>
-              </a>
-            </div>
+            <dl class="ha__jours">
+              {horaires.map((c) => (
+                <div class:list={['ha__jour', { 'ha__jour--ferme': c.ferme }]}>
+                  <dt>{c.jour}</dt>
+                  <dd>{c.heures}</dd>
+                </div>
+              ))}
+            </dl>
+            <p class="ha__note">{horairesNote}</p>
           </details>
+
+          <div class="ha__garde">
+            <div class="ha__garde-txt">
+              <span class="ha__garde-titre">
+                <Icone nom="shield" taille={18} /> Pharmacie de garde
+              </span>
+              <p>En dehors des horaires, composez le <strong>{pharmacie.garde}</strong> (24h/24).</p>
+            </div>
+            <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
+              <Icone nom="phone" class="btn__icone" />
+              <span>Appeler le {pharmacie.garde}</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -107,19 +109,37 @@ import Icone from './Icone.astro';
     border-radius: var(--rayon-lg);
     padding: var(--esp-lg);
   }
-  .ha__bloc-titre {
+  /* Horaires en accordéon (plié par défaut). */
+  .ha__horaires-sum {
     display: flex;
     align-items: center;
     gap: var(--esp-xs);
+    font-family: var(--police-titre);
+    font-weight: var(--graisse-forte);
     font-size: var(--taille-md);
-    margin-bottom: var(--esp-md);
+    color: var(--couleur-texte);
+    cursor: pointer;
+    list-style: none;
   }
-  .ha__bloc-titre :global(svg) {
+  .ha__horaires-sum::-webkit-details-marker {
+    display: none;
+  }
+  .ha__horaires-sum > :global(svg:first-child) {
     color: var(--bleu-medium);
+    flex: none;
+  }
+  .ha__horaires-chevron {
+    margin-left: auto;
+    color: var(--slate-2);
+    transition: transform var(--transition-douce);
+  }
+  .ha__horaires[open] .ha__horaires-chevron {
+    transform: rotate(180deg);
   }
   .ha__jours {
     display: flex;
     flex-direction: column;
+    margin-top: var(--esp-md);
   }
   .ha__jour {
     display: flex;
@@ -146,51 +166,35 @@ import Icone from './Icone.astro';
     color: var(--couleur-texte-doux);
   }
 
-  /* Garde en accordéon (plié par défaut) intégré au bloc horaires. */
+  /* Garde : simple (non pliable), sous les horaires. */
   .ha__garde {
-    margin-top: var(--esp-md);
+    margin-top: var(--esp-lg);
+    padding-top: var(--esp-lg);
     border-top: 1px solid var(--bordure);
-    padding-top: var(--esp-sm);
   }
-  .ha__garde-sum {
-    display: flex;
+  .ha__garde-titre {
+    display: inline-flex;
     align-items: center;
     gap: var(--esp-xs);
-    padding: var(--esp-xs) 0;
-    font-weight: var(--graisse-medium);
+    font-weight: var(--graisse-forte);
     color: var(--couleur-texte);
-    cursor: pointer;
-    list-style: none;
   }
-  .ha__garde-sum::-webkit-details-marker {
-    display: none;
-  }
-  .ha__garde-sum :global(svg:first-child) {
+  .ha__garde-titre :global(svg) {
     color: var(--bleu-medium);
     flex: none;
   }
-  .ha__garde-chevron {
-    margin-left: auto;
-    color: var(--slate-2);
-    transition: transform var(--transition-douce);
-  }
-  .ha__garde[open] .ha__garde-chevron {
-    transform: rotate(180deg);
-  }
-  .ha__garde-contenu {
-    padding: var(--esp-xs) 0 var(--esp-2xs);
-  }
-  .ha__garde-contenu p {
+  .ha__garde-txt p {
+    margin-top: var(--esp-2xs);
     font-size: var(--taille-sm);
     color: var(--couleur-texte-doux);
-    margin-bottom: var(--esp-sm);
   }
-  .ha__garde-contenu strong {
+  .ha__garde-txt strong {
     color: var(--bleu-medium);
     letter-spacing: 0.02em;
   }
   .ha__garde-btn {
     width: 100%;
+    margin-top: var(--esp-md);
   }
 
   .ha__carte {
