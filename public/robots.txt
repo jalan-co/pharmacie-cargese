@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://pharmacie-cargese.vercel.app/sitemap-index.xml
+Sitemap: https://pharmaciecargese.vercel.app/sitemap-index.xml
