@@ -58,6 +58,8 @@ export const pharmacie = {
   },
   email: content.pharmacie.email,
   garde: content.pharmacie.garde,
+  pharmacien: content.pharmacie.pharmacien,
+  pharmacienTitre: content.pharmacie.pharmacienTitre,
 };
 
 /** Logo officiel (fichier dans /public) — non éditable via le CMS. */

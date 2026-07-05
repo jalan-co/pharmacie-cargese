@@ -1,22 +1,33 @@
 ---
 /**
- * Hero de la page d'accueil (thème clair).
- * Colonne gauche : accroche + actions. Colonne droite : emplacement photo
- * avec un badge « ancienneté » et une carte « conseil » flottants.
+ * Hero de la page d'accueil (thème clair) avec « bel effet » :
+ * - fond ambiant animé (halos bleus qui dérivent lentement, CSS pur) ;
+ * - indicateur « Ouvert / Fermé maintenant » calculé en direct côté client ;
+ * - légères animations d'entrée et de flottement.
+ * Tout respecte prefers-reduced-motion (voir global.css).
  */
-import { hero, lienItineraire } from '../data/site';
+import { hero, pharmacie, horaires, lienItineraire } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
 import PlaceholderPhoto from './PlaceholderPhoto.astro';
 import Icone from './Icone.astro';
 ---
 
 <section class="hero" id="accueil">
+  <!-- Fond ambiant décoratif -->
+  <div class="hero__ambiance" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+
   <div class="conteneur hero__inner">
     <div class="hero__contenu">
       <span class="badge-pilule">{hero.badge}</span>
 
       <h1 class="hero__titre">{hero.titre}</h1>
       <p class="hero__texte">{hero.texte}</p>
+
+      <p class="hero__signature">
+        Officine dirigée par <strong>{pharmacie.pharmacien}</strong> · {pharmacie.pharmacienTitre}
+      </p>
 
       <div class="hero__actions">
         <BoutonAppeler variante="primaire" libelle="Appeler la pharmacie" />
@@ -26,9 +37,10 @@ import Icone from './Icone.astro';
         </a>
       </div>
 
-      <p class="hero__ouverture">
-        <Icone nom="clock" taille={17} />
-        <span>{hero.ouverture}</span>
+      <!-- Statut d'ouverture : le texte de secours est remplacé en direct par le script. -->
+      <p class="hero__statut" data-hero-statut>
+        <span class="hero__statut-dot" aria-hidden="true"></span>
+        <span class="hero__statut-txt">{hero.ouverture}</span>
       </p>
     </div>
 
@@ -53,19 +65,156 @@ import Icone from './Icone.astro';
   </div>
 </section>
 
+<!--
+  Indicateur Ouvert / Fermé en direct.
+  Les horaires (éditables dans le back-office) sont injectés ici et comparés à
+  l'heure courante du visiteur. Aucune dépendance, ~30 lignes.
+-->
+<script define:vars={{ horaires }}>
+  (function () {
+    const el = document.querySelector('[data-hero-statut]');
+    if (!el) return;
+
+    const fmt = (m) => Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0');
+
+    // Transforme « 08:30 – 19:30 » (ou plages multiples) en [[début, fin], …] en minutes.
+    const parse = (str) => {
+      if (!str) return [];
+      const t = [...str.matchAll(/(\d{1,2})\s*[h:]\s*(\d{0,2})/g)].map(
+        (m) => parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0)
+      );
+      const r = [];
+      for (let i = 0; i + 1 < t.length; i += 2) r.push([t[i], t[i + 1]]);
+      return r;
+    };
+
+    const now = new Date();
+    const dayIdx = (now.getDay() + 6) % 7; // Lundi = 0 … Dimanche = 6
+    const mins = now.getHours() * 60 + now.getMinutes();
+
+    const today = horaires[dayIdx];
+    const todayRanges = today && !today.ferme ? parse(today.heures) : [];
+
+    let open = false,
+      closeAt = null;
+    for (const [o, c] of todayRanges) {
+      if (mins >= o && mins < c) {
+        open = true;
+        closeAt = c;
+        break;
+      }
+    }
+
+    let txt;
+    if (open) {
+      txt = 'Ouvert · ferme à ' + fmt(closeAt);
+    } else {
+      let next = null;
+      for (const [o] of todayRanges) {
+        if (o > mins) {
+          next = { label: "aujourd'hui", at: o };
+          break;
+        }
+      }
+      if (!next) {
+        for (let d = 1; d <= 7; d++) {
+          const day = horaires[(dayIdx + d) % 7];
+          if (day && !day.ferme) {
+            const rs = parse(day.heures);
+            if (rs.length) {
+              next = { label: d === 1 ? 'demain' : day.jour.toLowerCase(), at: rs[0][0] };
+              break;
+            }
+          }
+        }
+      }
+      txt = 'Fermé' + (next ? ' · ouvre ' + next.label + ' à ' + fmt(next.at) : '');
+    }
+
+    el.classList.add(open ? 'is-open' : 'is-closed');
+    const span = el.querySelector('.hero__statut-txt');
+    if (span) span.textContent = txt;
+  })();
+</script>
+
 <style>
   .hero {
+    position: relative;
+    overflow: hidden;
     background:
       radial-gradient(90% 70% at 80% 0%, var(--bleu-clair-1), transparent 60%),
       linear-gradient(180deg, var(--bleu-clair-2), var(--blanc) 65%);
     border-bottom: 1px solid var(--bordure);
   }
+
+  /* --- Fond ambiant : halos flous qui dérivent --- */
+  .hero__ambiance {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero__ambiance span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.55;
+  }
+  .hero__ambiance span:nth-child(1) {
+    width: 28rem;
+    height: 28rem;
+    top: -9rem;
+    right: -7rem;
+    background: radial-gradient(circle, var(--bleu-clair-3), transparent 70%);
+    animation: derive-a 20s ease-in-out infinite;
+  }
+  .hero__ambiance span:nth-child(2) {
+    width: 22rem;
+    height: 22rem;
+    bottom: -8rem;
+    left: -6rem;
+    background: radial-gradient(circle, color-mix(in srgb, var(--bleu-medium) 30%, transparent), transparent 70%);
+    animation: derive-b 26s ease-in-out infinite;
+  }
+  .hero__ambiance span:nth-child(3) {
+    width: 16rem;
+    height: 16rem;
+    top: 35%;
+    left: 45%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-or) 22%, transparent), transparent 70%);
+    animation: derive-a 32s ease-in-out infinite reverse;
+  }
+  @keyframes derive-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-3rem, 2.5rem) scale(1.12); }
+  }
+  @keyframes derive-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(3.5rem, -2rem) scale(1.08); }
+  }
+
   .hero__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
     align-items: center;
     gap: var(--esp-2xl);
     padding-block: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  /* Animation d'entrée douce des éléments du texte. */
+  .hero__contenu > * {
+    animation: apparition 0.7s ease both;
+  }
+  .hero__contenu > *:nth-child(2) { animation-delay: 0.08s; }
+  .hero__contenu > *:nth-child(3) { animation-delay: 0.16s; }
+  .hero__contenu > *:nth-child(4) { animation-delay: 0.24s; }
+  .hero__contenu > *:nth-child(5) { animation-delay: 0.32s; }
+  .hero__contenu > *:nth-child(6) { animation-delay: 0.4s; }
+  @keyframes apparition {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
   }
 
   .hero__titre {
@@ -79,22 +228,55 @@ import Icone from './Icone.astro';
     font-size: var(--taille-md);
     color: var(--couleur-texte-doux);
   }
+  .hero__signature {
+    margin-top: var(--esp-md);
+    font-size: var(--taille-sm);
+    color: var(--couleur-texte-doux);
+  }
+  .hero__signature strong {
+    color: var(--couleur-texte);
+    font-weight: var(--graisse-medium);
+  }
+
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--esp-sm);
     margin-top: var(--esp-xl);
   }
-  .hero__ouverture {
+
+  /* Indicateur d'ouverture en direct */
+  .hero__statut {
     display: inline-flex;
     align-items: center;
     gap: var(--esp-xs);
     margin-top: var(--esp-lg);
     font-size: var(--taille-sm);
+    font-weight: var(--graisse-medium);
     color: var(--couleur-texte-doux);
   }
-  .hero__ouverture :global(svg) {
-    color: var(--bleu-medium);
+  .hero__statut-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--statut-ferme);
+    flex: none;
+  }
+  .hero__statut.is-open .hero__statut-dot {
+    background: var(--statut-ouvert);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 60%, transparent);
+    animation: pouls 2.2s ease-out infinite;
+  }
+  .hero__statut.is-open .hero__statut-txt {
+    color: var(--statut-ouvert);
+  }
+  .hero__statut.is-closed .hero__statut-dot {
+    background: var(--statut-ferme);
+  }
+  @keyframes pouls {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 55%, transparent); }
+    70% { box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
   }
 
   /* Visuel + éléments flottants */
@@ -116,6 +298,7 @@ import Icone from './Icone.astro';
     color: var(--blanc);
     border-radius: var(--rayon-md);
     box-shadow: var(--ombre-md);
+    animation: flottement 5.5s ease-in-out infinite;
   }
   .hero__badge-val {
     font-family: var(--police-titre);
@@ -148,6 +331,7 @@ import Icone from './Icone.astro';
     border-radius: var(--rayon-md);
     box-shadow: var(--ombre-md);
     max-width: 15rem;
+    animation: flottement 6.5s ease-in-out infinite;
   }
   .hero__carte-ico {
     display: grid;
@@ -167,6 +351,10 @@ import Icone from './Icone.astro';
   .hero__carte-sub {
     font-size: var(--taille-xs);
     color: var(--couleur-texte-doux);
+  }
+  @keyframes flottement {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
   }
 
   @media (max-width: 900px) {

@@ -5,6 +5,8 @@
     "telephone": "04 95 26 40 30",
     "email": "pharmaciedecargese@gmail.com",
     "garde": "3237",
+    "pharmacien": "Jean-Jérôme Stefani",
+    "pharmacienTitre": "Docteur en Pharmacie",
     "adresse": {
       "rue": "Quartier Saint-Jean",
       "complementRue": "Route de Piana",

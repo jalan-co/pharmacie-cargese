@@ -19,6 +19,10 @@
   /* Accent doré discret, en écho au traitement « de Cargèse » de la maquette. */
   --accent-or: #c9a24b;
 
+  /* Couleurs de statut (indicateur Ouvert / Fermé). */
+  --statut-ouvert: #1f9d55;
+  --statut-ferme: #8aa0b6;
+
   /* --- Couleurs sémantiques (dérivées des tokens ci-dessus) --- */
   --couleur-texte: var(--bleu-profond);
   --couleur-texte-doux: var(--slate);

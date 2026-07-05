@@ -25,6 +25,10 @@ const annee = 2026; // Site statique : année figée à la mise en ligne.
         Votre pharmacie de proximité en Corse, au cœur du village de Cargèse.
         Conseil, prévention et accompagnement, six jours sur sept.
       </p>
+      <p class="pied__titulaire">
+        Pharmacien titulaire : <strong>{pharmacie.pharmacien}</strong><br />
+        {pharmacie.pharmacienTitre}
+      </p>
     </div>
 
     <div class="pied__col">
@@ -95,6 +99,15 @@ const annee = 2026; // Site statique : année figée à la mise en ligne.
     max-width: 24rem;
     font-size: var(--taille-sm);
     color: var(--bleu-clair-3);
+  }
+  .pied__titulaire {
+    margin-top: var(--esp-md);
+    font-size: var(--taille-sm);
+    color: var(--bleu-clair-3);
+  }
+  .pied__titulaire strong {
+    color: var(--blanc);
+    font-weight: var(--graisse-medium);
   }
   .pied__titre {
     font-size: var(--taille-xs);

@@ -76,6 +76,17 @@ collections:
                   widget: string,
                   default: "3237",
                 }
+              - {
+                  label: Pharmacien titulaire,
+                  name: pharmacien,
+                  widget: string,
+                }
+              - {
+                  label: Titre du pharmacien,
+                  name: pharmacienTitre,
+                  widget: string,
+                  hint: "Ex. : Docteur en Pharmacie",
+                }
               - label: Adresse
                 name: adresse
                 widget: object
