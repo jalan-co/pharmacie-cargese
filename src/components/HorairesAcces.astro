@@ -36,18 +36,21 @@ import Icone from './Icone.astro';
             ))}
           </dl>
           <p class="ha__note">{horairesNote}</p>
-        </div>
 
-        <div class="ha__garde">
-          <span class="ha__garde-ico" aria-hidden="true"><Icone nom="shield" taille={22} /></span>
-          <div class="ha__garde-txt">
-            <strong>Pharmacie de garde</strong>
-            <span>En dehors des horaires, composez le {pharmacie.garde}.</span>
-          </div>
-          <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
-            <Icone nom="phone" class="btn__icone" />
-            <span>Appeler le {pharmacie.garde}</span>
-          </a>
+          <details class="ha__garde">
+            <summary class="ha__garde-sum">
+              <Icone nom="shield" taille={18} />
+              <span>Pharmacie de garde</span>
+              <Icone nom="chevron" taille={16} class="ha__garde-chevron" />
+            </summary>
+            <div class="ha__garde-contenu">
+              <p>En dehors des horaires, composez le <strong>{pharmacie.garde}</strong> (24h/24).</p>
+              <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
+                <Icone nom="phone" class="btn__icone" />
+                <span>Appeler le {pharmacie.garde}</span>
+              </a>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -143,39 +146,51 @@ import Icone from './Icone.astro';
     color: var(--couleur-texte-doux);
   }
 
+  /* Garde en accordéon (plié par défaut) intégré au bloc horaires. */
   .ha__garde {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    margin-top: var(--esp-md);
+    border-top: 1px solid var(--bordure);
+    padding-top: var(--esp-sm);
+  }
+  .ha__garde-sum {
+    display: flex;
     align-items: center;
-    gap: var(--esp-sm) var(--esp-md);
-    padding: var(--esp-lg);
-    background: var(--bleu-profond);
-    color: var(--blanc);
-    border-radius: var(--rayon-lg);
+    gap: var(--esp-xs);
+    padding: var(--esp-xs) 0;
+    font-weight: var(--graisse-medium);
+    color: var(--couleur-texte);
+    cursor: pointer;
+    list-style: none;
   }
-  .ha__garde-ico {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--rayon-md);
-    background: rgba(255, 255, 255, 0.12);
-    color: var(--blanc);
+  .ha__garde-sum::-webkit-details-marker {
+    display: none;
   }
-  .ha__garde-txt strong {
-    display: block;
+  .ha__garde-sum :global(svg:first-child) {
+    color: var(--bleu-medium);
+    flex: none;
   }
-  .ha__garde-txt span {
+  .ha__garde-chevron {
+    margin-left: auto;
+    color: var(--slate-2);
+    transition: transform var(--transition-douce);
+  }
+  .ha__garde[open] .ha__garde-chevron {
+    transform: rotate(180deg);
+  }
+  .ha__garde-contenu {
+    padding: var(--esp-xs) 0 var(--esp-2xs);
+  }
+  .ha__garde-contenu p {
     font-size: var(--taille-sm);
-    color: var(--bleu-clair-3);
+    color: var(--couleur-texte-doux);
+    margin-bottom: var(--esp-sm);
+  }
+  .ha__garde-contenu strong {
+    color: var(--bleu-medium);
+    letter-spacing: 0.02em;
   }
   .ha__garde-btn {
-    grid-column: 1 / -1;
-    background: var(--blanc);
-    color: var(--bleu-profond);
-  }
-  .ha__garde-btn:hover {
-    background: var(--bleu-clair-1);
+    width: 100%;
   }
 
   .ha__carte {
