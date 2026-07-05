@@ -36,14 +36,8 @@ import Icone from './Icone.astro';
 
       <h1 class="hero__titre">{hero.titre}</h1>
 
-      <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
-      <button class="hero__statut" data-hero-statut type="button">
-        <span class="hero__statut-dot" aria-hidden="true"></span>
-        <span class="hero__statut-txt">
-          <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-          <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
-        </span>
-      </button>
+      <!-- Trait doré décoratif, en écho au logo. -->
+      <span class="hero__trait" aria-hidden="true"></span>
 
       <div class="hero__actions">
         <a href="#services" class="btn btn--or hero__cta">
@@ -62,6 +56,7 @@ import Icone from './Icone.astro';
           <span class="hero__acces-ico"><Icone nom="phone" taille={22} /></span>
           <span class="hero__acces-lbl">Appeler</span>
         </a>
+        <span class="hero__acces-sep" aria-hidden="true"></span>
         <a
           href={lienItineraire}
           target="_blank"
@@ -73,6 +68,15 @@ import Icone from './Icone.astro';
           <span class="hero__acces-lbl">Itinéraire</span>
         </a>
       </div>
+
+      <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
+      <button class="hero__statut" data-hero-statut type="button">
+        <span class="hero__statut-dot" aria-hidden="true"></span>
+        <span class="hero__statut-txt">
+          <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
+          <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
+        </span>
+      </button>
     </div>
   </div>
 </section>
@@ -222,12 +226,21 @@ import Icone from './Icone.astro';
     color: var(--accent-or);
   }
 
+  /* Trait doré décoratif sous le titre. */
+  .hero__trait {
+    display: block;
+    width: 3.5rem;
+    height: 2px;
+    margin-top: var(--esp-md);
+    background: var(--accent-or);
+  }
+
   /* Statut « Ouvert / Fermé » plat : point + texte sur deux lignes. */
   .hero__statut {
     display: inline-flex;
     align-items: center;
-    gap: 0.7rem;
-    margin-top: var(--esp-lg);
+    gap: 0.75rem;
+    margin-top: var(--esp-xl);
     padding: 0;
     background: none;
     border: none;
@@ -237,12 +250,15 @@ import Icone from './Icone.astro';
     text-align: left;
     cursor: pointer;
   }
+  /* Point plein entouré d'un anneau net (plus premium qu'un halo flou). */
   .hero__statut-dot {
-    width: 0.65rem;
-    height: 0.65rem;
+    width: 0.7rem;
+    height: 0.7rem;
     border-radius: 50%;
     background: var(--statut-ferme);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 18%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 12%, transparent);
+    outline: 1.5px solid color-mix(in srgb, var(--statut-ferme) 45%, transparent);
+    outline-offset: 3px;
     flex: none;
   }
   .hero__statut-txt {
@@ -266,6 +282,7 @@ import Icone from './Icone.astro';
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
+    outline-color: color-mix(in srgb, var(--statut-ouvert) 45%, transparent);
     animation: pouls 2.2s ease-out infinite;
   }
   .hero__statut.is-open .hero__statut-etat {
@@ -292,8 +309,14 @@ import Icone from './Icone.astro';
   /* Accès rapides : cercle plat + label dessous. */
   .hero__acces {
     display: flex;
+    align-items: center;
     gap: var(--esp-lg);
     margin-top: var(--esp-lg);
+  }
+  .hero__acces-sep {
+    width: 1px;
+    height: 2.6rem;
+    background: var(--bordure);
   }
   .hero__acces-item {
     display: flex;
