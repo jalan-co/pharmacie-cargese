@@ -8,7 +8,7 @@
  */
 import { Image } from 'astro:assets';
 import facade from '../assets/facade-pharmacie.png';
-import { hero, pharmacie, horaires, lienItineraire } from '../data/site';
+import { hero, pharmacie, horaires, lienItineraire, logo } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
 import Icone from './Icone.astro';
 ---
@@ -27,7 +27,16 @@ import Icone from './Icone.astro';
 
   <div class="conteneur hero__inner">
     <div class="hero__contenu">
-      <span class="badge-pilule">{hero.badge}</span>
+      <span class="hero__logo-carte">
+        <img
+          class="hero__logo"
+          src={logo.src}
+          alt={`Logo ${pharmacie.nom}`}
+          width={logo.largeur}
+          height={logo.hauteur}
+          decoding="async"
+        />
+      </span>
 
       <h1 class="hero__titre">{hero.titre}</h1>
       <p class="hero__texte">{hero.texte}</p>
@@ -171,6 +180,19 @@ import Icone from './Icone.astro';
     to { opacity: 1; transform: none; }
   }
 
+  .hero__logo-carte {
+    display: inline-block;
+    padding: var(--esp-md) var(--esp-lg);
+    background: var(--blanc);
+    border-radius: var(--rayon-lg);
+    box-shadow: var(--ombre-md);
+    margin-bottom: var(--esp-lg);
+  }
+  .hero__logo {
+    display: block;
+    width: clamp(150px, 18vw, 220px);
+    height: auto;
+  }
   .hero__titre {
     margin-top: var(--esp-md);
     font-size: clamp(2.2rem, 1.4rem + 3vw, 3.4rem);
