@@ -63,19 +63,21 @@ import { services, seo, lienItineraire } from '../data/site';
   .services__lien:hover {
     text-decoration: underline;
   }
+  /* Grille résiliente : s'adapte à n'importe quel nombre de services,
+     les cartes se répartissent et se centrent (jamais de carte isolée étirée). */
   .services__grille {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--esp-lg);
   }
-  @media (max-width: 900px) {
-    .services__grille {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .services__grille > li {
+    flex: 1 1 240px;
+    max-width: 320px;
   }
-  @media (max-width: 520px) {
-    .services__grille {
-      grid-template-columns: 1fr;
+  @media (max-width: 540px) {
+    .services__grille > li {
+      max-width: none;
     }
   }
 </style>

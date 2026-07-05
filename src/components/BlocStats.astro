@@ -25,20 +25,25 @@ import { stats } from '../data/site';
     position: relative;
     z-index: 2;
   }
+  /* Bandeau résilient : s'adapte à n'importe quel nombre de chiffres,
+     les blocs se répartissent et se centrent automatiquement. */
   .stats__carte {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--esp-md);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--esp-lg) 0;
     padding: var(--esp-xl) var(--esp-lg);
     background: var(--bleu-profond);
     border-radius: var(--rayon-lg);
     box-shadow: var(--ombre-lg);
   }
   .stats__item {
+    flex: 1 1 150px;
+    max-width: 260px;
     display: flex;
     flex-direction: column;
     gap: var(--esp-2xs);
-    padding-inline: var(--esp-md);
+    padding-inline: var(--esp-lg);
     text-align: center;
   }
   .stats__item + .stats__item {
@@ -57,21 +62,10 @@ import { stats } from '../data/site';
     color: var(--bleu-clair-3);
   }
 
-  @media (max-width: 720px) {
-    .stats__carte {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--esp-lg) var(--esp-md);
-    }
-    .stats__item:nth-child(odd) {
-      border-left: none;
-    }
-    .stats__item:nth-child(even) {
-      border-left: 1px solid rgba(255, 255, 255, 0.14);
-    }
-  }
-  @media (max-width: 400px) {
-    .stats__carte {
-      grid-template-columns: 1fr;
+  @media (max-width: 520px) {
+    .stats__item {
+      flex-basis: 100%;
+      max-width: none;
     }
     .stats__item + .stats__item {
       border-left: none;
