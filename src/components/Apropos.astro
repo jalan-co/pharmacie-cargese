@@ -16,29 +16,29 @@ import { apropos } from '../data/site';
     </div>
 
     <div class="apropos__visuel">
-      <video
-        class="apropos__video"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        poster="/apropos-poster.webp"
-        aria-label="Sourire d'une patiente accueillie à l'officine"
-      >
-        <source src="/apropos.webm" type="video/webm" />
-        <source src="/apropos.mp4" type="video/mp4" />
-      </video>
+      <!--
+        Image animée (WebP animé) plutôt qu'une <video> : se lance vraiment
+        toute seule sur mobile (pas de bouton play imposé par le navigateur).
+      -->
+      <img
+        class="apropos__media"
+        src="/apropos-poster.webp"
+        data-anime="/apropos.webp"
+        width="420"
+        height="560"
+        loading="lazy"
+        decoding="async"
+        alt="Sourire d'une patiente accueillie à l'officine"
+      />
     </div>
   </div>
 </section>
 
 <script>
-  // Respecte prefers-reduced-motion : pas de lecture auto.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.apropos__video[autoplay]').forEach((v) => {
-      v.removeAttribute('autoplay');
-      v.pause();
+  // Respecte prefers-reduced-motion : n'affiche l'image animée que si l'utilisateur n'a pas demandé de réduire les animations.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.apropos__media[data-anime]').forEach((img) => {
+      img.src = img.dataset.anime;
     });
   }
 </script>
@@ -63,7 +63,7 @@ import { apropos } from '../data/site';
     font-size: var(--taille-md);
   }
 
-  .apropos__video {
+  .apropos__media {
     display: block;
     width: 100%;
     aspect-ratio: 3 / 4;
