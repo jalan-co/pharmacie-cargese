@@ -4,14 +4,14 @@
 # déploiement Vercel : le site est mis à jour ~1 minute plus tard.
 
 backend:
-  name: github
+  name: git-gateway
   repo: jalan-co/pharmacie-cargese
   branch: main
-  # IMPORTANT : remplacer par l'URL de PRODUCTION réelle du site après le
-  # premier déploiement Vercel (ou par le domaine définitif). L'authentification
-  # (/api/auth et /api/callback) est servie par cette même adresse.
-  base_url: https://pharmacie-cargese.vercel.app
-  auth_endpoint: api/auth
+  # Ces deux URL sont FOURNIES par DecapBridge après création du site sur
+  # https://decapbridge.com — remplacer <votre-site-id> par l'identifiant
+  # généré (le reste de config.yml n'a pas besoin d'être modifié).
+  identity_url: https://auth.decapbridge.com/sites/<votre-site-id>
+  gateway_url: https://gateway.decapbridge.com
 
 # Langue de l'interface d'administration.
 locale: fr

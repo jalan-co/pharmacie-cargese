@@ -10,7 +10,7 @@ Bleu/blanc épuré, responsive, accessible, zéro JavaScript superflu — avec u
 - **CSS moderne** avec design tokens (variables) — aucune couleur codée en dur
 - **Inter** auto-hébergée via `@fontsource-variable/inter`
 - **@astrojs/sitemap** pour le `sitemap.xml`
-- **Sveltia CMS** (back-office `/admin`) + 2 fonctions serverless pour l'auth GitHub
+- **Decap CMS** (back-office `/admin`) + **DecapBridge** pour l'authentification par email
 
 ## Structure
 
@@ -26,10 +26,8 @@ src/
     content.json               # CONTENU ÉDITABLE (modifié par le back-office)
     site.ts                    # lit content.json, le type et en dérive les valeurs
 public/
-  admin/                       # back-office Sveltia CMS (index.html + config.yml)
+  admin/                       # back-office Decap CMS (index.html + config.yml)
   logo-pharmacie-cargese.webp, favicon.svg, og-image.svg, robots.txt
-api/                           # fonctions serverless d'authentification GitHub
-  auth.js, callback.js
 ```
 
 > **Tout le contenu éditorial vit dans `src/data/content.json`.** C'est ce fichier
@@ -54,41 +52,34 @@ npm run preview  # prévisualise le build de production en local
 
 1. Sur [vercel.com](https://vercel.com) → **Add New… › Project**, importer le dépôt GitHub.
    Vercel détecte Astro automatiquement (build `astro build`, sortie `dist/`).
-2. Cliquer **Deploy**. Le dossier `api/` est déployé en fonctions serverless
-   automatiquement (nécessaire au back-office).
-3. Une fois l'URL de production connue, mettre à jour `SITE_URL` dans
-   `astro.config.mjs`, l'URL du `Sitemap` dans `public/robots.txt`, et `base_url`
-   dans `public/admin/config.yml`, puis recommiter.
+2. Cliquer **Deploy**. Une fois l'URL de production connue, mettre à jour
+   `SITE_URL` dans `astro.config.mjs` et l'URL du `Sitemap` dans
+   `public/robots.txt`, puis recommiter.
 
 ## Back-office — modifier le contenu (pour la pharmacie)
 
-La pharmacie modifie le contenu depuis **`https://<votre-site>/admin`**, sans code.
+La pharmacie modifie le contenu depuis **`https://<votre-site>/admin`**, sans code
+et **sans compte GitHub**. L'authentification est gérée par
+[DecapBridge](https://decapbridge.com) (connexion par email / Google / Microsoft).
 Chaque enregistrement écrit dans `content.json` sur GitHub et **redéploie le site
-automatiquement** (~1 min). Pas de base de données, pas de service payant : le
-contenu vit dans le dépôt Git.
+automatiquement** (~1 min). Pas de base de données : le contenu vit dans le dépôt Git.
 
 ### Mise en place (une seule fois, par le développeur)
 
-1. **Créer une app OAuth GitHub** — [github.com/settings/developers](https://github.com/settings/developers)
-   → *New OAuth App* :
-   - *Homepage URL* : `https://<votre-site>`
-   - *Authorization callback URL* : `https://<votre-site>/api/callback`
-   - Générer un *Client secret*, puis noter le **Client ID** et le **Client secret**.
-2. **Renseigner les variables d'environnement sur Vercel** (*Settings › Environment
-   Variables*) :
-   - `GITHUB_CLIENT_ID`
-   - `GITHUB_CLIENT_SECRET`
-   Puis redéployer.
-3. **Vérifier `base_url`** dans `public/admin/config.yml` : il doit correspondre à
-   l'URL de production réelle du site.
-4. **Donner accès à la pharmacie** : créer (ou utiliser) un compte GitHub pour la
-   pharmacie et l'ajouter comme *collaborateur* du dépôt avec le droit **Write**
-   (*Settings › Collaborators*).
+1. Créer un compte sur **[decapbridge.com](https://decapbridge.com)**, puis
+   **créer un « Site »** et le relier au dépôt GitHub `jalan-co/pharmacie-cargese`
+   (DecapBridge demande un jeton d'accès GitHub).
+2. DecapBridge génère alors les valeurs **`identity_url`** (avec l'identifiant du
+   site) et **`gateway_url`**. Les recopier dans `public/admin/config.yml` (bloc
+   `backend`), à la place de `<votre-site-id>`, puis recommiter.
+3. **Inviter la pharmacie** : dans l'onglet *Collaborators* de DecapBridge, saisir
+   son adresse email. Elle reçoit un lien d'invitation.
 
 ### Utilisation (par la pharmacie)
 
-1. Aller sur `https://<votre-site>/admin`.
-2. Cliquer **Se connecter avec GitHub** (une fois autorisé, plus rien à refaire).
+1. Ouvrir l'email d'invitation, définir un mot de passe (ou choisir *Se connecter
+   avec Google / Microsoft*). À faire une seule fois.
+2. Aller sur `https://<votre-site>/admin`, se connecter.
 3. Modifier les champs (téléphone, horaires, services, marques, chiffres, textes…),
    puis **Enregistrer**. Le site se met à jour tout seul en une minute environ.
 

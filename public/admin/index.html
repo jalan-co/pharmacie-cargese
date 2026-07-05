@@ -9,10 +9,12 @@
   </head>
   <body>
     <!--
-      Sveltia CMS : back-office qui édite src/data/content.json dans le dépôt
-      GitHub. La configuration (champs des formulaires, dépôt, authentification)
-      est dans config.yml, chargé automatiquement depuis ce même dossier.
+      Decap CMS : back-office qui édite src/data/content.json dans le dépôt
+      GitHub. L'authentification est gérée par DecapBridge (connexion par email /
+      Google / Microsoft, sans compte GitHub pour l'éditeur). La configuration
+      des formulaires et du dépôt est dans config.yml (même dossier).
+      Version 3.8.3+ requise pour « Se connecter avec Google / Microsoft ».
     -->
-    <script src="https://unpkg.com/@sveltia/cms@0.34/dist/sveltia-cms.js" type="module"></script>
+    <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
   </body>
 </html>
