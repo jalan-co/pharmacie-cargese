@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // URL de production (à ajuster après le premier déploiement Vercel).
 // Elle sert à générer un sitemap.xml et des URLs Open Graph absolues corrects.
-const SITE_URL = 'https://pharmaciecargese.vercel.app';
+const SITE_URL = 'https://pharmaciedecargese.vercel.app';
 
 // https://astro.build/config
 export default defineConfig({
