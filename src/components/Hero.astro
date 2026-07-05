@@ -53,7 +53,7 @@ import Icone from './Icone.astro';
           class="hero__ico-btn"
           aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
         >
-          <Icone nom="phone" taille={20} />
+          <Icone nom="phone" taille={24} />
         </a>
         <a
           href={lienItineraire}
@@ -62,7 +62,7 @@ import Icone from './Icone.astro';
           class="hero__ico-btn"
           aria-label={`Itinéraire vers la ${pharmacie.nom}`}
         >
-          <Icone nom="route" taille={20} />
+          <Icone nom="route" taille={24} />
         </a>
       </div>
     </div>
@@ -280,22 +280,31 @@ import Icone from './Icone.astro';
     padding: 1.05em 1.8em;
     font-size: var(--taille-base);
   }
-  /* Accès rapides en icônes, à côté du bouton principal. */
+  /* Accès rapides en icônes (relief 3D), à côté du bouton principal. */
   .hero__ico-btn {
     display: grid;
     place-items: center;
-    width: 3.15rem;
-    height: 3.15rem;
+    width: 3.7rem;
+    height: 3.7rem;
     flex: none;
     border-radius: 50%;
-    background: var(--blanc);
-    color: var(--bleu-profond);
-    box-shadow: var(--ombre-md);
-    transition: transform var(--transition-douce), background-color var(--transition-douce);
+    background: linear-gradient(160deg, var(--bleu-medium), var(--bleu-profond));
+    color: var(--blanc);
+    box-shadow:
+      0 8px 18px rgba(10, 46, 92, 0.38),
+      inset 0 2px 3px rgba(255, 255, 255, 0.4),
+      inset 0 -4px 5px rgba(0, 0, 0, 0.22);
+    transition: transform var(--transition-douce), box-shadow var(--transition-douce);
   }
   .hero__ico-btn:hover {
-    transform: translateY(-2px);
-    background: var(--bleu-clair-1);
+    transform: translateY(-3px);
+    box-shadow:
+      0 13px 26px rgba(10, 46, 92, 0.45),
+      inset 0 2px 3px rgba(255, 255, 255, 0.45),
+      inset 0 -4px 5px rgba(0, 0, 0, 0.22);
+  }
+  .hero__ico-btn:active {
+    transform: translateY(-1px);
   }
 
   @media (max-width: 760px) {
