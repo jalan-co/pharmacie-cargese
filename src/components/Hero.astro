@@ -248,20 +248,29 @@ import Icone from './Icone.astro';
     background: var(--accent-or);
   }
 
-  /* Statut « Ouvert / Fermé » plat : point + texte sur deux lignes. */
+  /* Statut « Ouvert / Fermé », en pastille flottante alignée avec le burger
+     (à gauche sur ordinateur, à droite sur mobile — voir media query). */
   .hero__statut {
+    position: fixed;
+    top: 1rem;
+    left: 4.75rem;
+    z-index: 200;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-top: var(--esp-xl);
-    padding: 0;
-    background: none;
-    border: none;
-    box-shadow: none;
+    gap: 0.5rem;
+    height: 3rem;
+    margin: 0;
+    padding: 0 0.9rem 0 1rem;
+    background: color-mix(in srgb, var(--blanc) 82%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: var(--rayon-pilule);
+    box-shadow: var(--ombre-md);
     font-family: inherit;
     color: var(--couleur-texte);
     text-align: left;
     cursor: pointer;
+    animation: none;
   }
   /* Point plein entouré d'un anneau net (plus premium qu'un halo flou). */
   .hero__statut-dot {
@@ -274,29 +283,31 @@ import Icone from './Icone.astro';
     outline-offset: 3px;
     flex: none;
   }
+  .hero__statut-date {
+    font-size: var(--taille-xs);
+    font-weight: var(--graisse-medium);
+    color: var(--couleur-texte-doux);
+    white-space: nowrap;
+  }
   .hero__statut-txt {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 0.4rem;
     line-height: 1.3;
   }
   .hero__statut-etat {
     font-weight: var(--graisse-forte);
-    font-size: var(--taille-base);
+    font-size: var(--taille-sm);
     color: var(--statut-ferme);
+    white-space: nowrap;
   }
   .hero__statut-detail {
-    font-size: var(--taille-sm);
-    color: var(--couleur-texte-doux);
-  }
-  .hero__statut:hover .hero__statut-detail {
-    color: var(--bleu-medium);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  /* Date du jour + chevron : réservés au badge compact du mobile. */
-  .hero__statut-date,
-  .hero__statut-chevron {
     display: none;
+  }
+  .hero__statut-chevron {
+    display: inline-block;
+    color: var(--slate-2);
+    flex: none;
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
@@ -407,46 +418,11 @@ import Icone from './Icone.astro';
       justify-content: center;
     }
 
-    /* Statut déplacé en haut à droite, aligné avec le burger menu :
-       date du jour + état + chevron pour ouvrir la popup des horaires. */
+    /* Sur mobile, le statut reste à droite (le burger occupe déjà la
+       gauche) plutôt qu'à côté du burger comme sur ordinateur. */
     .hero__statut {
-      position: fixed;
-      top: 1rem;
+      left: auto;
       right: 1rem;
-      z-index: 200;
-      margin: 0;
-      gap: 0.5rem;
-      height: 3rem;
-      padding: 0 0.9rem 0 1rem;
-      background: color-mix(in srgb, var(--blanc) 82%, transparent);
-      backdrop-filter: saturate(160%) blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: var(--rayon-pilule);
-      box-shadow: var(--ombre-md);
-      animation: none;
-    }
-    .hero__statut-date {
-      display: inline;
-      font-size: var(--taille-xs);
-      font-weight: var(--graisse-medium);
-      color: var(--couleur-texte-doux);
-      white-space: nowrap;
-    }
-    .hero__statut-txt {
-      flex-direction: row;
-      gap: 0.4rem;
-    }
-    .hero__statut-etat {
-      font-size: var(--taille-sm);
-      white-space: nowrap;
-    }
-    .hero__statut-detail {
-      display: none;
-    }
-    .hero__statut-chevron {
-      display: inline-block;
-      color: var(--slate-2);
-      flex: none;
     }
 
     /* Voile plus léger = moins de contraste garanti par endroits (ex. sur le
