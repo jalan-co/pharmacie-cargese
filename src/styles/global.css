@@ -62,6 +62,14 @@ h3 {
   text-wrap: balance;
 }
 
+/* Titres d'affichage en serif fine (Playfair) — h3 reste en Inter. */
+h1,
+h2 {
+  font-family: var(--police-affiche);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
 h1 {
   font-size: var(--taille-2xl);
 }

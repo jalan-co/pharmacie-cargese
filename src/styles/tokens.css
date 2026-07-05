@@ -37,6 +37,8 @@
   --police-titre: 'Inter Variable', 'Inter', system-ui, sans-serif;
   --police-corps: 'Inter Variable', 'Inter', system-ui, sans-serif;
   --police-serif: Georgia, 'Times New Roman', serif;
+  /* Serif d'affichage (titres h1/h2) — cachet éditorial « premium ». */
+  --police-affiche: 'Playfair Display Variable', Georgia, 'Times New Roman', serif;
 
   /* Échelle typographique (fluide, clamp mobile → desktop) */
   --taille-xs: 0.8125rem;   /* 13px */

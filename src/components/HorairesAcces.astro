@@ -27,7 +27,11 @@ import Icone from './Icone.astro';
           <details class="ha__horaires">
             <summary class="ha__horaires-sum">
               <Icone nom="clock" taille={20} />
-              <span>Horaires d'ouverture</span>
+              <span class="ha__sum-titre">Horaires d'ouverture</span>
+              <span class="ha__statut" data-ha-statut>
+                <span class="ha__statut-dot" aria-hidden="true"></span>
+                <span class="ha__statut-etat" data-ha-etat></span>
+              </span>
               <Icone nom="chevron" taille={16} class="ha__horaires-chevron" />
             </summary>
             <dl class="ha__jours">
@@ -39,20 +43,21 @@ import Icone from './Icone.astro';
               ))}
             </dl>
             <p class="ha__note">{horairesNote}</p>
-          </details>
 
-          <div class="ha__garde">
-            <div class="ha__garde-txt">
-              <span class="ha__garde-titre">
-                <Icone nom="shield" taille={18} /> Pharmacie de garde
-              </span>
-              <p>En dehors des horaires, composez le <strong>{pharmacie.garde}</strong> (24h/24).</p>
+            <!-- Pharmacie de garde : dans le dépliant (masquée quand plié). -->
+            <div class="ha__garde">
+              <div class="ha__garde-txt">
+                <span class="ha__garde-titre">
+                  <Icone nom="shield" taille={18} /> Pharmacie de garde
+                </span>
+                <p>En dehors des horaires, composez le <strong>{pharmacie.garde}</strong> (24h/24).</p>
+              </div>
+              <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
+                <Icone nom="phone" class="btn__icone" />
+                <span>Appeler le {pharmacie.garde}</span>
+              </a>
             </div>
-            <a href={`tel:${pharmacie.garde}`} class="btn btn--primaire ha__garde-btn">
-              <Icone nom="phone" class="btn__icone" />
-              <span>Appeler le {pharmacie.garde}</span>
-            </a>
-          </div>
+          </details>
         </div>
       </div>
 
@@ -82,6 +87,34 @@ import Icone from './Icone.astro';
     </div>
   </div>
 </section>
+
+<!-- Statut Ouvert / Fermé en direct sur la barre des horaires. -->
+<script define:vars={{ horaires }}>
+  (function () {
+    const el = document.querySelector('[data-ha-statut]');
+    if (!el) return;
+
+    const parse = (str) => {
+      if (!str) return [];
+      const t = [...str.matchAll(/(\d{1,2})\s*[h:]\s*(\d{0,2})/g)].map(
+        (m) => parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0)
+      );
+      const r = [];
+      for (let i = 0; i + 1 < t.length; i += 2) r.push([t[i], t[i + 1]]);
+      return r;
+    };
+
+    const now = new Date();
+    const dayIdx = (now.getDay() + 6) % 7;
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const today = horaires[dayIdx];
+    const ranges = today && !today.ferme ? parse(today.heures) : [];
+    const open = ranges.some(([o, c]) => mins >= o && mins < c);
+
+    el.classList.add(open ? 'is-open' : 'is-closed');
+    el.querySelector('[data-ha-etat]').textContent = open ? 'Ouvert' : 'Fermé';
+  })();
+</script>
 
 <style>
   .ha {
@@ -128,8 +161,37 @@ import Icone from './Icone.astro';
     color: var(--bleu-medium);
     flex: none;
   }
-  .ha__horaires-chevron {
+  .ha__sum-titre {
+    margin-right: var(--esp-sm);
+  }
+  /* Statut live (Ouvert/Fermé) sur la barre repliée, comme le hero. */
+  .ha__statut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     margin-left: auto;
+    font-size: var(--taille-sm);
+  }
+  .ha__statut-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--statut-ferme);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--statut-ferme) 18%, transparent);
+    flex: none;
+  }
+  .ha__statut-etat {
+    font-weight: var(--graisse-medium);
+    color: var(--statut-ferme);
+  }
+  .ha__statut.is-open .ha__statut-dot {
+    background: var(--statut-ouvert);
+  }
+  .ha__statut.is-open .ha__statut-etat {
+    color: var(--statut-ouvert);
+  }
+  .ha__horaires-chevron {
+    margin-left: var(--esp-sm);
     color: var(--slate-2);
     transition: transform var(--transition-douce);
   }

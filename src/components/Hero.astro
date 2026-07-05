@@ -36,11 +36,13 @@ import Icone from './Icone.astro';
 
       <h1 class="hero__titre">{hero.titre}</h1>
 
-      <!-- Statut d'ouverture (bouton → ouvre la popup des horaires). -->
+      <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
       <button class="hero__statut" data-hero-statut type="button">
         <span class="hero__statut-dot" aria-hidden="true"></span>
-        <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-        <span class="hero__statut-voir">Voir les horaires</span>
+        <span class="hero__statut-txt">
+          <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
+          <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
+        </span>
       </button>
 
       <div class="hero__actions">
@@ -48,21 +50,27 @@ import Icone from './Icone.astro';
           <span>Découvrir nos services</span>
           <Icone nom="arrow" class="btn__icone" />
         </a>
+      </div>
+
+      <!-- Accès rapides : cercle + label sous le bouton (sobre, plat). -->
+      <div class="hero__acces">
         <a
           href={`tel:${pharmacie.telephone.lien}`}
-          class="hero__ico-btn"
+          class="hero__acces-item"
           aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
         >
-          <Icone nom="phone" taille={24} />
+          <span class="hero__acces-ico"><Icone nom="phone" taille={22} /></span>
+          <span class="hero__acces-lbl">Appeler</span>
         </a>
         <a
           href={lienItineraire}
           target="_blank"
           rel="noopener"
-          class="hero__ico-btn"
+          class="hero__acces-item"
           aria-label={`Itinéraire vers la ${pharmacie.nom}`}
         >
-          <Icone nom="route" taille={24} />
+          <span class="hero__acces-ico"><Icone nom="route" taille={22} /></span>
+          <span class="hero__acces-lbl">Itinéraire</span>
         </a>
       </div>
     </div>
@@ -118,6 +126,14 @@ import Icone from './Icone.astro';
     el.classList.add(open ? 'is-open' : 'is-closed');
     el.querySelector('[data-statut-etat]').textContent = open ? 'Ouvert' : 'Fermé';
 
+    // Détail : horaires du jour (ou « fermé aujourd'hui »).
+    const detail = el.querySelector('[data-statut-detail]');
+    if (detail) {
+      detail.textContent = today && !today.ferme
+        ? `Aujourd'hui : ${today.heures}`
+        : "Fermé aujourd'hui";
+    }
+
     // Ouverture / fermeture de la popup des horaires.
     const modal = document.querySelector('[data-horaires-modal]');
     if (modal) {
@@ -155,11 +171,11 @@ import Icone from './Icone.astro';
     inset: 0;
     z-index: -1;
     background: linear-gradient(
-      100deg,
-      rgba(255, 255, 255, 0.92) 0%,
-      rgba(255, 255, 255, 0.78) 30%,
-      rgba(255, 255, 255, 0.3) 52%,
-      rgba(255, 255, 255, 0) 70%
+      104deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.52) 28%,
+      rgba(255, 255, 255, 0.12) 52%,
+      rgba(255, 255, 255, 0) 68%
     );
   }
 
@@ -195,62 +211,55 @@ import Icone from './Icone.astro';
   }
 
   .hero__titre {
-    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.6rem);
-    letter-spacing: -0.03em;
+    font-size: clamp(2.3rem, 1.4rem + 3.4vw, 3.9rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  /* Point doré final, en écho au traitement « de Cargèse » du logo. */
+  .hero__titre::after {
+    content: '.';
+    color: var(--accent-or);
   }
 
-  /* Cartouche de statut « Ouvert / Fermé » (bouton → popup horaires) */
+  /* Statut « Ouvert / Fermé » plat : point + texte sur deux lignes. */
   .hero__statut {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.7rem;
     margin-top: var(--esp-lg);
-    padding: 0.65rem 1.25rem;
-    background: color-mix(in srgb, var(--blanc) 78%, transparent);
-    backdrop-filter: saturate(160%) blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: var(--rayon-pilule);
-    box-shadow: var(--ombre-md);
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
     font-family: inherit;
-    font-size: var(--taille-base);
     color: var(--couleur-texte);
+    text-align: left;
     cursor: pointer;
-    transition: transform var(--transition-douce), box-shadow var(--transition-douce);
-  }
-  .hero__statut:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--ombre-lg);
   }
   .hero__statut-dot {
-    width: 0.6rem;
-    height: 0.6rem;
+    width: 0.65rem;
+    height: 0.65rem;
     border-radius: 50%;
     background: var(--statut-ferme);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 20%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 18%, transparent);
     flex: none;
+  }
+  .hero__statut-txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
   }
   .hero__statut-etat {
     font-weight: var(--graisse-forte);
+    font-size: var(--taille-base);
     color: var(--statut-ferme);
   }
-  /* Séparateur discret entre l'état et « Voir les horaires ». */
-  .hero__statut-voir {
-    position: relative;
-    padding-left: 0.65rem;
-    color: var(--couleur-texte-doux);
+  .hero__statut-detail {
     font-size: var(--taille-sm);
+    color: var(--couleur-texte-doux);
   }
-  .hero__statut-voir::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1px;
-    height: 0.9rem;
-    background: var(--bordure);
-  }
-  .hero__statut:hover .hero__statut-voir {
+  .hero__statut:hover .hero__statut-detail {
     color: var(--bleu-medium);
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -280,31 +289,38 @@ import Icone from './Icone.astro';
     padding: 1.05em 1.8em;
     font-size: var(--taille-base);
   }
-  /* Accès rapides en icônes (relief 3D), à côté du bouton principal. */
-  .hero__ico-btn {
+  /* Accès rapides : cercle plat + label dessous. */
+  .hero__acces {
+    display: flex;
+    gap: var(--esp-lg);
+    margin-top: var(--esp-lg);
+  }
+  .hero__acces-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: var(--couleur-texte);
+  }
+  .hero__acces-ico {
     display: grid;
     place-items: center;
-    width: 3.7rem;
-    height: 3.7rem;
-    flex: none;
+    width: 3.1rem;
+    height: 3.1rem;
     border-radius: 50%;
-    background: linear-gradient(160deg, var(--bleu-medium), var(--bleu-profond));
+    background: var(--bleu-medium);
     color: var(--blanc);
-    box-shadow:
-      0 8px 18px rgba(10, 46, 92, 0.38),
-      inset 0 2px 3px rgba(255, 255, 255, 0.4),
-      inset 0 -4px 5px rgba(0, 0, 0, 0.22);
-    transition: transform var(--transition-douce), box-shadow var(--transition-douce);
+    box-shadow: var(--ombre-sm);
+    transition: transform var(--transition-douce), background-color var(--transition-douce);
   }
-  .hero__ico-btn:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 13px 26px rgba(10, 46, 92, 0.45),
-      inset 0 2px 3px rgba(255, 255, 255, 0.45),
-      inset 0 -4px 5px rgba(0, 0, 0, 0.22);
+  .hero__acces-lbl {
+    font-size: var(--taille-sm);
+    font-weight: var(--graisse-medium);
   }
-  .hero__ico-btn:active {
-    transform: translateY(-1px);
+  .hero__acces-item:hover .hero__acces-ico {
+    transform: translateY(-2px);
+    background: var(--bleu-profond);
   }
 
   @media (max-width: 760px) {
@@ -339,6 +355,9 @@ import Icone from './Icone.astro';
     }
     .hero__cta {
       width: 100%;
+    }
+    .hero__acces {
+      justify-content: center;
     }
   }
 
