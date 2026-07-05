@@ -7,7 +7,7 @@
  */
 import { Image } from 'astro:assets';
 import facade from '../assets/facade-pharmacie.png';
-import { hero, pharmacie, horaires, logo } from '../data/site';
+import { hero, pharmacie, horaires, horairesNote, logo } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
 import Icone from './Icone.astro';
 ---
@@ -37,12 +37,13 @@ import Icone from './Icone.astro';
 
       <h1 class="hero__titre">{hero.titre}</h1>
 
-      <!-- Statut d'ouverture en direct (mis à jour par le script ci-dessous). -->
-      <div class="hero__statut" data-hero-statut>
+      <!-- Statut d'ouverture (bouton → ouvre la popup des horaires). -->
+      <button class="hero__statut" data-hero-statut type="button">
         <span class="hero__statut-dot" aria-hidden="true"></span>
         <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-        <span class="hero__statut-detail" data-statut-detail></span>
-      </div>
+        <span class="hero__statut-voir">· Voir les horaires</span>
+        <Icone nom="arrow" taille={14} class="hero__statut-fleche" />
+      </button>
 
       <div class="hero__actions">
         <a href="#services" class="btn btn--or hero__cta">
@@ -59,13 +60,35 @@ import Icone from './Icone.astro';
   </div>
 </section>
 
-<!-- Indicateur Ouvert / Fermé en direct (horaires éditables → recalcul auto). -->
+<!-- Popup des horaires (dialog natif, ouvert au clic sur le statut). -->
+<dialog class="modal-horaires" data-horaires-modal aria-label="Horaires d'ouverture">
+  <div class="modal-horaires__inner">
+    <button class="modal-horaires__close" data-close type="button" aria-label="Fermer">
+      <Icone nom="close" taille={20} />
+    </button>
+    <h2 class="modal-horaires__titre">Horaires d'ouverture</h2>
+    <dl class="modal-horaires__jours">
+      {horaires.map((c) => (
+        <div class:list={['modal-horaires__jour', { 'est-ferme': c.ferme }]}>
+          <dt>{c.jour}</dt>
+          <dd>{c.heures}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="modal-horaires__note">{horairesNote}</p>
+    <p class="modal-horaires__garde">
+      <Icone nom="shield" taille={18} />
+      <span>Pharmacie de garde : <strong>{pharmacie.garde}</strong> (24h/24)</span>
+    </p>
+  </div>
+</dialog>
+
+<!-- Statut Ouvert / Fermé en direct + ouverture de la popup horaires. -->
 <script define:vars={{ horaires }}>
   (function () {
     const el = document.querySelector('[data-hero-statut]');
     if (!el) return;
 
-    const fmt = (m) => Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0');
     const parse = (str) => {
       if (!str) return [];
       const t = [...str.matchAll(/(\d{1,2})\s*[h:]\s*(\d{0,2})/g)].map(
@@ -80,49 +103,22 @@ import Icone from './Icone.astro';
     const dayIdx = (now.getDay() + 6) % 7;
     const mins = now.getHours() * 60 + now.getMinutes();
     const today = horaires[dayIdx];
-    const todayRanges = today && !today.ferme ? parse(today.heures) : [];
-
-    let open = false,
-      closeAt = null;
-    for (const [o, c] of todayRanges) {
-      if (mins >= o && mins < c) {
-        open = true;
-        closeAt = c;
-        break;
-      }
-    }
-
-    let etat, detail;
-    if (open) {
-      etat = 'Ouvert';
-      detail = 'ferme à ' + fmt(closeAt);
-    } else {
-      etat = 'Fermé';
-      let next = null;
-      for (const [o] of todayRanges) {
-        if (o > mins) {
-          next = { label: "aujourd'hui", at: o };
-          break;
-        }
-      }
-      if (!next) {
-        for (let d = 1; d <= 7; d++) {
-          const day = horaires[(dayIdx + d) % 7];
-          if (day && !day.ferme) {
-            const rs = parse(day.heures);
-            if (rs.length) {
-              next = { label: d === 1 ? 'demain' : day.jour.toLowerCase(), at: rs[0][0] };
-              break;
-            }
-          }
-        }
-      }
-      detail = next ? 'ouvre ' + next.label + ' à ' + fmt(next.at) : '';
-    }
+    const ranges = today && !today.ferme ? parse(today.heures) : [];
+    const open = ranges.some(([o, c]) => mins >= o && mins < c);
 
     el.classList.add(open ? 'is-open' : 'is-closed');
-    el.querySelector('[data-statut-etat]').textContent = etat;
-    el.querySelector('[data-statut-detail]').textContent = detail;
+    el.querySelector('[data-statut-etat]').textContent = open ? 'Ouvert' : 'Fermé';
+
+    // Ouverture / fermeture de la popup des horaires.
+    const modal = document.querySelector('[data-horaires-modal]');
+    if (modal) {
+      el.addEventListener('click', () => modal.showModal());
+      const closeBtn = modal.querySelector('[data-close]');
+      if (closeBtn) closeBtn.addEventListener('click', () => modal.close());
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.close();
+      });
+    }
   })();
 </script>
 
@@ -194,7 +190,7 @@ import Icone from './Icone.astro';
     letter-spacing: -0.03em;
   }
 
-  /* Cartouche de statut « Ouvert / Fermé » */
+  /* Cartouche de statut « Ouvert / Fermé » (bouton → popup horaires) */
   .hero__statut {
     display: inline-flex;
     align-items: center;
@@ -205,7 +201,15 @@ import Icone from './Icone.astro';
     border: 1px solid var(--bordure);
     border-radius: var(--rayon-pilule);
     box-shadow: var(--ombre-sm);
+    font-family: inherit;
     font-size: var(--taille-base);
+    color: var(--couleur-texte);
+    cursor: pointer;
+    transition: border-color var(--transition-douce), box-shadow var(--transition-douce);
+  }
+  .hero__statut:hover {
+    border-color: var(--bleu-clair-3);
+    box-shadow: var(--ombre-md);
   }
   .hero__statut-dot {
     width: 0.7rem;
@@ -218,9 +222,16 @@ import Icone from './Icone.astro';
     font-weight: var(--graisse-forte);
     color: var(--statut-ferme);
   }
-  .hero__statut-detail {
+  .hero__statut-voir {
     color: var(--couleur-texte-doux);
     font-size: var(--taille-sm);
+  }
+  .hero__statut-fleche {
+    color: var(--bleu-medium);
+    transition: transform var(--transition-douce);
+  }
+  .hero__statut:hover .hero__statut-fleche {
+    transform: translateX(3px);
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
@@ -287,5 +298,96 @@ import Icone from './Icone.astro';
     .hero__cta {
       width: 100%;
     }
+  }
+
+  /* --- Popup des horaires (dialog) --- */
+  .modal-horaires {
+    margin: auto;
+    width: calc(100% - 2rem);
+    max-width: 26rem;
+    padding: 0;
+    border: none;
+    border-radius: var(--rayon-lg);
+    box-shadow: var(--ombre-lg);
+    color: var(--couleur-texte);
+    background: var(--blanc);
+  }
+  .modal-horaires::backdrop {
+    background: rgba(10, 46, 92, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  .modal-horaires__inner {
+    position: relative;
+    padding: var(--esp-xl) var(--esp-lg) var(--esp-lg);
+  }
+  .modal-horaires__close {
+    position: absolute;
+    top: var(--esp-sm);
+    right: var(--esp-sm);
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--bleu-clair-1);
+    color: var(--bleu-profond);
+    cursor: pointer;
+    transition: background-color var(--transition-douce);
+  }
+  .modal-horaires__close:hover {
+    background: var(--bleu-clair-3);
+  }
+  .modal-horaires__titre {
+    font-size: var(--taille-md);
+    margin-bottom: var(--esp-md);
+  }
+  .modal-horaires__jours {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    overflow: hidden;
+  }
+  .modal-horaires__jour {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--esp-md);
+    padding: 0.6rem var(--esp-md);
+  }
+  .modal-horaires__jour + .modal-horaires__jour {
+    border-top: 1px solid var(--bleu-clair-2);
+  }
+  .modal-horaires__jour dt {
+    font-weight: var(--graisse-medium);
+  }
+  .modal-horaires__jour dd {
+    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
+  }
+  .modal-horaires__jour.est-ferme dd {
+    color: var(--slate-2);
+  }
+  .modal-horaires__note {
+    margin-top: var(--esp-sm);
+    font-size: var(--taille-sm);
+    color: var(--couleur-texte-doux);
+  }
+  .modal-horaires__garde {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-xs);
+    margin-top: var(--esp-md);
+    padding: var(--esp-sm) var(--esp-md);
+    background: var(--bleu-clair-1);
+    border-radius: var(--rayon-md);
+    font-size: var(--taille-sm);
+  }
+  .modal-horaires__garde :global(svg) {
+    color: var(--bleu-medium);
+    flex: none;
+  }
+  .modal-horaires__garde strong {
+    color: var(--bleu-medium);
   }
 </style>

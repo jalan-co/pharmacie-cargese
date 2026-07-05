@@ -79,9 +79,6 @@ export const hero = {
   ouverture: content.hero.ouverture,
 };
 
-/** Statistiques rassurantes. */
-export const stats: { valeur: string; libelle: string }[] = content.stats;
-
 /** Services (un `id` stable est dérivé de la position pour les clés de liste). */
 export const services: Service[] = content.services.map((s, i) => ({
   id: `service-${i + 1}`,

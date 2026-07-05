@@ -20,12 +20,6 @@
     "texte": "Conseil, prévention et suivi personnalisé au cœur du village. Une équipe de pharmaciens à votre écoute, six jours sur sept, à deux pas du port.",
     "ouverture": "Consultez nos horaires"
   },
-  "stats": [
-    { "valeur": "45+", "libelle": "Années au service du village" },
-    { "valeur": "8 000+", "libelle": "Patients accompagnés chaque année" },
-    { "valeur": "40+", "libelle": "Marques sélectionnées" },
-    { "valeur": "6j/7", "libelle": "Ouvert et à votre écoute" }
-  ],
   "services": [
     {
       "titre": "Bilan de médication",

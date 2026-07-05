@@ -110,15 +110,6 @@ collections:
                   hint: "Affichée seulement si le statut « Ouvert/Fermé » automatique ne se charge pas.",
                 }
 
-          - label: Chiffres clés
-            name: stats
-            widget: list
-            label_singular: Chiffre
-            summary: "{{fields.valeur}} — {{fields.libelle}}"
-            fields:
-              - { label: Valeur, name: valeur, widget: string }
-              - { label: Libellé, name: libelle, widget: string }
-
           - label: Services
             name: services
             widget: list

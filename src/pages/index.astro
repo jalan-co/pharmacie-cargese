@@ -7,7 +7,6 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import BlocStats from '../components/BlocStats.astro';
 import Icone from '../components/Icone.astro';
 import PourquoiNous from '../components/PourquoiNous.astro';
 import RubanMarques from '../components/RubanMarques.astro';
@@ -25,7 +24,6 @@ const serviceImages = [imgBilan, imgTests, imgMicro, imgPhyto];
 
 <BaseLayout title={seo.title} description={seo.description}>
   <Hero />
-  <BlocStats />
 
   <section class="services section" id="services" aria-labelledby="services-titre">
     <div class="conteneur">
