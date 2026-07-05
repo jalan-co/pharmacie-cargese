@@ -21,7 +21,10 @@
 
   /* Couleurs de statut (indicateur Ouvert / Fermé). */
   --statut-ouvert: #1f9d55;
-  --statut-ferme: #8aa0b6;
+  --statut-ferme: #b0603a;
+
+  /* Or pour le bouton d'action principal (contraste suffisant sur blanc). */
+  --or-bouton: #bd8f2c;
 
   /* --- Couleurs sémantiques (dérivées des tokens ci-dessus) --- */
   --couleur-texte: var(--bleu-profond);

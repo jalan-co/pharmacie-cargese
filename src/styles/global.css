@@ -276,6 +276,16 @@ section[id] {
   background: var(--bleu-clair-1);
 }
 
+/* Bouton d'action « or » (accent chaleureux, ex. hero). */
+.btn--or {
+  background: var(--or-bouton);
+  color: var(--blanc);
+  box-shadow: var(--ombre-md);
+}
+.btn--or:hover {
+  background: color-mix(in srgb, var(--or-bouton) 86%, #000);
+}
+
 /* Variante sur fond sombre (hero, footer) */
 .btn--sur-sombre.btn--secondaire {
   background: transparent;

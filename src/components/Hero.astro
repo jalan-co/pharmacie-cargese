@@ -1,14 +1,13 @@
 ---
 /**
- * Hero plein écran : photo de la façade de la pharmacie (Cargèse, coucher de
- * soleil) en fond, texte et actions superposés à gauche sur un voile clair.
- * - Image optimisée automatiquement par Astro (WebP/AVIF, responsive).
- * - Indicateur « Ouvert / Fermé » calculé en direct côté client.
- * - Animations d'entrée douces (respecte prefers-reduced-motion).
+ * Hero plein écran (page d'arrivée) : photo de la façade en fond, logo, titre,
+ * statut « Ouvert / Fermé » en direct et actions. Reste le HAUT de la page
+ * unique (le bouton descend vers les sections) — pas une page-portail séparée,
+ * pour préserver le référencement.
  */
 import { Image } from 'astro:assets';
 import facade from '../assets/facade-pharmacie.png';
-import { hero, pharmacie, horaires, lienItineraire, logo } from '../data/site';
+import { hero, pharmacie, horaires, logo } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
 import Icone from './Icone.astro';
 ---
@@ -41,22 +40,24 @@ import Icone from './Icone.astro';
       <h1 class="hero__titre">{hero.titre}</h1>
       <p class="hero__texte">{hero.texte}</p>
 
-      <p class="hero__signature">
-        Officine dirigée par <strong>{pharmacie.pharmacien}</strong> · {pharmacie.pharmacienTitre}
-      </p>
-
-      <div class="hero__actions">
-        <BoutonAppeler variante="primaire" libelle="Appeler la pharmacie" />
-        <a href={lienItineraire} class="btn btn--secondaire" target="_blank" rel="noopener">
-          <Icone nom="route" class="btn__icone" />
-          <span>Itinéraire</span>
-        </a>
+      <!-- Statut d'ouverture en direct (mis à jour par le script ci-dessous). -->
+      <div class="hero__statut" data-hero-statut>
+        <span class="hero__statut-dot" aria-hidden="true"></span>
+        <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
+        <span class="hero__statut-detail" data-statut-detail></span>
       </div>
 
-      <p class="hero__statut" data-hero-statut>
-        <span class="hero__statut-dot" aria-hidden="true"></span>
-        <span class="hero__statut-txt">{hero.ouverture}</span>
-      </p>
+      <div class="hero__actions">
+        <a href="#services" class="btn btn--or hero__cta">
+          <span>Découvrir nos services</span>
+          <Icone nom="arrow" class="btn__icone" />
+        </a>
+        <BoutonAppeler
+          variante="secondaire"
+          libelle="Appeler la pharmacie"
+          class="hero__appeler"
+        />
+      </div>
     </div>
   </div>
 </section>
@@ -94,10 +95,12 @@ import Icone from './Icone.astro';
       }
     }
 
-    let txt;
+    let etat, detail;
     if (open) {
-      txt = 'Ouvert · ferme à ' + fmt(closeAt);
+      etat = 'Ouvert';
+      detail = 'ferme à ' + fmt(closeAt);
     } else {
+      etat = 'Fermé';
       let next = null;
       for (const [o] of todayRanges) {
         if (o > mins) {
@@ -117,12 +120,12 @@ import Icone from './Icone.astro';
           }
         }
       }
-      txt = 'Fermé' + (next ? ' · ouvre ' + next.label + ' à ' + fmt(next.at) : '');
+      detail = next ? 'ouvre ' + next.label + ' à ' + fmt(next.at) : '';
     }
 
     el.classList.add(open ? 'is-open' : 'is-closed');
-    const span = el.querySelector('.hero__statut-txt');
-    if (span) span.textContent = txt;
+    el.querySelector('[data-statut-etat]').textContent = etat;
+    el.querySelector('[data-statut-detail]').textContent = detail;
   })();
 </script>
 
@@ -151,21 +154,22 @@ import Icone from './Icone.astro';
     z-index: -1;
     background: linear-gradient(
       100deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.82) 26%,
-      rgba(255, 255, 255, 0.35) 46%,
-      rgba(255, 255, 255, 0) 64%
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.78) 30%,
+      rgba(255, 255, 255, 0.3) 52%,
+      rgba(255, 255, 255, 0) 70%
     );
   }
 
+  /* Plein écran : le hero occupe la hauteur visible sous l'en-tête. */
   .hero__inner {
     display: flex;
     align-items: center;
-    min-height: clamp(30rem, 74vh, 44rem);
+    min-height: calc(100svh - 4.75rem);
     padding-block: var(--esp-2xl);
   }
   .hero__contenu {
-    max-width: 34rem;
+    max-width: 36rem;
   }
   .hero__contenu > * {
     animation: apparition 0.7s ease both;
@@ -174,7 +178,6 @@ import Icone from './Icone.astro';
   .hero__contenu > *:nth-child(3) { animation-delay: 0.16s; }
   .hero__contenu > *:nth-child(4) { animation-delay: 0.24s; }
   .hero__contenu > *:nth-child(5) { animation-delay: 0.32s; }
-  .hero__contenu > *:nth-child(6) { animation-delay: 0.4s; }
   @keyframes apparition {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: none; }
@@ -193,9 +196,9 @@ import Icone from './Icone.astro';
     width: clamp(150px, 18vw, 220px);
     height: auto;
   }
+
   .hero__titre {
-    margin-top: var(--esp-md);
-    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.4rem);
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.6rem);
     letter-spacing: -0.03em;
   }
   .hero__texte {
@@ -204,44 +207,40 @@ import Icone from './Icone.astro';
     font-size: var(--taille-md);
     color: var(--couleur-texte);
   }
-  .hero__signature {
-    margin-top: var(--esp-md);
-    font-size: var(--taille-sm);
-    color: var(--couleur-texte-doux);
-  }
-  .hero__signature strong {
-    color: var(--couleur-texte);
-    font-weight: var(--graisse-medium);
-  }
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--esp-sm);
-    margin-top: var(--esp-xl);
-  }
 
-  /* Indicateur d'ouverture en direct */
+  /* Cartouche de statut « Ouvert / Fermé » */
   .hero__statut {
     display: inline-flex;
     align-items: center;
     gap: var(--esp-xs);
     margin-top: var(--esp-lg);
-    font-size: var(--taille-sm);
-    font-weight: var(--graisse-medium);
-    color: var(--couleur-texte-doux);
+    padding: 0.6rem 1.1rem;
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-pilule);
+    box-shadow: var(--ombre-sm);
+    font-size: var(--taille-base);
   }
   .hero__statut-dot {
-    width: 0.6rem;
-    height: 0.6rem;
+    width: 0.7rem;
+    height: 0.7rem;
     border-radius: 50%;
     background: var(--statut-ferme);
     flex: none;
+  }
+  .hero__statut-etat {
+    font-weight: var(--graisse-forte);
+    color: var(--statut-ferme);
+  }
+  .hero__statut-detail {
+    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
     animation: pouls 2.2s ease-out infinite;
   }
-  .hero__statut.is-open .hero__statut-txt {
+  .hero__statut.is-open .hero__statut-etat {
     color: var(--statut-ouvert);
   }
   @keyframes pouls {
@@ -250,24 +249,45 @@ import Icone from './Icone.astro';
     100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
   }
 
-  /* Tablette / mobile : le voile couvre davantage pour garder le texte lisible. */
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-sm);
+    margin-top: var(--esp-xl);
+  }
+  /* CTA principal un peu plus grand pour bien ressortir. */
+  .hero__cta {
+    padding: 1.05em 1.8em;
+    font-size: var(--taille-base);
+  }
+
   @media (max-width: 760px) {
     .hero__bg {
       object-position: 72% center;
     }
     .hero__scrim {
       background: linear-gradient(
-        160deg,
+        165deg,
         rgba(255, 255, 255, 0.92) 0%,
-        rgba(255, 255, 255, 0.78) 45%,
-        rgba(255, 255, 255, 0.45) 100%
+        rgba(255, 255, 255, 0.8) 45%,
+        rgba(255, 255, 255, 0.5) 100%
       );
     }
     .hero__inner {
-      min-height: clamp(26rem, 68vh, 36rem);
+      /* Hauteur = écran moins l'en-tête (≈4rem) et la barre d'appel fixe (≈5rem),
+         pour que tout le contenu tienne au-dessus de la barre. */
+      min-height: calc(100svh - 9rem);
+      padding-block: var(--esp-xl);
     }
     .hero__contenu {
       max-width: 100%;
+    }
+    /* L'appel est déjà couvert par la barre fixe du bas. */
+    .hero__appeler {
+      display: none;
+    }
+    .hero__cta {
+      width: 100%;
     }
   }
 </style>
