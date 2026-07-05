@@ -1,38 +1,65 @@
 ---
 /**
- * En-tête : logo (dans une carte bordée), navigation par ancres et bouton
- * Appeler. Sticky en haut. Sur mobile, le bouton Appeler du header est relayé
- * par la barre fixe en bas d'écran (BarreAppelMobile).
+ * En-tête épuré et sticky : menu « burger » (navigation) à gauche, accès rapides
+ * en icônes (Appeler, Itinéraire) à droite. Pas de logo (il est dans le hero).
  */
-import { navigation, pharmacie, logo } from '../data/site';
-import BoutonAppeler from './BoutonAppeler.astro';
+import { navigation, pharmacie, lienItineraire } from '../data/site';
+import Icone from './Icone.astro';
 ---
 
 <header class="entete">
   <div class="conteneur entete__inner">
-    <a href="#accueil" class="entete__logo" aria-label={`${pharmacie.nom} — accueil`}>
-      <img
-        src={logo.srcTransparent}
-        alt={`Logo ${pharmacie.nom}`}
-        width={Math.round((44 * logo.largeur) / logo.hauteur)}
-        height={44}
-        decoding="async"
-      />
-    </a>
+    <!-- Menu déroulant (disclosure natif). -->
+    <details class="menu">
+      <summary class="menu__btn" aria-label="Ouvrir le menu">
+        <Icone nom="menu" taille={24} />
+      </summary>
+      <nav class="menu__panneau" aria-label="Navigation principale">
+        <ul>
+          {navigation.map((lien) => (
+            <li><a href={lien.href}>{lien.libelle}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
 
-    <nav class="entete__nav" aria-label="Navigation principale">
-      <ul>
-        {navigation.map((lien) => (
-          <li><a href={lien.href}>{lien.libelle}</a></li>
-        ))}
-      </ul>
-    </nav>
-
-    <div class="entete__action">
-      <BoutonAppeler variante="primaire" />
+    <!-- Accès rapides en icônes. -->
+    <div class="entete__actions">
+      <a
+        class="entete__ico"
+        href={`tel:${pharmacie.telephone.lien}`}
+        aria-label={`Appeler la ${pharmacie.nom}`}
+      >
+        <Icone nom="phone" taille={20} />
+      </a>
+      <a
+        class="entete__ico"
+        href={lienItineraire}
+        target="_blank"
+        rel="noopener"
+        aria-label={`Itinéraire vers la ${pharmacie.nom}`}
+      >
+        <Icone nom="route" taille={20} />
+      </a>
     </div>
   </div>
 </header>
+
+<script>
+  // Ferme le menu au clic sur un lien, sur Échap, ou en cliquant ailleurs.
+  const menu = document.querySelector('.menu');
+  if (menu) {
+    menu.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => menu.removeAttribute('open'))
+    );
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') menu.removeAttribute('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target)) menu.removeAttribute('open');
+    });
+  }
+</script>
 
 <style>
   .entete {
@@ -46,60 +73,79 @@ import BoutonAppeler from './BoutonAppeler.astro';
   .entete__inner {
     display: flex;
     align-items: center;
-    gap: var(--esp-lg);
-    min-height: 4.75rem;
-  }
-  /* Logo détouré, posé directement sur l'en-tête clair. */
-  .entete__logo {
-    display: inline-flex;
-    align-items: center;
-    margin-right: auto;
-  }
-  .entete__logo img {
-    height: 46px;
-    width: auto;
+    justify-content: space-between;
+    min-height: 4rem;
   }
 
-  .entete__nav ul {
-    display: flex;
-    align-items: center;
-    gap: var(--esp-2xs);
+  /* --- Menu burger --- */
+  .menu {
+    position: relative;
   }
-  .entete__nav a {
-    display: inline-block;
-    padding: 0.5rem 0.9rem;
+  .menu__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: var(--rayon-sm);
-    font-family: var(--police-titre);
-    font-size: var(--taille-sm);
-    font-weight: var(--graisse-medium);
+    color: var(--bleu-profond);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color var(--transition-douce);
+  }
+  .menu__btn::-webkit-details-marker {
+    display: none;
+  }
+  .menu__btn:hover {
+    background: var(--bleu-clair-1);
+  }
+  .menu__panneau {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 0;
+    min-width: 13rem;
+    padding: var(--esp-xs);
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon-md);
+    box-shadow: var(--ombre-md);
+  }
+  .menu__panneau ul {
+    display: flex;
+    flex-direction: column;
+  }
+  .menu__panneau a {
+    display: block;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--rayon-sm);
     color: var(--couleur-texte);
+    font-family: var(--police-titre);
+    font-weight: var(--graisse-medium);
+    font-size: var(--taille-sm);
     text-decoration: none;
     transition: background-color var(--transition-douce), color var(--transition-douce);
   }
-  .entete__nav a:hover {
+  .menu__panneau a:hover {
     background: var(--bleu-clair-1);
     color: var(--bleu-medium);
   }
 
-  @media (max-width: 780px) {
-    .entete__inner {
-      gap: var(--esp-md);
-      min-height: 4rem;
-    }
-    .entete__action {
-      display: none;
-    }
-    .entete__logo img {
-      height: 38px;
-    }
-    .entete__nav a {
-      padding: 0.45rem 0.55rem;
-    }
+  /* --- Accès rapides en icônes --- */
+  .entete__actions {
+    display: flex;
+    gap: var(--esp-xs);
   }
-  @media (max-width: 420px) {
-    .entete__nav a {
-      font-size: var(--taille-xs);
-      padding: 0.4rem 0.4rem;
-    }
+  .entete__ico {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    color: var(--bleu-profond);
+    background: var(--bleu-clair-1);
+    transition: background-color var(--transition-douce), transform var(--transition-douce);
+  }
+  .entete__ico:hover {
+    background: var(--bleu-clair-3);
+    transform: translateY(-1px);
   }
 </style>

@@ -41,8 +41,7 @@ import Icone from './Icone.astro';
       <button class="hero__statut" data-hero-statut type="button">
         <span class="hero__statut-dot" aria-hidden="true"></span>
         <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-        <span class="hero__statut-voir">· Voir les horaires</span>
-        <Icone nom="arrow" taille={14} class="hero__statut-fleche" />
+        <span class="hero__statut-voir">Voir les horaires</span>
       </button>
 
       <div class="hero__actions">
@@ -194,44 +193,57 @@ import Icone from './Icone.astro';
   .hero__statut {
     display: inline-flex;
     align-items: center;
-    gap: var(--esp-xs);
+    gap: 0.6rem;
     margin-top: var(--esp-lg);
-    padding: 0.6rem 1.1rem;
-    background: var(--blanc);
-    border: 1px solid var(--bordure);
+    padding: 0.65rem 1.25rem;
+    background: color-mix(in srgb, var(--blanc) 78%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: var(--rayon-pilule);
-    box-shadow: var(--ombre-sm);
+    box-shadow: var(--ombre-md);
     font-family: inherit;
     font-size: var(--taille-base);
     color: var(--couleur-texte);
     cursor: pointer;
-    transition: border-color var(--transition-douce), box-shadow var(--transition-douce);
+    transition: transform var(--transition-douce), box-shadow var(--transition-douce);
   }
   .hero__statut:hover {
-    border-color: var(--bleu-clair-3);
-    box-shadow: var(--ombre-md);
+    transform: translateY(-1px);
+    box-shadow: var(--ombre-lg);
   }
   .hero__statut-dot {
-    width: 0.7rem;
-    height: 0.7rem;
+    width: 0.6rem;
+    height: 0.6rem;
     border-radius: 50%;
     background: var(--statut-ferme);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 20%, transparent);
     flex: none;
   }
   .hero__statut-etat {
     font-weight: var(--graisse-forte);
     color: var(--statut-ferme);
   }
+  /* Séparateur discret entre l'état et « Voir les horaires ». */
   .hero__statut-voir {
+    position: relative;
+    padding-left: 0.65rem;
     color: var(--couleur-texte-doux);
     font-size: var(--taille-sm);
   }
-  .hero__statut-fleche {
-    color: var(--bleu-medium);
-    transition: transform var(--transition-douce);
+  .hero__statut-voir::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 0.9rem;
+    background: var(--bordure);
   }
-  .hero__statut:hover .hero__statut-fleche {
-    transform: translateX(3px);
+  .hero__statut:hover .hero__statut-voir {
+    color: var(--bleu-medium);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
@@ -271,9 +283,7 @@ import Icone from './Icone.astro';
       );
     }
     .hero__inner {
-      /* Hauteur = écran moins l'en-tête (≈4rem) et la barre d'appel fixe (≈5rem),
-         pour que tout le contenu tienne au-dessus de la barre. */
-      min-height: calc(100svh - 9rem);
+      min-height: calc(100svh - 5rem);
       padding-block: var(--esp-xl);
     }
     /* Tout le contenu du hero centré sur mobile. */
@@ -289,11 +299,6 @@ import Icone from './Icone.astro';
     }
     .hero__actions {
       justify-content: center;
-    }
-    /* L'appel est déjà couvert par la barre fixe du bas.
-       :global car le bouton vient du composant BoutonAppeler (hors scope). */
-    :global(.hero__appeler) {
-      display: none;
     }
     .hero__cta {
       width: 100%;

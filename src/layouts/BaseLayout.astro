@@ -10,7 +10,6 @@ import '../styles/global.css';
 import { pharmacie } from '../data/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import BarreAppelMobile from '../components/BarreAppelMobile.astro';
 
 interface Props {
   title: string;
@@ -80,6 +79,5 @@ const jsonLd = {
       <slot />
     </main>
     <Footer />
-    <BarreAppelMobile />
   </body>
 </html>
