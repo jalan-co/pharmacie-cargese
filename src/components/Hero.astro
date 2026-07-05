@@ -383,8 +383,8 @@ import Icone from './Icone.astro';
     }
     .hero__inner {
       min-height: 100svh;
-      /* Contenu remonté : moins de vide au-dessus du logo. */
-      padding-block: clamp(2.25rem, 5.5vh, 3.5rem) var(--esp-xl);
+      /* Un peu plus d'écart avec le badge/burger flottants en haut. */
+      padding-block: clamp(3.25rem, 7.5vh, 4.5rem) var(--esp-xl);
     }
     /* Tout le contenu du hero centré sur mobile. */
     .hero__contenu {
@@ -395,7 +395,7 @@ import Icone from './Icone.astro';
       /* Logo agrandi et rapproché du titre. */
       width: clamp(340px, 76vw, 460px);
       margin-inline: auto;
-      margin-bottom: var(--esp-sm);
+      margin-bottom: 0.25rem;
     }
     .hero__actions {
       justify-content: center;
