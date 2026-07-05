@@ -29,3 +29,6 @@ Pharmacie de Cargèse.html
 .vscode/
 .idea/
 .vercel/
+
+# Fichiers sources lourds (vidéos, images brutes) — hors dépôt
+assets-source/
