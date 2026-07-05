@@ -12,7 +12,7 @@ import BoutonAppeler from './BoutonAppeler.astro';
   <div class="conteneur entete__inner">
     <a href="#accueil" class="entete__logo" aria-label={`${pharmacie.nom} — accueil`}>
       <img
-        src={logo.src}
+        src={logo.srcTransparent}
         alt={`Logo ${pharmacie.nom}`}
         width={Math.round((44 * logo.largeur) / logo.hauteur)}
         height={44}
@@ -49,19 +49,14 @@ import BoutonAppeler from './BoutonAppeler.astro';
     gap: var(--esp-lg);
     min-height: 4.75rem;
   }
-  /* Logo présenté dans une petite carte bordée, comme sur la maquette. */
+  /* Logo détouré, posé directement sur l'en-tête clair. */
   .entete__logo {
     display: inline-flex;
     align-items: center;
     margin-right: auto;
-    padding: 0.35rem 0.6rem;
-    background: var(--blanc);
-    border: 1px solid var(--bordure);
-    border-radius: var(--rayon-md);
-    box-shadow: var(--ombre-sm);
   }
   .entete__logo img {
-    height: 44px;
+    height: 46px;
     width: auto;
   }
 
