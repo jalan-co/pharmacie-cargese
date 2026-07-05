@@ -52,7 +52,7 @@ import Icone from './Icone.astro';
           class="hero__acces-item"
           aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
         >
-          <span class="hero__acces-ico"><Icone nom="phone" taille={22} /></span>
+          <span class="hero__acces-ico"><Icone nom="phone" taille={27} /></span>
           <span class="hero__acces-lbl">Appeler</span>
         </a>
         <span class="hero__acces-sep" aria-hidden="true"></span>
@@ -63,7 +63,7 @@ import Icone from './Icone.astro';
           class="hero__acces-item"
           aria-label={`Itinéraire vers la ${pharmacie.nom}`}
         >
-          <span class="hero__acces-ico"><Icone nom="route" taille={22} /></span>
+          <span class="hero__acces-ico"><Icone nom="route" taille={27} /></span>
           <span class="hero__acces-lbl">Itinéraire</span>
         </a>
       </div>
@@ -328,13 +328,13 @@ import Icone from './Icone.astro';
   .hero__acces-ico {
     display: grid;
     place-items: center;
-    width: 3.1rem;
-    height: 3.1rem;
+    width: 3.6rem;
+    height: 3.6rem;
     border-radius: 50%;
     background: var(--bleu-medium);
     color: var(--blanc);
-    box-shadow: var(--ombre-sm);
-    transition: transform var(--transition-douce), background-color var(--transition-douce);
+    box-shadow: var(--ombre-md);
+    transition: transform var(--transition-douce), background-color var(--transition-douce), box-shadow var(--transition-douce);
   }
   .hero__acces-lbl {
     font-size: var(--taille-sm);
@@ -343,6 +343,7 @@ import Icone from './Icone.astro';
   .hero__acces-item:hover .hero__acces-ico {
     transform: translateY(-2px);
     background: var(--bleu-profond);
+    box-shadow: var(--ombre-lg);
   }
 
   @media (max-width: 760px) {
