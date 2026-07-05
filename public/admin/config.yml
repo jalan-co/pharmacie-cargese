@@ -1,17 +1,41 @@
-# Configuration du back-office Sveltia CMS.
+# Configuration du back-office Decap CMS.
 # Le CMS édite le fichier src/data/content.json et enregistre les modifications
 # directement dans le dépôt GitHub. Chaque enregistrement déclenche un nouveau
-# déploiement Vercel : le site est mis à jour ~1 minute plus tard.
+# déploiement : le site est mis à jour ~1 minute plus tard.
+# L'authentification (connexion email / Google / Microsoft) est gérée par
+# DecapBridge — bloc `backend` généré depuis leur tableau de bord.
 
 backend:
   name: git-gateway
   repo: jalan-co/pharmacie-cargese
   branch: main
-  # Ces deux URL sont FOURNIES par DecapBridge après création du site sur
-  # https://decapbridge.com — remplacer <votre-site-id> par l'identifiant
-  # généré (le reste de config.yml n'a pas besoin d'être modifié).
-  identity_url: https://auth.decapbridge.com/sites/<votre-site-id>
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/2b529f95-88aa-4efb-8069-99cfe2818f30/pkce
+  auth_token_endpoint: /sites/2b529f95-88aa-4efb-8069-99cfe2818f30/token
   gateway_url: https://gateway.decapbridge.com
+
+  # Messages de commit lisibles (qui a modifié quoi).
+  commit_messages:
+    create: Create {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    update: Update {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    delete: Delete {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    uploadMedia: Upload “{{path}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    deleteMedia: Delete “{{path}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    openAuthoring: Message {{message}} - {{author-name}} <{{author-login}}> via DecapBridge
+
+# Champs d'identité fournis par DecapBridge (connexion PKCE).
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
+
+# Logo « Decap with Bridge » sur l'écran de connexion.
+logo_url: https://decapbridge.com/decapcms-with-bridge.svg
+
+# Lien vers le site depuis l'interface d'administration.
+site_url: https://pharmaciedecargese.vercel.app
 
 # Langue de l'interface d'administration.
 locale: fr
