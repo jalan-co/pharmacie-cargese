@@ -265,12 +265,19 @@ import Icone from './Icone.astro';
       min-height: calc(100svh - 9rem);
       padding-block: var(--esp-xl);
     }
+    /* Tout le contenu du hero centré sur mobile. */
     .hero__contenu {
       max-width: 100%;
+      text-align: center;
     }
-    /* Logo centré sur mobile. */
     .hero__logo {
       margin-inline: auto;
+    }
+    .hero__statut {
+      margin-inline: auto;
+    }
+    .hero__actions {
+      justify-content: center;
     }
     /* L'appel est déjà couvert par la barre fixe du bas.
        :global car le bouton vient du composant BoutonAppeler (hors scope). */

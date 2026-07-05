@@ -1,16 +1,26 @@
 ---
 /**
- * Page unique (landing) reproduisant la maquette validée :
- * hero, chiffres clés, services, pourquoi nous, marques, horaires & accès.
+ * Page unique (landing) :
+ * hero, chiffres clés, services (photos + texte superposé), pourquoi nous,
+ * marques, horaires.
  */
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import BlocStats from '../components/BlocStats.astro';
-import CarteService from '../components/CarteService.astro';
+import Icone from '../components/Icone.astro';
 import PourquoiNous from '../components/PourquoiNous.astro';
 import RubanMarques from '../components/RubanMarques.astro';
 import HorairesAcces from '../components/HorairesAcces.astro';
-import { services, seo, lienItineraire } from '../data/site';
+import { services, seo } from '../data/site';
+
+// Photos des services (propres, sans texte : le texte est du vrai HTML posé
+// par-dessus → éditable, lisible sur mobile, lu par Google).
+import imgBilan from '../assets/services/service-bilan.webp';
+import imgTests from '../assets/services/service-tests.webp';
+import imgMicro from '../assets/services/service-micronutrition.webp';
+// Phytothérapie : photo à venir (fond dégradé en attendant).
+const serviceImages = [imgBilan, imgTests, imgMicro, undefined];
 ---
 
 <BaseLayout title={seo.title} description={seo.description}>
@@ -20,16 +30,33 @@ import { services, seo, lienItineraire } from '../data/site';
   <section class="services section" id="services" aria-labelledby="services-titre">
     <div class="conteneur">
       <div class="services__entete">
-        <div>
-          <span class="surtitre">Nos services</span>
-          <h2 id="services-titre">Un accompagnement complet, au-delà de l'ordonnance</h2>
-        </div>
-        <a href="#horaires" class="services__lien">Tous les services</a>
+        <span class="surtitre">Nos services</span>
+        <h2 id="services-titre">Un accompagnement complet, au-delà de l'ordonnance</h2>
       </div>
 
       <ul class="services__grille" role="list">
-        {services.map((service) => (
-          <li><CarteService service={service} niveauTitre={3} /></li>
+        {services.map((service, i) => (
+          <li class="services__carte">
+            {serviceImages[i] ? (
+              <Image
+                src={serviceImages[i]}
+                alt={service.titre}
+                class="services__img"
+                widths={[500, 768]}
+                sizes="(max-width: 700px) 100vw, 45vw"
+                loading="lazy"
+              />
+            ) : (
+              <div class="services__img services__img--vide"></div>
+            )}
+            <div class="services__overlay">
+              <span class="services__ico" aria-hidden="true">
+                <Icone nom={service.icone} taille={24} />
+              </span>
+              <h3 class="services__titre">{service.titre}</h3>
+              <p class="services__desc">{service.description}</p>
+            </div>
+          </li>
         ))}
       </ul>
     </div>
@@ -42,42 +69,81 @@ import { services, seo, lienItineraire } from '../data/site';
 
 <style>
   .services__entete {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    justify-content: space-between;
-    gap: var(--esp-md);
+    max-width: 46rem;
     margin-bottom: var(--esp-xl);
   }
   .services__entete h2 {
     margin-top: var(--esp-2xs);
-    max-width: 30rem;
   }
-  .services__lien {
-    font-weight: var(--graisse-medium);
-    font-size: var(--taille-sm);
-    color: var(--bleu-medium);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .services__lien:hover {
-    text-decoration: underline;
-  }
-  /* Grille résiliente : s'adapte à n'importe quel nombre de services,
-     les cartes se répartissent et se centrent (jamais de carte isolée étirée). */
+
   .services__grille {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--esp-lg);
   }
-  .services__grille > li {
-    flex: 1 1 240px;
-    max-width: 320px;
+
+  /* Carte : photo en fond, texte superposé sur un dégradé bleu. */
+  .services__carte {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--rayon-lg);
+    overflow: hidden;
+    box-shadow: var(--ombre-sm);
+    transition: transform var(--transition-douce), box-shadow var(--transition-douce);
   }
-  @media (max-width: 540px) {
-    .services__grille > li {
-      max-width: none;
+  .services__carte:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ombre-md);
+  }
+  .services__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .services__img--vide {
+    background: linear-gradient(135deg, var(--bleu-medium), var(--bleu-profond));
+  }
+  .services__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--esp-2xs);
+    padding: var(--esp-lg);
+    color: var(--blanc);
+    background: linear-gradient(
+      to top,
+      rgba(10, 46, 92, 0.92) 0%,
+      rgba(10, 46, 92, 0.5) 35%,
+      rgba(10, 46, 92, 0) 68%
+    );
+  }
+  .services__ico {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--esp-xs);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    color: var(--blanc);
+  }
+  .services__titre {
+    color: var(--blanc);
+    font-size: var(--taille-md);
+  }
+  .services__desc {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--taille-sm);
+    max-width: 26rem;
+  }
+
+  @media (max-width: 700px) {
+    .services__grille {
+      grid-template-columns: 1fr;
     }
   }
 </style>
