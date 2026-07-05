@@ -16,12 +16,6 @@ export interface Service {
   icone: string;
 }
 
-export interface Atout {
-  titre: string;
-  description: string;
-  icone: string;
-}
-
 export interface CreneauHoraire {
   jour: string;
   heures: string;
@@ -86,12 +80,11 @@ export const services: Service[] = content.services.map((s, i) => ({
 }));
 
 /** Section « Pourquoi nous ». */
-export const pourquoiNous: {
+export const apropos: {
   surtitre: string;
   titre: string;
-  photoLegende: string;
-  atouts: Atout[];
-} = content.pourquoiNous;
+  paragraphes: string[];
+} = content.apropos;
 
 /** Marques du ruban. */
 export const marques: string[] = content.marques;

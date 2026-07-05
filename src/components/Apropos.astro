@@ -1,0 +1,85 @@
+---
+/**
+ * Section « À propos » : présentation de la pharmacie de village (texte
+ * éditorial, pas d'argumentaire commercial) + vidéo nature/phytothérapie.
+ */
+import { apropos } from '../data/site';
+---
+
+<section class="apropos section" id="apropos" aria-labelledby="apropos-titre">
+  <div class="conteneur apropos__inner">
+    <div class="apropos__texte">
+      <span class="surtitre">{apropos.surtitre}</span>
+      <h2 id="apropos-titre">{apropos.titre}</h2>
+      {apropos.paragraphes.map((p) => <p class="apropos__p">{p}</p>)}
+    </div>
+
+    <div class="apropos__visuel">
+      <video
+        class="apropos__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="/pourquoi-poster.webp"
+        aria-label="Plantes médicinales et préparations naturelles à l'officine"
+      >
+        <source src="/pourquoi.webm" type="video/webm" />
+        <source src="/pourquoi.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Respecte prefers-reduced-motion : pas de lecture auto.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.apropos__video[autoplay]').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+    });
+  }
+</script>
+
+<style>
+  .apropos__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--esp-2xl);
+  }
+  .apropos__texte h2 {
+    margin-top: var(--esp-2xs);
+  }
+  .apropos__p {
+    margin-top: var(--esp-md);
+    color: var(--couleur-texte-doux);
+    max-width: var(--largeur-texte);
+  }
+  .apropos__p:first-of-type {
+    color: var(--couleur-texte);
+    font-size: var(--taille-md);
+  }
+
+  .apropos__video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--rayon-lg);
+    box-shadow: var(--ombre-md);
+    background: var(--bleu-clair-1);
+  }
+
+  @media (max-width: 860px) {
+    .apropos__inner {
+      grid-template-columns: 1fr;
+      gap: var(--esp-xl);
+    }
+    .apropos__visuel {
+      max-width: 22rem;
+      margin-inline: auto;
+    }
+  }
+</style>

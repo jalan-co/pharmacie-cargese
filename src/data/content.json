@@ -42,26 +42,12 @@
       "icone": "plant"
     }
   ],
-  "pourquoiNous": {
-    "surtitre": "Pourquoi nous",
-    "titre": "Une pharmacie humaine, au plus près des habitants",
-    "photoLegende": "Équipe de la pharmacie ou intérieur de l'officine — image libre de droit",
-    "atouts": [
-      {
-        "titre": "Un suivi qui vous connaît",
-        "description": "Vos traitements, vos habitudes, votre historique : un conseil qui tient compte de qui vous êtes.",
-        "icone": "heart"
-      },
-      {
-        "titre": "Disponible 6 jours sur 7",
-        "description": "Sans rendez-vous, du lundi au samedi, avec une pharmacie de garde joignable au 3237.",
-        "icone": "clock"
-      },
-      {
-        "titre": "Des marques de confiance",
-        "description": "Une sélection dermo-cosmétique et de santé naturelle rigoureuse, testée et recommandée.",
-        "icone": "shield"
-      }
+  "apropos": {
+    "surtitre": "Votre pharmacie de village",
+    "titre": "Une officine au cœur de Cargèse",
+    "paragraphes": [
+      "Depuis le Quartier Saint-Jean, la Pharmacie de Cargèse assure un service de proximité pour les habitants du village et de la région, ainsi que pour les visiteurs tout au long de l'année.",
+      "Jean-Jérôme Stefani, pharmacien titulaire et docteur en pharmacie, met son expertise à votre service pour la délivrance de vos médicaments sur ordonnance, mais aussi pour vous orienter vers les produits les mieux adaptés à vos besoins. Chaque patient est unique : nos conseils le sont aussi."
     ]
   },
   "marques": [

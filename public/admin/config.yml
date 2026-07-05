@@ -135,36 +135,17 @@ collections:
                   - mail
                   - image
 
-          - label: Pourquoi nous
-            name: pourquoiNous
+          - label: À propos (pharmacie de village)
+            name: apropos
             widget: object
             fields:
               - { label: Surtitre, name: surtitre, widget: string }
               - { label: Titre, name: titre, widget: string }
-              - {
-                  label: Légende de l'emplacement photo,
-                  name: photoLegende,
-                  widget: string,
-                }
-              - label: Atouts
-                name: atouts
+              - label: Paragraphes
+                name: paragraphes
                 widget: list
-                label_singular: Atout
-                summary: "{{fields.titre}}"
-                fields:
-                  - { label: Titre, name: titre, widget: string }
-                  - { label: Description, name: description, widget: text }
-                  - label: Icône
-                    name: icone
-                    widget: select
-                    options:
-                      - heart
-                      - clock
-                      - shield
-                      - leaf
-                      - plant
-                      - clipboard
-                      - test
+                label_singular: Paragraphe
+                field: { label: Paragraphe, name: paragraphe, widget: text }
 
           - label: Marques
             name: marques
