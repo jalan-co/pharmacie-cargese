@@ -75,16 +75,6 @@ export const hero = {
   titre: content.hero.titre,
   texte: content.hero.texte,
   ouverture: content.hero.ouverture,
-  photoLegende: content.hero.photoLegende,
-  carteFlottante: {
-    titre: content.hero.carteFlottanteTitre,
-    texte: content.hero.carteFlottanteTexte,
-  },
-  badgeFlottant: {
-    valeur: content.hero.badgeValeur,
-    unite: content.hero.badgeUnite,
-    texte: content.hero.badgeTexte,
-  },
 };
 
 /** Statistiques rassurantes. */

@@ -18,13 +18,7 @@
     "badge": "Pharmacie de proximité à Cargèse",
     "titre": "Votre santé, accompagnée avec soin",
     "texte": "Conseil, prévention et suivi personnalisé au cœur du village. Une équipe de pharmaciens à votre écoute, six jours sur sept, à deux pas du port.",
-    "ouverture": "Ouvert aujourd'hui · ferme à 19h00",
-    "photoLegende": "Façade de l'officine ou pharmacien en conseil — image libre de droit",
-    "carteFlottanteTitre": "Conseil personnalisé",
-    "carteFlottanteTexte": "6 jours sur 7, sans rendez-vous",
-    "badgeValeur": "45",
-    "badgeUnite": "ans",
-    "badgeTexte": "au service du village"
+    "ouverture": "Consultez nos horaires"
   },
   "stats": [
     { "valeur": "45+", "libelle": "Années au service du village" },

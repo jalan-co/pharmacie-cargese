@@ -1,22 +1,29 @@
 ---
 /**
- * Hero de la page d'accueil (thème clair) avec « bel effet » :
- * - fond ambiant animé (halos bleus qui dérivent lentement, CSS pur) ;
- * - indicateur « Ouvert / Fermé maintenant » calculé en direct côté client ;
- * - légères animations d'entrée et de flottement.
- * Tout respecte prefers-reduced-motion (voir global.css).
+ * Hero plein écran : photo de la façade de la pharmacie (Cargèse, coucher de
+ * soleil) en fond, texte et actions superposés à gauche sur un voile clair.
+ * - Image optimisée automatiquement par Astro (WebP/AVIF, responsive).
+ * - Indicateur « Ouvert / Fermé » calculé en direct côté client.
+ * - Animations d'entrée douces (respecte prefers-reduced-motion).
  */
+import { Image } from 'astro:assets';
+import facade from '../assets/facade-pharmacie.png';
 import { hero, pharmacie, horaires, lienItineraire } from '../data/site';
 import BoutonAppeler from './BoutonAppeler.astro';
-import PlaceholderPhoto from './PlaceholderPhoto.astro';
 import Icone from './Icone.astro';
 ---
 
 <section class="hero" id="accueil">
-  <!-- Fond ambiant décoratif -->
-  <div class="hero__ambiance" aria-hidden="true">
-    <span></span><span></span><span></span>
-  </div>
+  <Image
+    src={facade}
+    alt={`Façade de la ${pharmacie.nom}, au bord de mer à Cargèse au coucher du soleil`}
+    class="hero__bg"
+    widths={[640, 1024, 1400, 1659]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="hero__scrim" aria-hidden="true"></div>
 
   <div class="conteneur hero__inner">
     <div class="hero__contenu">
@@ -37,47 +44,21 @@ import Icone from './Icone.astro';
         </a>
       </div>
 
-      <!-- Statut d'ouverture : le texte de secours est remplacé en direct par le script. -->
       <p class="hero__statut" data-hero-statut>
         <span class="hero__statut-dot" aria-hidden="true"></span>
         <span class="hero__statut-txt">{hero.ouverture}</span>
       </p>
     </div>
-
-    <div class="hero__visuel">
-      <PlaceholderPhoto legende={hero.photoLegende} ratio="4 / 3" class="hero__photo" />
-
-      <!-- Badge ancienneté, flottant en haut à droite. -->
-      <div class="hero__badge" aria-hidden="true">
-        <span class="hero__badge-val">{hero.badgeFlottant.valeur}<em>{hero.badgeFlottant.unite}</em></span>
-        <span class="hero__badge-txt">{hero.badgeFlottant.texte}</span>
-      </div>
-
-      <!-- Carte conseil, flottante en bas à gauche. -->
-      <div class="hero__carte" aria-hidden="true">
-        <span class="hero__carte-ico"><Icone nom="shield" taille={20} /></span>
-        <span>
-          <strong>{hero.carteFlottante.titre}</strong>
-          <span class="hero__carte-sub">{hero.carteFlottante.texte}</span>
-        </span>
-      </div>
-    </div>
   </div>
 </section>
 
-<!--
-  Indicateur Ouvert / Fermé en direct.
-  Les horaires (éditables dans le back-office) sont injectés ici et comparés à
-  l'heure courante du visiteur. Aucune dépendance, ~30 lignes.
--->
+<!-- Indicateur Ouvert / Fermé en direct (horaires éditables → recalcul auto). -->
 <script define:vars={{ horaires }}>
   (function () {
     const el = document.querySelector('[data-hero-statut]');
     if (!el) return;
 
     const fmt = (m) => Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0');
-
-    // Transforme « 08:30 – 19:30 » (ou plages multiples) en [[début, fin], …] en minutes.
     const parse = (str) => {
       if (!str) return [];
       const t = [...str.matchAll(/(\d{1,2})\s*[h:]\s*(\d{0,2})/g)].map(
@@ -89,9 +70,8 @@ import Icone from './Icone.astro';
     };
 
     const now = new Date();
-    const dayIdx = (now.getDay() + 6) % 7; // Lundi = 0 … Dimanche = 6
+    const dayIdx = (now.getDay() + 6) % 7;
     const mins = now.getHours() * 60 + now.getMinutes();
-
     const today = horaires[dayIdx];
     const todayRanges = today && !today.ferme ? parse(today.heures) : [];
 
@@ -141,69 +121,43 @@ import Icone from './Icone.astro';
   .hero {
     position: relative;
     overflow: hidden;
-    background:
-      radial-gradient(90% 70% at 80% 0%, var(--bleu-clair-1), transparent 60%),
-      linear-gradient(180deg, var(--bleu-clair-2), var(--blanc) 65%);
+    isolation: isolate;
     border-bottom: 1px solid var(--bordure);
   }
 
-  /* --- Fond ambiant : halos flous qui dérivent --- */
-  .hero__ambiance {
+  /* Photo de fond, plein cadre. */
+  .hero__bg {
     position: absolute;
     inset: 0;
-    z-index: 0;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 68% center;
+    z-index: -2;
   }
-  .hero__ambiance span {
+  /* Voile clair sur la gauche pour la lisibilité du texte. */
+  .hero__scrim {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
-    opacity: 0.55;
-  }
-  .hero__ambiance span:nth-child(1) {
-    width: 28rem;
-    height: 28rem;
-    top: -9rem;
-    right: -7rem;
-    background: radial-gradient(circle, var(--bleu-clair-3), transparent 70%);
-    animation: derive-a 20s ease-in-out infinite;
-  }
-  .hero__ambiance span:nth-child(2) {
-    width: 22rem;
-    height: 22rem;
-    bottom: -8rem;
-    left: -6rem;
-    background: radial-gradient(circle, color-mix(in srgb, var(--bleu-medium) 30%, transparent), transparent 70%);
-    animation: derive-b 26s ease-in-out infinite;
-  }
-  .hero__ambiance span:nth-child(3) {
-    width: 16rem;
-    height: 16rem;
-    top: 35%;
-    left: 45%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent-or) 22%, transparent), transparent 70%);
-    animation: derive-a 32s ease-in-out infinite reverse;
-  }
-  @keyframes derive-a {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-3rem, 2.5rem) scale(1.12); }
-  }
-  @keyframes derive-b {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(3.5rem, -2rem) scale(1.08); }
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(255, 255, 255, 0.82) 26%,
+      rgba(255, 255, 255, 0.35) 46%,
+      rgba(255, 255, 255, 0) 64%
+    );
   }
 
   .hero__inner {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    display: flex;
     align-items: center;
-    gap: var(--esp-2xl);
-    padding-block: clamp(2.5rem, 5vw, 5rem);
+    min-height: clamp(30rem, 74vh, 44rem);
+    padding-block: var(--esp-2xl);
   }
-
-  /* Animation d'entrée douce des éléments du texte. */
+  .hero__contenu {
+    max-width: 34rem;
+  }
   .hero__contenu > * {
     animation: apparition 0.7s ease both;
   }
@@ -224,9 +178,9 @@ import Icone from './Icone.astro';
   }
   .hero__texte {
     margin-top: var(--esp-lg);
-    max-width: 34rem;
+    max-width: 32rem;
     font-size: var(--taille-md);
-    color: var(--couleur-texte-doux);
+    color: var(--couleur-texte);
   }
   .hero__signature {
     margin-top: var(--esp-md);
@@ -237,7 +191,6 @@ import Icone from './Icone.astro';
     color: var(--couleur-texte);
     font-weight: var(--graisse-medium);
   }
-
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
@@ -264,14 +217,10 @@ import Icone from './Icone.astro';
   }
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 60%, transparent);
     animation: pouls 2.2s ease-out infinite;
   }
   .hero__statut.is-open .hero__statut-txt {
     color: var(--statut-ouvert);
-  }
-  .hero__statut.is-closed .hero__statut-dot {
-    background: var(--statut-ferme);
   }
   @keyframes pouls {
     0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 55%, transparent); }
@@ -279,100 +228,24 @@ import Icone from './Icone.astro';
     100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
   }
 
-  /* Visuel + éléments flottants */
-  .hero__visuel {
-    position: relative;
-  }
-  .hero__photo {
-    box-shadow: var(--ombre-md);
-  }
-
-  .hero__badge {
-    position: absolute;
-    top: -0.9rem;
-    right: -0.6rem;
-    display: flex;
-    flex-direction: column;
-    padding: var(--esp-sm) var(--esp-md);
-    background: var(--bleu-profond);
-    color: var(--blanc);
-    border-radius: var(--rayon-md);
-    box-shadow: var(--ombre-md);
-    animation: flottement 5.5s ease-in-out infinite;
-  }
-  .hero__badge-val {
-    font-family: var(--police-titre);
-    font-weight: var(--graisse-forte);
-    font-size: 1.6rem;
-    line-height: 1;
-  }
-  .hero__badge-val em {
-    font-style: normal;
-    font-size: 0.9rem;
-    font-weight: var(--graisse-medium);
-    margin-left: 0.15em;
-  }
-  .hero__badge-txt {
-    margin-top: 0.15rem;
-    font-size: var(--taille-xs);
-    color: var(--bleu-clair-3);
-  }
-
-  .hero__carte {
-    position: absolute;
-    left: -0.8rem;
-    bottom: -1.2rem;
-    display: flex;
-    align-items: center;
-    gap: var(--esp-sm);
-    padding: var(--esp-sm) var(--esp-md);
-    background: var(--blanc);
-    border: 1px solid var(--bordure);
-    border-radius: var(--rayon-md);
-    box-shadow: var(--ombre-md);
-    max-width: 15rem;
-    animation: flottement 6.5s ease-in-out infinite;
-  }
-  .hero__carte-ico {
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    flex: none;
-    border-radius: var(--rayon-sm);
-    background: var(--bleu-clair-1);
-    color: var(--bleu-medium);
-  }
-  .hero__carte strong {
-    display: block;
-    font-size: var(--taille-sm);
-    color: var(--couleur-texte);
-  }
-  .hero__carte-sub {
-    font-size: var(--taille-xs);
-    color: var(--couleur-texte-doux);
-  }
-  @keyframes flottement {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  @media (max-width: 900px) {
+  /* Tablette / mobile : le voile couvre davantage pour garder le texte lisible. */
+  @media (max-width: 760px) {
+    .hero__bg {
+      object-position: 72% center;
+    }
+    .hero__scrim {
+      background: linear-gradient(
+        160deg,
+        rgba(255, 255, 255, 0.92) 0%,
+        rgba(255, 255, 255, 0.78) 45%,
+        rgba(255, 255, 255, 0.45) 100%
+      );
+    }
     .hero__inner {
-      grid-template-columns: 1fr;
-      gap: var(--esp-2xl);
+      min-height: clamp(26rem, 68vh, 36rem);
     }
-    .hero__visuel {
-      max-width: 34rem;
-    }
-  }
-  @media (max-width: 460px) {
-    .hero__carte {
-      left: 0;
-      bottom: -1rem;
-    }
-    .hero__badge {
-      right: 0;
+    .hero__contenu {
+      max-width: 100%;
     }
   }
 </style>

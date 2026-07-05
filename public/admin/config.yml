@@ -104,40 +104,10 @@ collections:
               - { label: Titre principal, name: titre, widget: string }
               - { label: Texte d'introduction, name: texte, widget: text }
               - {
-                  label: Ligne d'ouverture,
+                  label: Ligne d'ouverture (repli),
                   name: ouverture,
                   widget: string,
-                  hint: "Ex. : Ouvert aujourd'hui · ferme à 19h00",
-                }
-              - {
-                  label: Légende de l'emplacement photo,
-                  name: photoLegende,
-                  widget: string,
-                }
-              - {
-                  label: "Carte flottante — titre",
-                  name: carteFlottanteTitre,
-                  widget: string,
-                }
-              - {
-                  label: "Carte flottante — texte",
-                  name: carteFlottanteTexte,
-                  widget: string,
-                }
-              - {
-                  label: "Badge — valeur (ex. 45)",
-                  name: badgeValeur,
-                  widget: string,
-                }
-              - {
-                  label: "Badge — unité (ex. ans)",
-                  name: badgeUnite,
-                  widget: string,
-                }
-              - {
-                  label: "Badge — texte",
-                  name: badgeTexte,
-                  widget: string,
+                  hint: "Affichée seulement si le statut « Ouvert/Fermé » automatique ne se charge pas.",
                 }
 
           - label: Chiffres clés
