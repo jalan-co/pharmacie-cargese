@@ -1,53 +1,27 @@
 ---
 /**
- * En-tête épuré et sticky : menu « burger » (navigation) à gauche, accès rapides
- * en icônes (Appeler, Itinéraire) à droite. Pas de logo (il est dans le hero).
+ * Menu « burger » flottant (pas d'en-tête pleine largeur) : posé en haut à
+ * gauche, au-dessus du contenu, il reste accessible pendant le défilement.
  */
-import { navigation, pharmacie, lienItineraire } from '../data/site';
+import { navigation } from '../data/site';
 import Icone from './Icone.astro';
 ---
 
-<header class="entete">
-  <div class="conteneur entete__inner">
-    <!-- Menu déroulant (disclosure natif). -->
-    <details class="menu">
-      <summary class="menu__btn" aria-label="Ouvrir le menu">
-        <Icone nom="menu" taille={24} />
-      </summary>
-      <nav class="menu__panneau" aria-label="Navigation principale">
-        <ul>
-          {navigation.map((lien) => (
-            <li><a href={lien.href}>{lien.libelle}</a></li>
-          ))}
-        </ul>
-      </nav>
-    </details>
-
-    <!-- Accès rapides en icônes. -->
-    <div class="entete__actions">
-      <a
-        class="entete__ico"
-        href={`tel:${pharmacie.telephone.lien}`}
-        aria-label={`Appeler la ${pharmacie.nom}`}
-      >
-        <Icone nom="phone" taille={20} />
-      </a>
-      <a
-        class="entete__ico"
-        href={lienItineraire}
-        target="_blank"
-        rel="noopener"
-        aria-label={`Itinéraire vers la ${pharmacie.nom}`}
-      >
-        <Icone nom="route" taille={20} />
-      </a>
-    </div>
-  </div>
-</header>
+<details class="menu-flottant">
+  <summary class="menu-flottant__btn" aria-label="Ouvrir le menu">
+    <Icone nom="menu" taille={24} />
+  </summary>
+  <nav class="menu-flottant__panneau" aria-label="Navigation principale">
+    <ul>
+      {navigation.map((lien) => (
+        <li><a href={lien.href}>{lien.libelle}</a></li>
+      ))}
+    </ul>
+  </nav>
+</details>
 
 <script>
-  // Ferme le menu au clic sur un lien, sur Échap, ou en cliquant ailleurs.
-  const menu = document.querySelector('.menu');
+  const menu = document.querySelector('.menu-flottant');
   if (menu) {
     menu.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => menu.removeAttribute('open'))
@@ -62,43 +36,34 @@ import Icone from './Icone.astro';
 </script>
 
 <style>
-  .entete {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: color-mix(in srgb, var(--blanc) 85%, transparent);
-    backdrop-filter: saturate(180%) blur(12px);
-    border-bottom: 1px solid var(--bordure);
+  .menu-flottant {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 200;
   }
-  .entete__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 4rem;
-  }
-
-  /* --- Menu burger --- */
-  .menu {
-    position: relative;
-  }
-  .menu__btn {
+  .menu-flottant__btn {
     display: grid;
     place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--rayon-sm);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--blanc) 82%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: var(--ombre-md);
     color: var(--bleu-profond);
     cursor: pointer;
     list-style: none;
-    transition: background-color var(--transition-douce);
+    transition: transform var(--transition-douce);
   }
-  .menu__btn::-webkit-details-marker {
+  .menu-flottant__btn::-webkit-details-marker {
     display: none;
   }
-  .menu__btn:hover {
-    background: var(--bleu-clair-1);
+  .menu-flottant__btn:hover {
+    transform: translateY(-1px);
   }
-  .menu__panneau {
+  .menu-flottant__panneau {
     position: absolute;
     top: calc(100% + 0.6rem);
     left: 0;
@@ -107,13 +72,13 @@ import Icone from './Icone.astro';
     background: var(--blanc);
     border: 1px solid var(--bordure);
     border-radius: var(--rayon-md);
-    box-shadow: var(--ombre-md);
+    box-shadow: var(--ombre-lg);
   }
-  .menu__panneau ul {
+  .menu-flottant__panneau ul {
     display: flex;
     flex-direction: column;
   }
-  .menu__panneau a {
+  .menu-flottant__panneau a {
     display: block;
     padding: 0.6rem 0.9rem;
     border-radius: var(--rayon-sm);
@@ -124,28 +89,8 @@ import Icone from './Icone.astro';
     text-decoration: none;
     transition: background-color var(--transition-douce), color var(--transition-douce);
   }
-  .menu__panneau a:hover {
+  .menu-flottant__panneau a:hover {
     background: var(--bleu-clair-1);
     color: var(--bleu-medium);
-  }
-
-  /* --- Accès rapides en icônes --- */
-  .entete__actions {
-    display: flex;
-    gap: var(--esp-xs);
-  }
-  .entete__ico {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    color: var(--bleu-profond);
-    background: var(--bleu-clair-1);
-    transition: background-color var(--transition-douce), transform var(--transition-douce);
-  }
-  .entete__ico:hover {
-    background: var(--bleu-clair-3);
-    transform: translateY(-1px);
   }
 </style>

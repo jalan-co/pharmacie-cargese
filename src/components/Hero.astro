@@ -7,8 +7,7 @@
  */
 import { Image } from 'astro:assets';
 import facade from '../assets/facade-pharmacie.png';
-import { hero, pharmacie, horaires, horairesNote, logo } from '../data/site';
-import BoutonAppeler from './BoutonAppeler.astro';
+import { hero, pharmacie, horaires, horairesNote, lienItineraire, logo } from '../data/site';
 import Icone from './Icone.astro';
 ---
 
@@ -49,11 +48,22 @@ import Icone from './Icone.astro';
           <span>Découvrir nos services</span>
           <Icone nom="arrow" class="btn__icone" />
         </a>
-        <BoutonAppeler
-          variante="secondaire"
-          libelle="Appeler la pharmacie"
-          class="hero__appeler"
-        />
+        <a
+          href={`tel:${pharmacie.telephone.lien}`}
+          class="hero__ico-btn"
+          aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
+        >
+          <Icone nom="phone" taille={20} />
+        </a>
+        <a
+          href={lienItineraire}
+          target="_blank"
+          rel="noopener"
+          class="hero__ico-btn"
+          aria-label={`Itinéraire vers la ${pharmacie.nom}`}
+        >
+          <Icone nom="route" taille={20} />
+        </a>
       </div>
     </div>
   </div>
@@ -157,7 +167,7 @@ import Icone from './Icone.astro';
   .hero__inner {
     display: flex;
     align-items: center;
-    min-height: calc(100svh - 4.75rem);
+    min-height: 100svh;
     padding-block: var(--esp-2xl);
   }
   .hero__contenu {
@@ -261,6 +271,7 @@ import Icone from './Icone.astro';
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--esp-sm);
     margin-top: var(--esp-xl);
   }
@@ -268,6 +279,23 @@ import Icone from './Icone.astro';
   .hero__cta {
     padding: 1.05em 1.8em;
     font-size: var(--taille-base);
+  }
+  /* Accès rapides en icônes, à côté du bouton principal. */
+  .hero__ico-btn {
+    display: grid;
+    place-items: center;
+    width: 3.15rem;
+    height: 3.15rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--blanc);
+    color: var(--bleu-profond);
+    box-shadow: var(--ombre-md);
+    transition: transform var(--transition-douce), background-color var(--transition-douce);
+  }
+  .hero__ico-btn:hover {
+    transform: translateY(-2px);
+    background: var(--bleu-clair-1);
   }
 
   @media (max-width: 760px) {
@@ -283,7 +311,7 @@ import Icone from './Icone.astro';
       );
     }
     .hero__inner {
-      min-height: calc(100svh - 5rem);
+      min-height: 100svh;
       padding-block: var(--esp-xl);
     }
     /* Tout le contenu du hero centré sur mobile. */

@@ -5,7 +5,6 @@
  */
 import { pourquoiNous } from '../data/site';
 import Icone from './Icone.astro';
-import PlaceholderPhoto from './PlaceholderPhoto.astro';
 ---
 
 <section class="pq section" id="pourquoi" aria-labelledby="pq-titre">
@@ -28,10 +27,32 @@ import PlaceholderPhoto from './PlaceholderPhoto.astro';
     </div>
 
     <div class="pq__visuel">
-      <PlaceholderPhoto legende={pourquoiNous.photoLegende} ratio="3 / 4" />
+      <video
+        class="pq__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="/conseil-poster.webp"
+        aria-label="Une pharmacienne rédige un conseil personnalisé"
+      >
+        <source src="/conseil.webm" type="video/webm" />
+        <source src="/conseil.mp4" type="video/mp4" />
+      </video>
     </div>
   </div>
 </section>
+
+<script>
+  // Respecte prefers-reduced-motion : on ne lance pas la vidéo automatiquement.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.pq__video[autoplay]').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+    });
+  }
+</script>
 
 <style>
   .pq__inner {
@@ -72,6 +93,17 @@ import PlaceholderPhoto from './PlaceholderPhoto.astro';
     margin-top: var(--esp-2xs);
     color: var(--couleur-texte-doux);
     font-size: var(--taille-sm);
+  }
+
+  /* Vidéo « conseil » (courte, muette, en boucle) à la place de la photo. */
+  .pq__video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--rayon-lg);
+    box-shadow: var(--ombre-md);
+    background: var(--bleu-clair-1);
   }
 
   @media (max-width: 860px) {
