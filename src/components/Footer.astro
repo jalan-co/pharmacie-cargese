@@ -11,15 +11,6 @@ const annee = 2026; // Site statique : année figée à la mise en ligne.
 <footer class="pied">
   <div class="conteneur pied__inner">
     <div class="pied__marque">
-      <span class="pied__logo">
-        <img
-          src={logo.src}
-          alt={`Logo ${pharmacie.nom}`}
-          width={Math.round((44 * logo.largeur) / logo.hauteur)}
-          height={44}
-          decoding="async"
-        />
-      </span>
       <p class="pied__desc">
         Votre pharmacie de proximité en Corse, au cœur du village de Cargèse.
         Conseil, prévention et accompagnement, six jours sur sept.
@@ -61,8 +52,8 @@ const annee = 2026; // Site statique : année figée à la mise en ligne.
       <img
         src={logo.src}
         alt={`Logo ${pharmacie.nom}`}
-        width={Math.round((88 * logo.largeur) / logo.hauteur)}
-        height={88}
+        width={Math.round((128 * logo.largeur) / logo.hauteur)}
+        height={128}
         decoding="async"
       />
     </div>
@@ -85,33 +76,23 @@ const annee = 2026; // Site statique : année figée à la mise en ligne.
   .pied__inner {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr auto;
-    align-items: center;
+    align-items: start;
     gap: var(--esp-xl);
     padding-block: var(--esp-2xl);
   }
   .pied__grand-logo {
     display: flex;
-    justify-content: flex-end;
-    padding: var(--esp-md) 1.1rem;
+    align-items: center;
+    justify-content: center;
+    padding: var(--esp-sm);
     background: var(--blanc);
     border-radius: var(--rayon-lg);
   }
   .pied__grand-logo img {
-    height: 88px;
-    width: auto;
-  }
-  .pied__logo {
-    display: inline-flex;
-    padding: 0.35rem 0.6rem;
-    background: var(--blanc);
-    border-radius: var(--rayon-md);
-  }
-  .pied__logo img {
-    height: 44px;
+    height: 128px;
     width: auto;
   }
   .pied__desc {
-    margin-top: var(--esp-md);
     max-width: 24rem;
     font-size: var(--taille-sm);
     color: var(--bleu-clair-3);
