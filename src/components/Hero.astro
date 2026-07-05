@@ -347,14 +347,16 @@ import Icone from './Icone.astro';
 
   @media (max-width: 760px) {
     .hero__bg {
-      object-position: 72% center;
+      /* Cadré sur la partie calme (ciel/mer) plutôt que sur la façade
+         chargée, pour que le texte reste lisible sans voile trop épais. */
+      object-position: 28% center;
     }
     .hero__scrim {
       background: linear-gradient(
         165deg,
-        rgba(255, 255, 255, 0.92) 0%,
-        rgba(255, 255, 255, 0.8) 45%,
-        rgba(255, 255, 255, 0.5) 100%
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.5) 45%,
+        rgba(255, 255, 255, 0.25) 100%
       );
     }
     .hero__inner {
@@ -380,6 +382,13 @@ import Icone from './Icone.astro';
     }
     .hero__acces {
       justify-content: center;
+    }
+    /* Voile plus léger = moins de contraste garanti par endroits (ex. sur le
+       feuillage) : une ombre blanche douce protège la lisibilité du texte. */
+    .hero__statut-etat,
+    .hero__statut-detail,
+    .hero__acces-lbl {
+      text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 1px 12px rgba(255, 255, 255, 0.6);
     }
   }
 
