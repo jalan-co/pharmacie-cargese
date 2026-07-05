@@ -23,7 +23,7 @@
   "services": [
     {
       "titre": "Bilan de médication",
-      "description": "Un entretien dédié pour revoir vos traitements, éviter les interactions et sécuriser votre suivi.",
+      "description": "Un entretien dédié pour revoir vos traitements et améliorer votre suivi.",
       "icone": "clipboard"
     },
     {
@@ -62,13 +62,41 @@
     "Isdin"
   ],
   "horaires": [
-    { "jour": "Lundi", "heures": "08:30 – 19:30", "ferme": false },
-    { "jour": "Mardi", "heures": "08:30 – 19:30", "ferme": false },
-    { "jour": "Mercredi", "heures": "08:30 – 19:30", "ferme": false },
-    { "jour": "Jeudi", "heures": "08:30 – 19:30", "ferme": false },
-    { "jour": "Vendredi", "heures": "08:30 – 19:30", "ferme": false },
-    { "jour": "Samedi", "heures": "09:00 – 19:00", "ferme": false },
-    { "jour": "Dimanche", "heures": "Fermé", "ferme": true }
+    {
+      "jour": "Lundi",
+      "heures": "08:30 – 19:30",
+      "ferme": false
+    },
+    {
+      "jour": "Mardi",
+      "heures": "08:30 – 19:30",
+      "ferme": false
+    },
+    {
+      "jour": "Mercredi",
+      "heures": "08:30 – 19:30",
+      "ferme": false
+    },
+    {
+      "jour": "Jeudi",
+      "heures": "08:30 – 19:30",
+      "ferme": false
+    },
+    {
+      "jour": "Vendredi",
+      "heures": "08:30 – 19:30",
+      "ferme": false
+    },
+    {
+      "jour": "Samedi",
+      "heures": "09:00 – 19:00",
+      "ferme": false
+    },
+    {
+      "jour": "Dimanche",
+      "heures": "Fermé",
+      "ferme": true
+    }
   ],
   "horairesNote": "Fermé les jours fériés",
   "seo": {
