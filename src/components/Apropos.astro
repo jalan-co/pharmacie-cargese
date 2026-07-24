@@ -22,9 +22,9 @@ import interieur from '../assets/interieur-pharmacie.jpg';
         src={interieur}
         alt={`Intérieur de la ${pharmacie.nom}`}
         class="apropos__media"
-        width={840}
-        widths={[420, 640, 840]}
-        sizes="(max-width: 860px) 90vw, 40vw"
+        width={900}
+        widths={[480, 720, 900]}
+        sizes="(max-width: 860px) 95vw, 48vw"
         loading="lazy"
       />
     </div>
@@ -34,7 +34,7 @@ import interieur from '../assets/interieur-pharmacie.jpg';
 <style>
   .apropos__inner {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1fr 1.1fr;
     align-items: center;
     gap: var(--esp-2xl);
   }
@@ -54,7 +54,7 @@ import interieur from '../assets/interieur-pharmacie.jpg';
   .apropos__media {
     display: block;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: var(--rayon-lg);
     box-shadow: var(--ombre-md);
@@ -67,7 +67,7 @@ import interieur from '../assets/interieur-pharmacie.jpg';
       gap: var(--esp-xl);
     }
     .apropos__visuel {
-      max-width: 22rem;
+      max-width: 34rem;
       margin-inline: auto;
     }
   }
