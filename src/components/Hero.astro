@@ -224,62 +224,78 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     padding-block: clamp(4.5rem, 11vh, 6.5rem) clamp(1.75rem, 5vh, 2.75rem);
   }
 
-  /* Médaillon logo : squircle crème avec profondeur (dégradé radial, halo
-     central, ombre interne chaude), liseré doré. Logo qui remplit l'espace. */
-  /* Cadre portrait (plus haut que large) qui épouse le logo avec de petites
-     marges uniformes — indépendant du fichier logo (lui, plus large que
-     haut) : le logo est centré dedans sans être déformé (object-fit). */
+  /* Médaillon logo : carré organique presque carré (1/1.08), verre blanc
+     chaud, double contour doré, reflet subtil. Valeurs exactes fournies. */
   .hero__logo {
     position: relative;
-    display: grid;
-    place-items: center;
-    width: clamp(230px, 62vw, 300px);
-    aspect-ratio: 0.84;
-    margin: 0 auto;
-    padding: clamp(1.4rem, 5vw, 1.9rem) clamp(1.3rem, 4.5vw, 1.7rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(72vw, 320px);
+    aspect-ratio: 1 / 1.08;
+    margin: 18px auto 0;
+    padding: 42px 28px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    border-radius: 17%;
-    /* Translucide : on voit la photo derrière (verre givré crème). */
-    background: radial-gradient(
-      115% 100% at 50% 32%,
-      rgba(252, 248, 241, 0.5) 0%,
-      rgba(240, 232, 218, 0.42) 55%,
-      rgba(224, 211, 190, 0.4) 100%
+    border-radius: 34%;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.86) 0%,
+      rgba(250, 245, 236, 0.76) 55%,
+      rgba(235, 225, 211, 0.68) 100%
     );
+    border: 1px solid rgba(255, 255, 255, 0.92);
     box-shadow:
-      0 26px 58px rgba(6, 22, 40, 0.24),
-      inset 0 1px 1px rgba(255, 255, 255, 0.7);
-    backdrop-filter: saturate(140%) blur(16px);
+      0 24px 55px rgba(4, 18, 35, 0.24),
+      0 8px 18px rgba(4, 18, 35, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(22px) saturate(115%);
     animation: apparition 0.7s ease both;
   }
+  /* Double contour intérieur doré. */
   .hero__logo::before {
     content: '';
     position: absolute;
     inset: 6px;
-    border: 1px solid rgba(200, 158, 82, 0.5);
-    border-radius: inherit;
+    border-radius: calc(34% - 4px);
+    border: 1px solid rgba(205, 158, 79, 0.62);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 0 18px rgba(205, 158, 79, 0.08);
     pointer-events: none;
   }
+  /* Reflet subtil en haut. */
   .hero__logo::after {
     content: '';
     position: absolute;
-    top: 12%;
-    left: 22%;
-    width: 56%;
-    height: 55%;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    height: 36%;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    filter: blur(28px);
+    background: rgba(255, 255, 255, 0.28);
+    filter: blur(26px);
+    pointer-events: none;
   }
   .hero__logo img {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 68%;
+    max-width: 215px;
+    height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 6px 16px rgba(12, 35, 62, 0.12));
+    filter: drop-shadow(0 7px 14px rgba(8, 30, 55, 0.09));
+  }
+  @media (max-width: 480px) {
+    .hero__logo {
+      width: 72vw;
+      max-width: 315px;
+      min-width: 255px;
+      aspect-ratio: 1 / 1.08;
+      padding: 38px 24px;
+      border-radius: 34%;
+    }
+    .hero__logo img {
+      width: 68%;
+    }
   }
 
   .hero__contenu {
@@ -456,9 +472,11 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       padding-block: clamp(6rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
     }
     .hero__logo {
-      width: clamp(230px, 24vw, 310px);
+      width: clamp(260px, 24vw, 340px);
       margin: 0;
-      border-radius: 15%;
+    }
+    .hero__logo img {
+      max-width: 235px;
     }
     .hero__contenu {
       margin: 0;
