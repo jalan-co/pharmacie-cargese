@@ -223,7 +223,8 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     );
   }
 
-  /* Logo emblème dans un médaillon rond givré, grand et centré en haut. */
+  /* Logo emblème dans un médaillon givré qui épouse le logo (ovale : un vrai
+     cercle laisserait trop de vide autour d'un logo large). Centré en haut. */
   .hero__logo {
     position: absolute;
     top: clamp(4.5rem, 10vh, 7rem);
@@ -232,12 +233,11 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     z-index: 3;
     display: grid;
     place-items: center;
-    width: clamp(310px, 86vw, 420px);
-    aspect-ratio: 1;
-    border-radius: 50%;
+    padding: clamp(1.3rem, 4.5vw, 2rem) clamp(1.7rem, 6vw, 2.6rem);
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: saturate(150%) blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
     box-shadow: 0 14px 46px rgba(6, 18, 38, 0.24);
     /* Animation dédiée : préserve le translateX(-50%) de centrage
        (l'animation générique le remettrait à zéro → logo décalé à droite). */
@@ -245,7 +245,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
   }
   .hero__logo img {
     display: block;
-    width: 84%;
+    width: clamp(210px, 56vw, 320px);
     height: auto;
     filter: drop-shadow(0 1px 6px rgba(255, 255, 255, 0.5));
   }
