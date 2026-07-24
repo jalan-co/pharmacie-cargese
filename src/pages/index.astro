@@ -19,14 +19,18 @@ import imgBilan from '../assets/services/service-bilan.webp';
 import imgTests from '../assets/services/service-tests.webp';
 import imgMicro from '../assets/services/service-micronutrition.webp';
 import imgPhyto from '../assets/services/service-phyto.webp';
+import imgMateriel from '../assets/services/service-materiel.webp';
+import imgOrtho from '../assets/services/service-orthopedie.webp';
 
 // Associées par icône (pas par position) : un service sans photo dédiée
-// (matériel médical, orthopédie, vétérinaire...) retombe sur le dégradé.
+// (vétérinaire...) retombe sur le dégradé.
 const serviceImages: Record<string, ImageMetadata> = {
+  materiel: imgMateriel,
   clipboard: imgBilan,
   test: imgTests,
   leaf: imgMicro,
   plant: imgPhyto,
+  os: imgOrtho,
 };
 ---
 
