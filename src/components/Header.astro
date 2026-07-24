@@ -38,27 +38,28 @@ import Icone from './Icone.astro';
 <style>
   .menu-flottant {
     position: fixed;
-    top: 1rem;
-    left: 1rem;
+    top: 18px;
+    left: 18px;
     z-index: 200;
   }
   .menu-flottant__btn {
     display: grid;
     place-items: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 14px;
-    background: rgba(15, 25, 42, 0.5);
-    backdrop-filter: saturate(160%) blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: var(--ombre-md);
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: rgba(7, 24, 46, 0.82);
+    backdrop-filter: saturate(160%) blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 12px 30px rgba(4, 16, 31, 0.18);
     color: var(--blanc);
     cursor: pointer;
     list-style: none;
     transition: transform var(--transition-douce), background-color var(--transition-douce);
   }
   .menu-flottant__btn:hover {
-    background: rgba(26, 40, 64, 0.62);
+    transform: translateY(-2px);
+    background: rgba(7, 24, 46, 0.96);
   }
   .menu-flottant__btn::-webkit-details-marker {
     display: none;
