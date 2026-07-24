@@ -51,14 +51,14 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
         <Icone nom="arrow" taille={21} class="hero__cta-fleche" />
       </a>
 
-      <!-- Accès rapides : icône dorée + label en ligne, sobres. -->
+      <!-- Accès rapides : icône dorée cerclée + label. -->
       <div class="hero__acces">
         <a
           href={`tel:${pharmacie.telephone.lien}`}
           class="hero__acces-item"
           aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
         >
-          <Icone nom="phone" taille={18} />
+          <span class="hero__acces-ico"><Icone nom="phone" taille={17} /></span>
           <span>Appeler</span>
         </a>
         <span class="hero__acces-sep" aria-hidden="true"></span>
@@ -69,7 +69,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
           class="hero__acces-item"
           aria-label={`Itinéraire vers la ${pharmacie.nom}`}
         >
-          <Icone nom="route" taille={18} />
+          <span class="hero__acces-ico"><Icone nom="pin" taille={17} /></span>
           <span>Itinéraire</span>
         </a>
       </div>
@@ -233,11 +233,11 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     aspect-ratio: 1;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 42%;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(247, 241, 232, 0.55));
-    box-shadow: 0 30px 70px rgba(6, 22, 40, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    backdrop-filter: saturate(150%) blur(20px);
+    background: linear-gradient(145deg, rgba(248, 243, 234, 0.94), rgba(236, 228, 214, 0.86));
+    box-shadow: 0 30px 70px rgba(6, 22, 40, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(140%) blur(14px);
     animation: apparition 0.7s ease both;
   }
   .hero__logo::before {
@@ -272,6 +272,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     width: 100%;
     max-width: 34rem;
     margin: 0 auto;
+    text-align: center;
     color: var(--blanc);
   }
   .hero__contenu > * {
@@ -307,15 +308,16 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     color: var(--accent-or);
   }
 
-  /* CTA : fond marine + liseré doré + flèche dorée poussée à droite. */
+  /* CTA : fond marine + liseré doré + flèche dorée, centré. */
   .hero__cta {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--esp-md);
+    justify-content: center;
+    gap: 0.6rem;
     width: 100%;
     max-width: 30rem;
     margin-top: clamp(1.5rem, 4vh, 2rem);
+    margin-inline: auto;
     padding: 1.05rem 1.25rem;
     font-family: var(--police-titre);
     font-size: var(--taille-base);
@@ -359,7 +361,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
   .hero__acces-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.6rem;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.9);
     font-family: var(--police-titre);
@@ -367,12 +369,23 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     font-size: var(--taille-sm);
     transition: color var(--transition-douce);
   }
-  .hero__acces-item :global(svg) {
+  /* Icône dorée dans un anneau doré fin. */
+  .hero__acces-ico {
+    display: grid;
+    place-items: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    border-radius: 50%;
+    border: 1px solid rgba(216, 170, 85, 0.55);
     color: var(--accent-or);
-    flex: none;
+    transition: border-color var(--transition-douce), background-color var(--transition-douce);
   }
   .hero__acces-item:hover {
     color: var(--accent-or);
+  }
+  .hero__acces-item:hover .hero__acces-ico {
+    border-color: var(--accent-or);
+    background: rgba(216, 170, 85, 0.12);
   }
 
   /* Statut « Ouvert / Fermé », pastille flottante en verre marine. */
@@ -436,10 +449,14 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     .hero__contenu {
       margin: 0;
       max-width: none;
+      text-align: left;
     }
     .hero__cta,
     .hero__acces {
       max-width: 30rem;
+    }
+    .hero__cta {
+      margin-inline: 0;
     }
     .hero__acces {
       justify-content: flex-start;
