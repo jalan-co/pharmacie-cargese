@@ -21,9 +21,9 @@ import imgMicro from '../assets/services/service-micronutrition.webp';
 import imgPhyto from '../assets/services/service-phyto.webp';
 import imgMateriel from '../assets/services/service-materiel.webp';
 import imgOrtho from '../assets/services/service-orthopedie.webp';
+import imgVeto from '../assets/services/service-veterinaire.webp';
 
-// Associées par icône (pas par position) : un service sans photo dédiée
-// (vétérinaire...) retombe sur le dégradé.
+// Associées par icône (pas par position), robuste à tout réordonnancement.
 const serviceImages: Record<string, ImageMetadata> = {
   materiel: imgMateriel,
   clipboard: imgBilan,
@@ -31,6 +31,7 @@ const serviceImages: Record<string, ImageMetadata> = {
   leaf: imgMicro,
   plant: imgPhyto,
   os: imgOrtho,
+  patte: imgVeto,
 };
 ---
 
