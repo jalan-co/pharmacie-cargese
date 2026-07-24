@@ -23,7 +23,7 @@
   "services": [
     {
       "titre": "Location et vente de matériel médical",
-      "description": "Fauteuils roulants, cannes, lits médicalisés : du matériel à la location ou à l'achat, adapté à vos besoins.",
+      "description": "Du matériel médical à la location comme à l'achat, pour vous accompagner au quotidien.",
       "icone": "materiel"
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "titre": "Orthopédie",
-      "description": "Semelles, ceintures de maintien, bas de contention : des solutions orthopédiques et un conseil adapté.",
+      "description": "Des solutions orthopédiques et un conseil adapté à vos besoins.",
       "icone": "os"
     },
     {
