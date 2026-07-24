@@ -230,29 +230,29 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     position: relative;
     display: grid;
     place-items: center;
-    width: min(80vw, 350px);
-    aspect-ratio: 0.94;
+    width: min(64vw, 288px);
+    aspect-ratio: 0.96;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 34%;
+    /* Translucide : on voit la photo derrière (verre givré crème). */
     background: radial-gradient(
       115% 100% at 50% 32%,
-      rgba(253, 249, 243, 0.97) 0%,
-      rgba(242, 234, 220, 0.93) 55%,
-      rgba(224, 211, 190, 0.9) 100%
+      rgba(252, 248, 241, 0.5) 0%,
+      rgba(240, 232, 218, 0.42) 55%,
+      rgba(224, 211, 190, 0.4) 100%
     );
     box-shadow:
-      0 34px 74px rgba(6, 22, 40, 0.26),
-      inset 0 2px 2px rgba(255, 255, 255, 0.9),
-      inset 0 -26px 44px rgba(176, 154, 120, 0.16);
-    backdrop-filter: saturate(135%) blur(12px);
+      0 30px 66px rgba(6, 22, 40, 0.24),
+      inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    backdrop-filter: saturate(140%) blur(16px);
     animation: apparition 0.7s ease both;
   }
   .hero__logo::before {
     content: '';
     position: absolute;
-    inset: 8px;
+    inset: 7px;
     border: 1px solid rgba(200, 158, 82, 0.5);
     border-radius: inherit;
     pointer-events: none;
@@ -265,16 +265,16 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     width: 56%;
     height: 46%;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.4);
     filter: blur(30px);
   }
   .hero__logo img {
     position: relative;
     z-index: 1;
     display: block;
-    width: 74%;
+    width: 82%;
     height: auto;
-    filter: drop-shadow(0 8px 18px rgba(12, 35, 62, 0.1));
+    filter: drop-shadow(0 6px 16px rgba(12, 35, 62, 0.12));
   }
 
   .hero__contenu {
@@ -451,7 +451,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       padding-block: clamp(6rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
     }
     .hero__logo {
-      width: min(34vw, 470px);
+      width: min(28vw, 380px);
       margin: 0;
       border-radius: 32%;
     }
