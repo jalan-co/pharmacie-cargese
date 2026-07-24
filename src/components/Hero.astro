@@ -224,48 +224,57 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     padding-block: clamp(4.5rem, 11vh, 6.5rem) clamp(1.75rem, 5vh, 2.75rem);
   }
 
-  /* Médaillon logo : squircle givré clair, liseré doré intérieur + halo. */
+  /* Médaillon logo : squircle crème avec profondeur (dégradé radial, halo
+     central, ombre interne chaude), liseré doré. Logo qui remplit l'espace. */
   .hero__logo {
     position: relative;
     display: grid;
     place-items: center;
-    width: min(78vw, 340px);
-    aspect-ratio: 1;
+    width: min(80vw, 350px);
+    aspect-ratio: 0.94;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: 42%;
-    background: linear-gradient(145deg, rgba(248, 243, 234, 0.94), rgba(236, 228, 214, 0.86));
-    box-shadow: 0 30px 70px rgba(6, 22, 40, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.85);
-    backdrop-filter: saturate(140%) blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 34%;
+    background: radial-gradient(
+      115% 100% at 50% 32%,
+      rgba(253, 249, 243, 0.97) 0%,
+      rgba(242, 234, 220, 0.93) 55%,
+      rgba(224, 211, 190, 0.9) 100%
+    );
+    box-shadow:
+      0 34px 74px rgba(6, 22, 40, 0.26),
+      inset 0 2px 2px rgba(255, 255, 255, 0.9),
+      inset 0 -26px 44px rgba(176, 154, 120, 0.16);
+    backdrop-filter: saturate(135%) blur(12px);
     animation: apparition 0.7s ease both;
   }
   .hero__logo::before {
     content: '';
     position: absolute;
-    inset: 7px;
-    border: 1px solid rgba(216, 170, 85, 0.45);
+    inset: 8px;
+    border: 1px solid rgba(200, 158, 82, 0.5);
     border-radius: inherit;
     pointer-events: none;
   }
   .hero__logo::after {
     content: '';
     position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 55%;
-    height: 55%;
+    top: 16%;
+    left: 22%;
+    width: 56%;
+    height: 46%;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.7);
-    filter: blur(35px);
+    background: rgba(255, 255, 255, 0.55);
+    filter: blur(30px);
   }
   .hero__logo img {
     position: relative;
     z-index: 1;
     display: block;
-    width: 64%;
+    width: 74%;
     height: auto;
-    filter: drop-shadow(0 8px 18px rgba(12, 35, 62, 0.08));
+    filter: drop-shadow(0 8px 18px rgba(12, 35, 62, 0.1));
   }
 
   .hero__contenu {
@@ -442,9 +451,9 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       padding-block: clamp(6rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
     }
     .hero__logo {
-      width: min(34vw, 460px);
+      width: min(34vw, 470px);
       margin: 0;
-      border-radius: 38%;
+      border-radius: 32%;
     }
     .hero__contenu {
       margin: 0;
