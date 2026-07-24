@@ -64,8 +64,8 @@ export const logo = {
   srcTransparent: '/logo-pharmacie-cargese-transparent.webp',
   largeur: 680,
   hauteur: 453,
-  largeurTransparent: 386,
-  hauteurTransparent: 327,
+  largeurTransparent: 700,
+  hauteurTransparent: 473,
 } as const;
 
 /** Contenu du hero. */

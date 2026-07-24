@@ -19,7 +19,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
 <section class="hero" id="accueil">
   <Image
     src={facade}
-    alt={`Façade de la ${pharmacie.nom}, au bord de mer à Cargèse au coucher du soleil`}
+    alt={`Façade et vitrines de la ${pharmacie.nom}`}
     class="hero__bg"
     widths={[640, 1024, 1400, 1659]}
     sizes="100vw"
@@ -206,12 +206,14 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     background:
       linear-gradient(
         180deg,
-        rgba(4, 16, 31, 0.03) 0%,
-        rgba(4, 16, 31, 0.05) 25%,
-        rgba(4, 16, 31, 0.5) 62%,
+        rgba(4, 16, 31, 0.14) 0%,
+        rgba(4, 16, 31, 0.1) 25%,
+        rgba(4, 16, 31, 0.55) 62%,
         rgba(4, 16, 31, 0.96) 100%
       ),
-      linear-gradient(90deg, rgba(4, 16, 31, 0.22) 0%, transparent 55%);
+      linear-gradient(90deg, rgba(4, 16, 31, 0.22) 0%, transparent 55%),
+      /* Vignette douce : assombrit les bords, la photo se fond mieux dans la page. */
+      radial-gradient(120% 95% at 50% 42%, transparent 55%, rgba(2, 10, 22, 0.32) 100%);
   }
 
   /* Layout mobile : colonne, logo en haut / contenu en bas. */
@@ -327,6 +329,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     letter-spacing: -0.045em;
     color: var(--blanc);
     text-wrap: balance;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.45);
   }
   .hero__titre-accent {
     display: inline-block;
@@ -474,11 +477,11 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       padding-block: clamp(6rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
     }
     .hero__logo {
-      width: clamp(210px, 18vw, 270px);
+      width: clamp(280px, 24vw, 360px);
       margin: 0;
     }
     .hero__logo img {
-      max-width: 190px;
+      max-width: 260px;
     }
     .hero__contenu {
       margin: 0;
@@ -499,7 +502,7 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
 
   @media (max-width: 760px) {
     .hero__bg {
-      object-position: 60% center;
+      object-position: 46% center;
     }
   }
   @media (max-width: 370px) {
