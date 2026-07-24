@@ -1,10 +1,12 @@
 ---
 /**
  * Section « À propos » : présentation de la pharmacie de village (texte
- * éditorial, pas d'argumentaire commercial) + vidéo d'une patiente souriante,
- * pour mettre le patient au cœur du discours.
+ * éditorial, pas d'argumentaire commercial) + photo de l'intérieur de
+ * l'officine.
  */
-import { apropos } from '../data/site';
+import { Image } from 'astro:assets';
+import { apropos, pharmacie } from '../data/site';
+import interieur from '../assets/interieur-pharmacie.jpg';
 ---
 
 <section class="apropos section" id="apropos" aria-labelledby="apropos-titre">
@@ -16,32 +18,18 @@ import { apropos } from '../data/site';
     </div>
 
     <div class="apropos__visuel">
-      <!--
-        Image animée (WebP animé) plutôt qu'une <video> : se lance vraiment
-        toute seule sur mobile (pas de bouton play imposé par le navigateur).
-      -->
-      <img
+      <Image
+        src={interieur}
+        alt={`Intérieur de la ${pharmacie.nom}`}
         class="apropos__media"
-        src="/apropos-poster.webp"
-        data-anime="/apropos.webp"
-        width="420"
-        height="560"
+        width={840}
+        widths={[420, 640, 840]}
+        sizes="(max-width: 860px) 90vw, 40vw"
         loading="lazy"
-        decoding="async"
-        alt="Sourire d'une patiente accueillie à l'officine"
       />
     </div>
   </div>
 </section>
-
-<script>
-  // Respecte prefers-reduced-motion : n'affiche l'image animée que si l'utilisateur n'a pas demandé de réduire les animations.
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.apropos__media[data-anime]').forEach((img) => {
-      img.src = img.dataset.anime;
-    });
-  }
-</script>
 
 <style>
   .apropos__inner {

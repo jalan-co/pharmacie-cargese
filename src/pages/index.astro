@@ -19,7 +19,15 @@ import imgBilan from '../assets/services/service-bilan.webp';
 import imgTests from '../assets/services/service-tests.webp';
 import imgMicro from '../assets/services/service-micronutrition.webp';
 import imgPhyto from '../assets/services/service-phyto.webp';
-const serviceImages = [imgBilan, imgTests, imgMicro, imgPhyto];
+
+// Associées par icône (pas par position) : un service sans photo dédiée
+// (matériel médical, orthopédie, vétérinaire...) retombe sur le dégradé.
+const serviceImages: Record<string, ImageMetadata> = {
+  clipboard: imgBilan,
+  test: imgTests,
+  leaf: imgMicro,
+  plant: imgPhyto,
+};
 ---
 
 <BaseLayout title={seo.title} description={seo.description}>
@@ -33,11 +41,11 @@ const serviceImages = [imgBilan, imgTests, imgMicro, imgPhyto];
       </div>
 
       <ul class="services__grille" role="list">
-        {services.map((service, i) => (
+        {services.map((service) => (
           <li class="services__carte">
-            {serviceImages[i] ? (
+            {serviceImages[service.icone] ? (
               <Image
-                src={serviceImages[i]}
+                src={serviceImages[service.icone]}
                 alt={service.titre}
                 class="services__img"
                 widths={[500, 768]}

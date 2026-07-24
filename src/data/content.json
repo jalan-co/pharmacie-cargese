@@ -22,6 +22,11 @@
   },
   "services": [
     {
+      "titre": "Location et vente de matériel médical",
+      "description": "Fauteuils roulants, cannes, lits médicalisés : du matériel à la location ou à l'achat, adapté à vos besoins.",
+      "icone": "materiel"
+    },
+    {
       "titre": "Bilan de médication",
       "description": "Un entretien dédié pour revoir vos traitements et améliorer votre suivi.",
       "icone": "clipboard"
@@ -40,6 +45,16 @@
       "titre": "Phytothérapie",
       "description": "Le bienfait des plantes, conseillé par des pharmaciens formés, en complément de votre parcours de soin.",
       "icone": "plant"
+    },
+    {
+      "titre": "Orthopédie",
+      "description": "Semelles, ceintures de maintien, bas de contention : des solutions orthopédiques et un conseil adapté.",
+      "icone": "os"
+    },
+    {
+      "titre": "Produits vétérinaires",
+      "description": "Antiparasitaires, compléments et soins pour vos compagnons, conseillés par notre équipe.",
+      "icone": "patte"
     }
   ],
   "apropos": {
@@ -47,7 +62,7 @@
     "titre": "Une officine au cœur de Cargèse",
     "paragraphes": [
       "Depuis le Quartier Saint-Jean, la Pharmacie de Cargèse assure un service de proximité pour les habitants du village et de la région, ainsi que pour les visiteurs tout au long de l'année.",
-      "Jean-Jérôme Stefani, pharmacien titulaire et docteur en pharmacie, et toute son équipe mettent leur expertise à votre service pour la délivrance de vos médicaments sur ordonnance, comme pour vous orienter vers les produits les mieux adaptés à vos besoins. Chaque patient est unique : nos conseils le sont aussi."
+      "Notre équipe met son expertise à votre service pour vous accompagner dans le choix de produits de santé, de bien-être et de parapharmacie adaptés à vos besoins et à ceux de votre famille. Chaque patient est unique, nos conseils le sont aussi."
     ]
   },
   "marques": [
