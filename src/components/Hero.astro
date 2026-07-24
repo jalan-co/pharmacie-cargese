@@ -36,9 +36,6 @@ import Icone from './Icone.astro';
 
       <h1 class="hero__titre">{hero.titre}</h1>
 
-      <!-- Trait doré décoratif, en écho au logo. -->
-      <span class="hero__trait" aria-hidden="true"></span>
-
       <div class="hero__actions">
         <a href="#services" class="btn btn--or hero__cta">
           <span>Découvrir nos services</span>
@@ -209,7 +206,9 @@ import Icone from './Icone.astro';
     object-position: 68% center;
     z-index: -2;
   }
-  /* Voile clair sur la gauche pour la lisibilité du texte. */
+  /* Voile clair sur la gauche pour la lisibilité, puis une légère teinte
+     marine (plutôt qu'un simple fondu blanc) qui unifie la photo avec le
+     reste de l'identité au lieu de la laisser « brute ». */
   .hero__scrim {
     position: absolute;
     inset: 0;
@@ -218,8 +217,9 @@ import Icone from './Icone.astro';
       104deg,
       rgba(255, 255, 255, 0.8) 0%,
       rgba(255, 255, 255, 0.52) 28%,
-      rgba(255, 255, 255, 0.12) 52%,
-      rgba(255, 255, 255, 0) 68%
+      rgba(255, 255, 255, 0.14) 48%,
+      rgba(10, 46, 92, 0.04) 62%,
+      rgba(10, 46, 92, 0.16) 100%
     );
   }
 
@@ -264,15 +264,6 @@ import Icone from './Icone.astro';
   .hero__titre::after {
     content: '.';
     color: var(--accent-or);
-  }
-
-  /* Trait doré décoratif sous le titre. */
-  .hero__trait {
-    display: block;
-    width: 3.5rem;
-    height: 2px;
-    margin-top: var(--esp-md);
-    background: var(--accent-or);
   }
 
   /* Statut « Ouvert / Fermé », en pastille flottante alignée avec le burger
@@ -348,15 +339,9 @@ import Icone from './Icone.astro';
   .hero__statut.is-open .hero__statut-dot {
     background: var(--statut-ouvert);
     outline-color: color-mix(in srgb, var(--statut-ouvert) 45%, transparent);
-    animation: pouls 2.2s ease-out infinite;
   }
   .hero__statut.is-open .hero__statut-etat {
     color: var(--statut-ouvert);
-  }
-  @keyframes pouls {
-    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 55%, transparent); }
-    70% { box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
-    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--statut-ouvert) 0%, transparent); }
   }
 
   .hero__actions {
@@ -391,25 +376,28 @@ import Icone from './Icone.astro';
     text-decoration: none;
     color: var(--couleur-texte);
   }
+  /* Verre dépoli, comme le burger et le badge de statut : un seul
+     langage de « chrome » flottant plutôt que des matières différentes. */
   .hero__acces-ico {
     display: grid;
     place-items: center;
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 3.4rem;
+    height: 3.4rem;
     border-radius: 50%;
-    background: var(--bleu-medium);
-    color: var(--blanc);
+    background: color-mix(in srgb, var(--blanc) 82%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: var(--bleu-profond);
     box-shadow: var(--ombre-md);
-    transition: transform var(--transition-douce), background-color var(--transition-douce), box-shadow var(--transition-douce);
+    transition: transform var(--transition-douce), background-color var(--transition-douce);
   }
   .hero__acces-lbl {
     font-size: var(--taille-sm);
     font-weight: var(--graisse-medium);
   }
   .hero__acces-item:hover .hero__acces-ico {
-    transform: translateY(-2px);
-    background: var(--bleu-profond);
-    box-shadow: var(--ombre-lg);
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--blanc) 92%, transparent);
   }
 
   @media (max-width: 760px) {
