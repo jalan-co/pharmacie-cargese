@@ -35,8 +35,8 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       <img
         src={logo.srcTransparent}
         alt={`Logo ${pharmacie.nom}`}
-        width={logo.largeur}
-        height={logo.hauteur}
+        width={logo.largeurTransparent}
+        height={logo.hauteurTransparent}
         decoding="async"
       />
     </div>
@@ -231,19 +231,20 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     display: flex;
     align-items: center;
     justify-content: center;
-    width: min(72vw, 320px);
+    width: min(58vw, 250px);
     aspect-ratio: 1 / 1.08;
     margin: 18px auto 0;
-    padding: 28px 20px;
+    padding: 20px 16px;
     overflow: hidden;
     border-radius: 34%;
+    /* Plus translucide : on voit la photo derrière. */
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.86) 0%,
-      rgba(250, 245, 236, 0.76) 55%,
-      rgba(235, 225, 211, 0.68) 100%
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(250, 245, 236, 0.42) 55%,
+      rgba(235, 225, 211, 0.38) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow:
       0 24px 55px rgba(4, 18, 35, 0.24),
       0 8px 18px rgba(4, 18, 35, 0.12),
@@ -279,18 +280,18 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     z-index: 2;
     display: block;
     width: 90%;
-    max-width: 280px;
+    max-width: 220px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 7px 14px rgba(8, 30, 55, 0.09));
   }
   @media (max-width: 480px) {
     .hero__logo {
-      width: 72vw;
-      max-width: 315px;
-      min-width: 255px;
+      width: 58vw;
+      max-width: 245px;
+      min-width: 195px;
       aspect-ratio: 1 / 1.08;
-      padding: 26px 18px;
+      padding: 18px 14px;
       border-radius: 34%;
     }
     .hero__logo img {
@@ -472,11 +473,11 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       padding-block: clamp(6rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
     }
     .hero__logo {
-      width: clamp(260px, 24vw, 340px);
+      width: clamp(210px, 18vw, 270px);
       margin: 0;
     }
     .hero__logo img {
-      max-width: 235px;
+      max-width: 190px;
     }
     .hero__contenu {
       margin: 0;

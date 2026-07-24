@@ -59,10 +59,13 @@ export const pharmacie = {
 /** Logo officiel (fichier dans /public) — non éditable via le CMS. */
 export const logo = {
   src: '/logo-pharmacie-cargese.webp',
-  /** Version détourée (fond transparent), pour poser le logo sur une photo. */
+  /** Version détourée (fond transparent), rognée au plus près du dessin
+   *  (pour le médaillon du hero) — dimensions et ratio différents de `src`. */
   srcTransparent: '/logo-pharmacie-cargese-transparent.webp',
   largeur: 680,
   hauteur: 453,
+  largeurTransparent: 386,
+  hauteurTransparent: 327,
 } as const;
 
 /** Contenu du hero. */
