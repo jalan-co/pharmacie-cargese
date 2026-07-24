@@ -278,13 +278,16 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     filter: blur(26px);
     pointer-events: none;
   }
+  /* Dimensionné par la hauteur (pas la largeur) : ce logo est plus large
+     que haut, dans un cadre presque carré — la hauteur est la contrainte
+     qui le fait vraiment remplir le cadre, jusqu'au liseré doré. */
   .hero__logo img {
     position: relative;
     z-index: 2;
     display: block;
-    width: 90%;
-    max-width: 220px;
-    height: auto;
+    width: auto;
+    height: 84%;
+    max-width: 92%;
     object-fit: contain;
     filter: drop-shadow(0 7px 14px rgba(8, 30, 55, 0.09));
   }
@@ -296,9 +299,6 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
       aspect-ratio: 1 / 1.08;
       padding: 18px 14px;
       border-radius: 34%;
-    }
-    .hero__logo img {
-      width: 90%;
     }
   }
 
@@ -479,9 +479,6 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     .hero__logo {
       width: clamp(280px, 24vw, 360px);
       margin: 0;
-    }
-    .hero__logo img {
-      max-width: 260px;
     }
     .hero__contenu {
       margin: 0;
