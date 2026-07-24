@@ -9,6 +9,11 @@ import { Image } from 'astro:assets';
 import facade from '../assets/facade-pharmacie.png';
 import { hero, pharmacie, horaires, horairesNote, lienItineraire, logo } from '../data/site';
 import Icone from './Icone.astro';
+
+// Met les deux derniers mots du titre en accent doré italique (« avec soin »).
+const motsTitre = hero.titre.trim().split(/\s+/);
+const titreAccent = motsTitre.slice(-2).join(' ');
+const titreDebut = motsTitre.slice(0, -2).join(' ');
 ---
 
 <section class="hero" id="accueil">
@@ -21,36 +26,39 @@ import Icone from './Icone.astro';
     loading="eager"
     fetchpriority="high"
   />
+  <!-- Filtre bleuté léger + dégradé sombre en bas (lisibilité du texte). -->
+  <div class="hero__tint" aria-hidden="true"></div>
   <div class="hero__scrim" aria-hidden="true"></div>
+
+  <!-- Logo emblème, centré en haut. -->
+  <img
+    class="hero__logo"
+    src={logo.srcTransparent}
+    alt={`Logo ${pharmacie.nom}`}
+    width={logo.largeur}
+    height={logo.hauteur}
+    decoding="async"
+  />
 
   <div class="conteneur hero__inner">
     <div class="hero__contenu">
-      <img
-        class="hero__logo"
-        src={logo.srcTransparent}
-        alt={`Logo ${pharmacie.nom}`}
-        width={logo.largeur}
-        height={logo.hauteur}
-        decoding="async"
-      />
-
-      <h1 class="hero__titre">{hero.titre}</h1>
+      <h1 class="hero__titre">
+        {titreDebut} <span class="hero__titre-accent">{titreAccent}.</span>
+      </h1>
 
       <div class="hero__actions">
-        <a href="#services" class="btn btn--or hero__cta">
-          <span>Découvrir nos services</span>
-        </a>
+        <a href="#services" class="hero__cta">Découvrir nos services</a>
       </div>
 
-      <!-- Accès rapides : cercle + label sous le bouton (sobre, plat). -->
+      <!-- Accès rapides : icône + label en ligne, sobres. -->
       <div class="hero__acces">
         <a
           href={`tel:${pharmacie.telephone.lien}`}
           class="hero__acces-item"
           aria-label={`Appeler la ${pharmacie.nom} au ${pharmacie.telephone.affichage}`}
         >
-          <span class="hero__acces-ico"><Icone nom="phone" taille={27} /></span>
-          <span class="hero__acces-lbl">Appeler</span>
+          <Icone nom="phone" taille={19} />
+          <span>Appeler</span>
         </a>
         <span class="hero__acces-sep" aria-hidden="true"></span>
         <a
@@ -60,25 +68,19 @@ import Icone from './Icone.astro';
           class="hero__acces-item"
           aria-label={`Itinéraire vers la ${pharmacie.nom}`}
         >
-          <span class="hero__acces-ico"><Icone nom="route" taille={27} /></span>
-          <span class="hero__acces-lbl">Itinéraire</span>
+          <Icone nom="route" taille={19} />
+          <span>Itinéraire</span>
         </a>
       </div>
-
-      <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
-      <button class="hero__statut" data-hero-statut type="button">
-        <span class="hero__statut-dot" aria-hidden="true"></span>
-        <span class="hero__statut-corps">
-          <span class="hero__statut-date" data-statut-date></span>
-          <span class="hero__statut-txt">
-            <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-            <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
-          </span>
-        </span>
-        <Icone nom="chevron" taille={16} class="hero__statut-chevron" />
-      </button>
     </div>
   </div>
+
+  <!-- Statut d'ouverture, pastille flottante (→ ouvre la popup des horaires). -->
+  <button class="hero__statut" data-hero-statut type="button">
+    <span class="hero__statut-dot" aria-hidden="true"></span>
+    <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
+    <span class="hero__statut-detail" data-statut-detail></span>
+  </button>
 </section>
 
 <!-- Popup des horaires (dialog natif, ouvert au clic sur le statut). -->
@@ -144,35 +146,23 @@ import Icone from './Icone.astro';
       let texte = '';
       if (open) {
         const enCours = ranges.find(([o, c]) => mins >= o && mins < c);
-        texte = `Ferme à ${fmt(enCours[1])}`;
+        texte = `ferme à ${fmt(enCours[1])}`;
       } else {
         const prochaine = ranges.find(([o]) => mins < o);
         if (prochaine) {
-          texte = `Ouvre à ${fmt(prochaine[0])}`;
+          texte = `ouvre à ${fmt(prochaine[0])}`;
         } else {
           for (let i = 1; i <= 7; i++) {
             const j = horaires[(dayIdx + i) % 7];
             const r = j && !j.ferme ? parse(j.heures) : [];
             if (r.length) {
-              texte = `Ouvre ${j.jour.toLowerCase()} à ${fmt(r[0][0])}`;
+              texte = `ouvre ${j.jour.toLowerCase()} à ${fmt(r[0][0])}`;
               break;
             }
           }
         }
       }
-      detail.textContent = texte;
-    }
-
-    // Date du jour (ex. « Dimanche 5 juillet 2026 »), affichée sur mobile.
-    const dateEl = el.querySelector('[data-statut-date]');
-    if (dateEl) {
-      const texte = new Intl.DateTimeFormat('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }).format(now);
-      dateEl.textContent = texte.charAt(0).toUpperCase() + texte.slice(1);
+      detail.textContent = texte ? `· ${texte}` : '';
     }
 
     // Ouverture / fermeture de la popup des horaires.
@@ -203,256 +193,189 @@ import Icone from './Icone.astro';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 68% center;
-    z-index: -2;
+    object-position: center;
+    z-index: -3;
   }
-  /* Voile clair sur la gauche pour la lisibilité, puis une légère teinte
-     marine (plutôt qu'un simple fondu blanc) qui unifie la photo avec le
-     reste de l'identité au lieu de la laisser « brute ». */
+  /* Filtre bleuté léger, homogène, sur toute la photo. */
+  .hero__tint {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 42, 84, 0.30) 0%,
+      rgba(10, 32, 66, 0.14) 40%,
+      rgba(8, 24, 50, 0.22) 100%
+    );
+  }
+  /* Dégradé sombre ancré en bas : lisibilité du texte blanc. */
   .hero__scrim {
     position: absolute;
     inset: 0;
     z-index: -1;
     background: linear-gradient(
-      104deg,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(255, 255, 255, 0.52) 28%,
-      rgba(255, 255, 255, 0.14) 48%,
-      rgba(10, 46, 92, 0.04) 62%,
-      rgba(10, 46, 92, 0.16) 100%
+      to top,
+      rgba(6, 18, 38, 0.9) 0%,
+      rgba(6, 18, 38, 0.6) 20%,
+      rgba(6, 18, 38, 0.12) 42%,
+      rgba(6, 18, 38, 0) 60%
     );
   }
 
-  /* Plein écran : contenu placé dans le haut (moins de vide au-dessus). */
+  /* Logo emblème, centré en haut, posé sur le ciel. */
+  .hero__logo {
+    position: absolute;
+    top: clamp(4.25rem, 8vh, 5.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(178px, 30vw, 300px);
+    height: auto;
+    z-index: 3;
+    filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5))
+      drop-shadow(0 3px 18px rgba(0, 0, 0, 0.35));
+    animation: apparition 0.7s ease both;
+  }
+
+  /* Plein écran : contenu ancré en bas (façon page d'accueil d'app). */
   .hero__inner {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     min-height: 100svh;
-    padding-block: clamp(4.5rem, 11vh, 7.5rem) var(--esp-2xl);
+    padding-block: clamp(5rem, 12vh, 8rem) clamp(2.25rem, 6vh, 3.5rem);
   }
   .hero__contenu {
-    max-width: 36rem;
+    max-width: 34rem;
+    color: var(--blanc);
   }
   .hero__contenu > * {
     animation: apparition 0.7s ease both;
   }
   .hero__contenu > *:nth-child(2) { animation-delay: 0.08s; }
   .hero__contenu > *:nth-child(3) { animation-delay: 0.16s; }
-  .hero__contenu > *:nth-child(4) { animation-delay: 0.24s; }
-  .hero__contenu > *:nth-child(5) { animation-delay: 0.32s; }
   @keyframes apparition {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: none; }
   }
 
-  /* Logo détouré, posé directement sur la photo (pas de plaque). */
-  .hero__logo {
-    display: block;
-    width: clamp(300px, 37vw, 500px);
-    height: auto;
-    margin-bottom: var(--esp-lg);
-    filter: drop-shadow(0 2px 10px rgba(10, 46, 92, 0.15));
-  }
-
   .hero__titre {
-    font-size: clamp(2.3rem, 1.4rem + 3.4vw, 3.9rem);
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 4.1rem);
     font-weight: 500;
     letter-spacing: -0.01em;
-    line-height: 1.1;
+    line-height: 1.08;
+    color: var(--blanc);
+    text-wrap: balance;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.28);
   }
-  /* Point doré final, en écho au traitement « de Cargèse » du logo. */
-  .hero__titre::after {
-    content: '.';
+  /* « avec soin » en accent doré italique. */
+  .hero__titre-accent {
+    font-style: italic;
     color: var(--accent-or);
   }
 
-  /* Statut « Ouvert / Fermé », en pastille flottante alignée avec le burger
-     (à gauche sur ordinateur, à droite sur mobile — voir media query). */
+  /* Statut « Ouvert / Fermé », pastille flottante en verre sombre. */
   .hero__statut {
     position: fixed;
     top: 1rem;
-    left: 4.75rem;
+    right: 1rem;
     z-index: 200;
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    min-height: 3rem;
+    gap: 0.5rem;
+    min-height: 2.6rem;
     margin: 0;
-    padding: 0.4rem 0.9rem 0.4rem 1rem;
-    background: color-mix(in srgb, var(--blanc) 82%, transparent);
-    backdrop-filter: saturate(160%) blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    padding: 0.35rem 0.9rem;
+    background: rgba(15, 25, 42, 0.5);
+    backdrop-filter: saturate(160%) blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--rayon-pilule);
-    box-shadow: var(--ombre-md);
     font-family: inherit;
-    color: var(--couleur-texte);
-    text-align: left;
+    color: var(--blanc);
     cursor: pointer;
-    animation: none;
   }
-  /* Point plein entouré d'un anneau net (plus premium qu'un halo flou). */
   .hero__statut-dot {
-    width: 0.7rem;
-    height: 0.7rem;
+    width: 0.6rem;
+    height: 0.6rem;
     border-radius: 50%;
-    background: var(--statut-ferme);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--statut-ferme) 12%, transparent);
-    outline: 1.5px solid color-mix(in srgb, var(--statut-ferme) 45%, transparent);
-    outline-offset: 3px;
+    background: var(--accent-or);
     flex: none;
-  }
-  .hero__statut-corps {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-  .hero__statut-date {
-    font-size: var(--taille-xs);
-    font-weight: var(--graisse-medium);
-    color: var(--couleur-texte-doux);
-    white-space: nowrap;
-  }
-  .hero__statut-txt {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.4rem;
-    line-height: 1.3;
   }
   .hero__statut-etat {
     font-weight: var(--graisse-forte);
     font-size: var(--taille-sm);
-    color: var(--statut-ferme);
     white-space: nowrap;
   }
-  /* Heure d'ouverture/fermeture la plus utile selon le statut. */
   .hero__statut-detail {
-    font-size: var(--taille-xs);
-    color: var(--couleur-texte-doux);
+    font-size: var(--taille-sm);
+    color: rgba(255, 255, 255, 0.78);
     white-space: nowrap;
-  }
-  .hero__statut-chevron {
-    display: inline-block;
-    color: var(--slate-2);
-    flex: none;
   }
   .hero__statut.is-open .hero__statut-dot {
-    background: var(--statut-ouvert);
-    outline-color: color-mix(in srgb, var(--statut-ouvert) 45%, transparent);
-  }
-  .hero__statut.is-open .hero__statut-etat {
-    color: var(--statut-ouvert);
+    background: #4ade80;
   }
 
   .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--esp-sm);
-    margin-top: var(--esp-xl);
+    margin-top: clamp(1.5rem, 4vh, 2.4rem);
   }
-  /* CTA principal un peu plus grand pour bien ressortir. */
+  /* CTA principal en verre sombre (le doré est réservé au titre). */
   .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 27rem;
     padding: 1.05em 1.8em;
+    font-family: var(--police-titre);
     font-size: var(--taille-base);
+    font-weight: var(--graisse-medium);
+    color: var(--blanc);
+    text-decoration: none;
+    background: rgba(15, 25, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: var(--rayon-md);
+    backdrop-filter: saturate(160%) blur(12px);
+    transition: background-color var(--transition-douce), transform var(--transition-douce);
   }
-  /* Accès rapides : cercle plat + label dessous. */
+  .hero__cta:hover {
+    background: rgba(26, 40, 64, 0.65);
+    transform: translateY(-1px);
+  }
+  /* Accès rapides : icône + label en ligne, discrets, sous le CTA. */
   .hero__acces {
     display: flex;
     align-items: center;
-    gap: var(--esp-lg);
-    margin-top: var(--esp-lg);
+    gap: clamp(1.25rem, 5vw, 2rem);
+    margin-top: clamp(1.1rem, 3vh, 1.6rem);
   }
   .hero__acces-sep {
     width: 1px;
-    height: 2.6rem;
-    background: var(--bordure);
+    height: 1.1rem;
+    background: rgba(255, 255, 255, 0.4);
   }
   .hero__acces-item {
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.5rem;
     text-decoration: none;
-    color: var(--couleur-texte);
-  }
-  /* Verre dépoli, comme le burger et le badge de statut : un seul
-     langage de « chrome » flottant plutôt que des matières différentes. */
-  .hero__acces-ico {
-    display: grid;
-    place-items: center;
-    width: 3.4rem;
-    height: 3.4rem;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--blanc) 82%, transparent);
-    backdrop-filter: saturate(160%) blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    color: var(--bleu-profond);
-    box-shadow: var(--ombre-md);
-    transition: transform var(--transition-douce), background-color var(--transition-douce);
-  }
-  .hero__acces-lbl {
-    font-size: var(--taille-sm);
+    color: var(--blanc);
+    font-family: var(--police-titre);
     font-weight: var(--graisse-medium);
+    font-size: var(--taille-sm);
+    opacity: 0.92;
+    transition: opacity var(--transition-douce);
   }
-  .hero__acces-item:hover .hero__acces-ico {
-    transform: translateY(-1px);
-    background: color-mix(in srgb, var(--blanc) 92%, transparent);
+  .hero__acces-item:hover {
+    opacity: 1;
   }
 
   @media (max-width: 760px) {
     .hero__bg {
       object-position: 60% center;
-      /* Zoom + recadrage vertical : fait descendre l'enseigne/la façade
-         dans la zone libre sous les boutons, loin du texte. */
-      transform: scale(1.5);
-      transform-origin: top center;
     }
-    .hero__scrim {
-      background: linear-gradient(
-        165deg,
-        rgba(255, 255, 255, 0.7) 0%,
-        rgba(255, 255, 255, 0.5) 45%,
-        rgba(255, 255, 255, 0.25) 100%
-      );
-    }
-    .hero__inner {
-      min-height: 100svh;
-      /* Un peu plus d'écart avec le badge/burger flottants en haut. */
-      padding-block: clamp(3.25rem, 7.5vh, 4.5rem) var(--esp-xl);
-    }
-    /* Tout le contenu du hero centré sur mobile. */
     .hero__contenu {
       max-width: 100%;
-      text-align: center;
-    }
-    .hero__logo {
-      /* Logo agrandi et rapproché du titre. */
-      width: clamp(340px, 76vw, 460px);
-      margin-inline: auto;
-      margin-bottom: 0.25rem;
-    }
-    .hero__actions {
-      justify-content: center;
     }
     .hero__cta {
-      width: 100%;
-    }
-    .hero__acces {
-      justify-content: center;
-    }
-
-    /* Sur mobile, le statut reste à droite (le burger occupe déjà la
-       gauche) plutôt qu'à côté du burger comme sur ordinateur. */
-    .hero__statut {
-      left: auto;
-      right: 1rem;
-    }
-
-    /* Voile plus léger = moins de contraste garanti par endroits (ex. sur le
-       feuillage) : une ombre blanche douce protège la lisibilité du texte. */
-    .hero__acces-lbl {
-      text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 1px 12px rgba(255, 255, 255, 0.6);
+      max-width: none;
     }
   }
 
