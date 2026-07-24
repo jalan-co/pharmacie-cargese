@@ -71,10 +71,12 @@ import Icone from './Icone.astro';
       <!-- Statut d'ouverture, plat (bouton → ouvre la popup des horaires). -->
       <button class="hero__statut" data-hero-statut type="button">
         <span class="hero__statut-dot" aria-hidden="true"></span>
-        <span class="hero__statut-date" data-statut-date></span>
-        <span class="hero__statut-txt">
-          <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
-          <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
+        <span class="hero__statut-corps">
+          <span class="hero__statut-date" data-statut-date></span>
+          <span class="hero__statut-txt">
+            <span class="hero__statut-etat" data-statut-etat>{hero.ouverture}</span>
+            <span class="hero__statut-detail" data-statut-detail>Voir les horaires</span>
+          </span>
         </span>
         <Icone nom="chevron" taille={16} class="hero__statut-chevron" />
       </button>
@@ -131,12 +133,37 @@ import Icone from './Icone.astro';
     el.classList.add(open ? 'is-open' : 'is-closed');
     el.querySelector('[data-statut-etat]').textContent = open ? 'Ouvert' : 'Fermé';
 
-    // Détail : horaires du jour (ou « fermé aujourd'hui »).
+    // Formate des minutes en « 8h30 » (ou « 19h » si les minutes sont nulles).
+    const fmt = (m) => {
+      const h = Math.floor(m / 60);
+      const mm = m % 60;
+      return mm === 0 ? `${h}h` : `${h}h${String(mm).padStart(2, '0')}`;
+    };
+
+    // Détail le plus utile selon le statut : heure de fermeture si ouvert,
+    // prochaine ouverture (aujourd'hui ou un autre jour) si fermé.
     const detail = el.querySelector('[data-statut-detail]');
     if (detail) {
-      detail.textContent = today && !today.ferme
-        ? `Aujourd'hui : ${today.heures}`
-        : "Fermé aujourd'hui";
+      let texte = '';
+      if (open) {
+        const enCours = ranges.find(([o, c]) => mins >= o && mins < c);
+        texte = `Ferme à ${fmt(enCours[1])}`;
+      } else {
+        const prochaine = ranges.find(([o]) => mins < o);
+        if (prochaine) {
+          texte = `Ouvre à ${fmt(prochaine[0])}`;
+        } else {
+          for (let i = 1; i <= 7; i++) {
+            const j = horaires[(dayIdx + i) % 7];
+            const r = j && !j.ferme ? parse(j.heures) : [];
+            if (r.length) {
+              texte = `Ouvre ${j.jour.toLowerCase()} à ${fmt(r[0][0])}`;
+              break;
+            }
+          }
+        }
+      }
+      detail.textContent = texte;
     }
 
     // Date du jour (ex. « Dimanche 5 juillet 2026 »), affichée sur mobile.
@@ -257,10 +284,10 @@ import Icone from './Icone.astro';
     z-index: 200;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    height: 3rem;
+    gap: 0.55rem;
+    min-height: 3rem;
     margin: 0;
-    padding: 0 0.9rem 0 1rem;
+    padding: 0.4rem 0.9rem 0.4rem 1rem;
     background: color-mix(in srgb, var(--blanc) 82%, transparent);
     backdrop-filter: saturate(160%) blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.7);
@@ -283,6 +310,11 @@ import Icone from './Icone.astro';
     outline-offset: 3px;
     flex: none;
   }
+  .hero__statut-corps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
   .hero__statut-date {
     font-size: var(--taille-xs);
     font-weight: var(--graisse-medium);
@@ -292,6 +324,7 @@ import Icone from './Icone.astro';
   .hero__statut-txt {
     display: flex;
     flex-direction: row;
+    align-items: baseline;
     gap: 0.4rem;
     line-height: 1.3;
   }
@@ -301,8 +334,11 @@ import Icone from './Icone.astro';
     color: var(--statut-ferme);
     white-space: nowrap;
   }
+  /* Heure d'ouverture/fermeture la plus utile selon le statut. */
   .hero__statut-detail {
-    display: none;
+    font-size: var(--taille-xs);
+    color: var(--couleur-texte-doux);
+    white-space: nowrap;
   }
   .hero__statut-chevron {
     display: inline-block;
