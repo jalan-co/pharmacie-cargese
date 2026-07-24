@@ -237,19 +237,20 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     padding: 20px 16px;
     overflow: hidden;
     border-radius: 34%;
-    /* Translucide (on voit la photo derrière) mais assez opaque pour rester lisible. */
+    /* Transparent mais plus blanc, et net (peu de flou) : la photo derrière
+       reste nette au lieu d'être brouillée. */
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.7) 0%,
-      rgba(250, 245, 236, 0.62) 55%,
-      rgba(235, 225, 211, 0.56) 100%
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(250, 245, 236, 0.28) 55%,
+      rgba(235, 225, 211, 0.24) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     box-shadow:
       0 24px 55px rgba(4, 18, 35, 0.24),
       0 8px 18px rgba(4, 18, 35, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(22px) saturate(115%);
+    backdrop-filter: blur(4px) saturate(115%);
     animation: apparition 0.7s ease both;
   }
   /* Double contour intérieur doré. */
