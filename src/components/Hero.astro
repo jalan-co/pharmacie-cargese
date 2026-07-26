@@ -287,6 +287,9 @@ const titreDebut = motsTitre.slice(0, -2).join(' ');
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 7px 14px rgba(8, 30, 55, 0.09));
+    /* Zoomé x1.5 : remplit vraiment le cadre, léger débordement haut/bas
+       coupé proprement par l'overflow:hidden du médaillon. */
+    transform: scale(1.5);
   }
   @media (max-width: 480px) {
     .hero__logo {
