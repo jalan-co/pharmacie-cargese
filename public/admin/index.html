@@ -6,6 +6,10 @@
     <!-- Page d'administration : ne pas indexer par les moteurs de recherche. -->
     <meta name="robots" content="noindex, nofollow" />
     <title>Administration — Pharmacie de Cargèse</title>
+    <!-- Fixe la base des chemins relatifs (ex: config.yml) même si l'URL est
+         tapée sans slash final (/admin au lieu de /admin/), qui sinon fait
+         résoudre les chemins relatifs depuis la racine du site. -->
+    <base href="/admin/" />
   </head>
   <body>
     <!--
